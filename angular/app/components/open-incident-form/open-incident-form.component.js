@@ -17,12 +17,7 @@ class OpenIncidentFormController {
     this.showAlert = false;
     //this.issueDataEdit = {};
 
-    let openIcident = this
-    openIcident.can = AclService.can
 
-    ContextService.me(function (data) {
-      openIcident.userData = data
-    })
 
     let issueId = $stateParams.issueId
     this.EditIssueId = issueId;
@@ -73,6 +68,7 @@ class OpenIncidentFormController {
             this.groupDivision = issueEdit.data.groupDivision;
             this.issueDescription = issueEdit.data.issueDescription;
 
+            this.selectedReporter = { id: this.fidUserRaised, name: this.raiseBy, division: this.division, groupDivision: this.groupDivision };
           })
         break;
       case 'editAfterSave':
@@ -92,7 +88,7 @@ class OpenIncidentFormController {
             this.division = issueEdit.data.division;
             this.groupDivision = issueEdit.data.groupDivision;
             this.issueDescription = issueEdit.data.issueDescription;
-            
+            this.selectedReporter = { id: this.fidUserRaised, name: this.raiseBy, division: this.division, groupDivision: this.groupDivision };
           })
         break;
       default:
@@ -109,25 +105,26 @@ class OpenIncidentFormController {
             id: value.id,
             name: value.name,
             division: value.division,
-            groupDivision: value.groupDivision
+            groupDivision: value.group_division,
           });
         })
+      })
 
+    let openIcident = this;
+    openIcident.can = AclService.can
+
+    ContextService.me(function (data) {
+      openIcident.userData = data;
+      if (data) {
         switch (inputState) {
           case 'add':
-
-          $scope.selectedReporter = { id: this.userData.fidUserRaised, name: this.userData.raiseBy, division:this.userData.division, groupDivision:this.userData.groupDivision }; 
-          break;
-          case 'edit':
-          $scope.selectedReporter = { id: this.fidUserRaised, name: this.raiseBy, division:this.division, groupDivision:this.groupDivision };
-          break;
-          case 'editAfterSave':
-          $scope.selectedReporter = { id: this.fidUserRaised, name: this.raiseBy, division:this.division, groupDivision:this.groupDivision };
-          break;
-          default:
-          break;
+            openIcident.selectedReporter = { id: openIcident.userData.id, name: openIcident.userData.name, division: openIcident.userData.division, groupDivision: openIcident.userData.group_division };
+            openIcident.division = openIcident.userData.division;
+            openIcident.groupDivision = openIcident.userData.group_division;
+            break
         }
-      })
+      }
+    })
 
     function getIssueData() {
 
@@ -308,6 +305,11 @@ class OpenIncidentFormController {
     this.classElemetStepTwo = 'btn btn-primary btn-circle';
   }
 
+  reloadDivision() {
+    this.division = this.selectedReporter.division;
+    this.groupDivision = this.selectedReporter.groupDivision;
+  }
+
   save(isValid) {
     if (isValid) {
       let CreateIssue = this.API.service('incident', this.API.all('incidents'))
@@ -315,8 +317,8 @@ class OpenIncidentFormController {
       //console.log('is Save');
       CreateIssue.post({
         'raisedDate': this.$scope.dt,
-        'raisedBy': this.$scope.selectedReporter.name,
-        'fidUserRaised': this.$scope.selectedReporter.value,
+        'raisedBy': this.selectedReporter.name,
+        'fidUserRaised': this.selectedReporter.id,
         'division': this.division,
         'groupDivision': this.groupDivision,
         'issueDescription': this.issueDescription,
@@ -342,9 +344,9 @@ class OpenIncidentFormController {
       let $state = this.$state
       //console.log('Is Update');
       this.issueDataEdit.data.raisedDate = this.$scope.dt;
-      this.issueDataEdit.data.raisedBy = this.$scope.selectedReporter.name,
-        this.issueDataEdit.data.fidUserRaised = this.$scope.selectedReporter.value,
-        this.issueDataEdit.data.division = this.division;
+      this.issueDataEdit.data.raisedBy = this.selectedReporter.name,
+      this.issueDataEdit.data.fidUserRaised = this.selectedReporter.id,
+      this.issueDataEdit.data.division = this.division;
       this.issueDataEdit.data.groupDivision = this.groupDivision;
       this.issueDataEdit.data.issueDescription = this.issueDescription;
 
