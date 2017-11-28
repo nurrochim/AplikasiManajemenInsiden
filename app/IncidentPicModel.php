@@ -10,9 +10,11 @@ class IncidentPicModel extends Model
                                 'fidIncident',
                                 'fidUser',
                                 'picName',
+                                'task',
                                 'startDate',
                                 'finishDate',
                                 'targetDate'
                                 );
     protected $table = 'incident_pic';
+    protected $primaryKey = 'idPic';
 }

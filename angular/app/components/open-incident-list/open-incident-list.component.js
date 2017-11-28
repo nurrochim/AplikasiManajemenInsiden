@@ -38,10 +38,10 @@ class OpenIncidentListController {
             return `<text style="white-space:pre-line">${data.issueDescription}</text>`
         }
         let actionsHtml = (data) => {
-            return `
+            return `<div style="text-align: center">
                         <a class="btn btn-xs btn-warning" ui-sref="app.inputIncident({inputState: 'edit',issueId: ${data.idIncident}})" uib-tooltip="Edit">
                             <i class="fa fa-edit"></i>
-                        </a>`
+                        </a></div>`
         }
     }
 

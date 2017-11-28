@@ -50,6 +50,8 @@ class OpenIncidentFormController {
         this.isEdit = false;
         break;
       case 'edit':
+        this.disableButtonStepTwo = false;
+        this.classElemetStepTwo = 'btn btn-primary btn-circle';
         this.form_title = "Edit Incident";
         this.form_subTitle = "Edit Incident Number : " + issueId;
         this.isEdit = true;
@@ -225,29 +227,6 @@ class OpenIncidentFormController {
       return '';
     }
 
-
-
-    // Priority
-    $scope.options = [
-      {
-        name: 'Critical',
-        value: 'Critical'
-      },
-      {
-        name: 'High',
-        value: 'High'
-      },
-      {
-        name: 'Medium',
-        value: 'Medium'
-      },
-      {
-        name: 'Low',
-        value: 'Low'
-      }
-    ];
-    $scope.selectedOption = $scope.options[0].value;
-
     var uploader = $scope.uploader = new FileUploader({
       url: 'upload'
     });
@@ -257,7 +236,7 @@ class OpenIncidentFormController {
       $http.post('/destroy-image', { id: id })
         .then(function (success) {
           //console.info('remove', success);
-          c//onsole.info('remove', success.data.message);
+          //onsole.info('remove', success.data.message);
         }, function (error) {
 
         });
@@ -280,17 +259,41 @@ class OpenIncidentFormController {
     }
 
     // FILTERS
+    // image filter
+    // uploader.filters.push({
+    //   name: 'imageFilter',
+    //   fn: function (item /*{File|FileLikeObject}*/, options) {
+    //     var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+    //     return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+    //   }
+    // });
 
-    uploader.filters.push({
-      name: 'imageFilter',
-      fn: function (item /*{File|FileLikeObject}*/, options) {
-        var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-        return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+     // a sync filter
+     uploader.filters.push({
+      name: 'syncFilter',
+      fn: function(item /*{File|FileLikeObject}*/, options) {
+          console.log('syncFilter');
+          return this.queue.length < 10;
       }
-    });
+  });
 
-    console.info('uploader', uploader);
+  // an async filter
+  uploader.filters.push({
+      name: 'asyncFilter',
+      fn: function(item /*{File|FileLikeObject}*/, options, deferred) {
+          console.log('asyncFilter');
+          setTimeout(deferred.resolve, 1e3);
+      }
+  });
 
+
+    //console.info('uploader', uploader);
+
+  }
+
+  filterImage(item){
+    var type = item.slice((item.lastIndexOf(".") - 1 >>> 0) + 2);
+    return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
   }
 
   eventStepOne() {

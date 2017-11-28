@@ -101,6 +101,12 @@ class UserController extends Controller
         return response()->success(compact('users'));
     }
 
+    public function getMaintenanceTeam($enum)
+    {
+        $users = User::where('client', $enum)->orderBy('name', 'asc')->get();
+        return response()->success(compact('users'));
+    }
+
     /**
      * Get user details referenced by id.
      *

@@ -17,6 +17,7 @@ class CreateIncidentPicTable extends Migration
             $table->integer('fidIncident');
             $table->integer('fidUser');
             $table->string('picName')->nullable();
+            $table->string('task')->nullable();
             $table->date('startDate')->nullable();
             $table->date('finishDate')->nullable();
             $table->date('targetDate')->nullable();

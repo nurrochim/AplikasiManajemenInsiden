@@ -54,9 +54,10 @@
                                     <div class="col-sm-5">
                                         <p class="input-group">
                                             <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions"
-                                                ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                                ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-disabled="vm.detailIncidentDisable"
+                                            />
                                             <span class="input-group-btn">
-                                                <button type="button" class="btn btn-default" ng-click="open1()">
+                                                <button type="button" class="btn btn-default" ng-click="open1()" ng-disabled="vm.detailIncidentDisable">
                                                     <i class="glyphicon glyphicon-calendar"></i>
                                                 </button>
                                             </span>
@@ -66,29 +67,27 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Raise By</label>
                                     <div class="col-sm-8">
-                                        <select class="form-control" id="sel1" ng-model="vm.raiseBy" ng-options="option.value as option.name for option in options"
-                                        />
+                                        <select class="form-control" id="sel1" ng-model="vm.selectedReporter" ng-options="reporter as reporter.name for reporter in reporters track by reporter.id"
+                                            ng-change="vm.reloadDivision()" ng-disabled="vm.detailIncidentDisable" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Division</label>
                                     <div class="col-sm-8">
-                                        <select class="form-control" id="sel1" ng-model="vm.division" ng-options="option.value as option.name for option in options"
-                                        />
+                                        <input type="text" class="form-control" ng-model="vm.division" name="division" placeholder="Division" ng-disabled="vm.detailIncidentDisable">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Group Division</label>
                                     <div class="col-sm-8">
-                                        <select class="form-control" id="sel1" ng-model="vm.groupDivision" ng-options="option.value as option.name for option in options"
-                                        />
+                                        <input type="text" class="form-control" ng-model="vm.groupDivision" name="groupDivision" placeholder="Group Division" ng-disabled="vm.detailIncidentDisable">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Issue Descriptions</label>
                                     <div class="col-sm-8">
                                         <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Issue descriptions"
-                                            value="{{issue_description}}" ng-model="vm.issue_description" ng-required="true"></textarea>
+                                            value="{{issue_description}}" ng-model="vm.issueDescription" ng-required="true" ng-disabled="vm.detailIncidentDisable"></textarea>
                                         <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                     </div>
                                 </div>
@@ -100,14 +99,14 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Module</label>
                                     <div class="col-sm-8">
-                                        <select class="form-control" id="sel1" ng-model="vm.module" ng-options="option.value as option.name for option in options"
+                                        <select class="form-control" id="sel1" ng-model="vm.module" ng-options="option.value as option.name for option in optionsModul"
                                         />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Sub Modul</label>
                                     <div class="col-sm-8">
-                                        <select class="form-control" id="sel1" ng-model="vm.subModule" ng-options="option.value as option.name for option in options"
+                                        <select class="form-control" id="sel1" ng-model="vm.subModule" ng-options="option.value as option.name for option in optionsSubModul"
                                         />
                                     </div>
                                 </div>
@@ -118,7 +117,14 @@
                                         />
                                     </div>
                                 </div>
+
                                 <label class="col-sm-4 control-label" style=" text-align: left;margin-bottom: 10px; text-decoration: underline">Assignment PIC List</label>
+                                <div class="col-sm-8 ">
+                                    <div class="box-tools pull-right">
+                                        <a ng-click="vm.toggle('add', 0)" class="btn btn-block btn-success btn-xs">
+                                            <i class="fa fa-plus"></i> Add New</a>
+                                    </div>
+                                </div>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr style="background: whitesmoke">
@@ -134,26 +140,23 @@
                                             <td>{{ pic.picName}}</td>
                                             <td>{{ pic.targetDate}}</td>
                                             <td style="text-align: center">
-                                                <button class="btn btn-xs btn-warning" uib-tooltip="Edit" ng-click="vm.toggle('edit', 0)">
+                                                <!-- <button class="btn btn-xs btn-warning" uib-tooltip="Edit" ng-click="vm.toggle('edit', 0)">
                                                     <i class="fa fa-edit"></i>
-                                                </button>
+                                                </button> -->
+                                                <button class="btn btn-xs btn-danger" ng-click="vm.delete(pic.id)" uib-tooltip="Delete">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </button>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
-
                     </div>
                     <div class="box-footer">
-                        <a ng-show="vm.stepTwo" ng-click="vm.eventStepOne()" class="btn btn-default">
+                        <a ui-sref="app.assignTask" class="btn btn-default">
                             <i class="fa fa-angle-double-left"></i> Back</a>
-                        <div ng-show="vm.stepOne">
-                            <button ng-show="!vm.isEdit" ng-click="vm.save(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Save</button>
-                            <button ng-show="vm.isEdit" ng-click="vm.update(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Update</button>
-                        </div>
-                        <a ng-show="vm.stepTwo" ui-sref="app.openissue" class="btn btn-primary pull-right">Finish</a>
+                        <button ng-show="vm.isEdit" ng-click="vm.update(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Update</button>
                     </div>
                 </form>
             </div>
@@ -167,23 +170,24 @@
                 <form name="frmIncident" class="form-horizontal" novalidate="">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Task</label>
-                            <div class="col-sm-8">
-                                <select class="form-control" id="sel1" ng-model="mvm.module" ng-options="option.value as option.name for option in options"
+                            <div class="col-sm-5">
+                                <select class="form-control" id="sel1" ng-model="mvm.task" ng-options="option.value as option.name for option in optionsTask"
                                 />
                             </div>
                         </div>    
                         <div class="form-group">
                             <label class="col-sm-3 control-label">PIC Name</label>
-                            <div class="col-sm-8">
-                                <select class="form-control" id="sel1" ng-model="mvm.module" ng-options="option.value as option.name for option in options"
+                            <div class="col-sm-5">
+                                <select class="form-control" id="sel1" ng-model="mvm.pic" ng-options="option as option.name for option in teamMember track by option.id"
                                 />
                             </div>
+                            
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Target Date</label>
                             <div class="col-sm-5">
                                 <p class="input-group">
-                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions"
+                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dtPic" is-open="popup1.opened" datepicker-options="dateOptions"
                                         ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="open1()">
