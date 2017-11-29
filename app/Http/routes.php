@@ -45,3 +45,4 @@ $api->group(['middleware' => ['api', 'api.auth']], function ($api) {
     $api->controller('incidents', 'IncidentCtrl');
     $api->controller('incidentpics', 'IncidentPicCtrl');
 });
+

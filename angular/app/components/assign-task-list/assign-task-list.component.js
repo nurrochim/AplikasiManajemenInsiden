@@ -7,24 +7,8 @@ class AssignTaskListController {
         let IncidentList = this.API.service('incident-assignment', this.API.all('incidents'))
         IncidentList.one().get()
         .then((response) => {
-        //   let pics = response.data.issue;
-        //   console.info('test', response);
-        //   angular.forEach(response.data.pics, function (value, key) {
-        //     assignTaskPIC.push({
-        //       id: value.idPic,
-        //       fidIncident: value.fidIncident,
-        //       picName: value.picName,
-        //       taskName: value.task,
-        //       targetDate: value.targetDate,
-        //     });
-        //   })
-        // })
-        // IncidentList.getList()
-        //     .then((response) => {
                 console.info('test', response);
-                //let dataSet = response.plain();
                 let dataIncident = response.data.issue;
-                //let dataSet = dataIncident.plain(); 
                 this.dtOptions = DTOptionsBuilder.newOptions()
                     .withOption('data', dataIncident)
                     .withOption('createdRow', createdRow)
