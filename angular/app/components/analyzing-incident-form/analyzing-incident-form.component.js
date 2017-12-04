@@ -1,5 +1,5 @@
 class AnalyzingIncidentFormController {
-    constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal) {
+    constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService) {
         'ngInject'
 
         this.$state = $state;
@@ -19,7 +19,39 @@ class AnalyzingIncidentFormController {
         this.disableButtonStepTwo = true;
         this.showAlert = false;
         this.detailIncidentDisable = true;
+        this.params = [];
         //this.issueDataEdit = {};
+
+        // get data user
+        let controller = this;
+        controller.can = AclService.can
+
+        ContextService.me(function (data) {
+            controller.userData = data; 
+            if (data) {
+                controller.params = { idIncident: issueId, idUser: controller.userData.id, task: "Analyzing" };
+                getDataPicIncidentTask();
+            }
+        })
+
+        let IncidentList = this.API.service('pic-incident-task', this.API.all('incidentpics'))
+        let getDataPicIncidentTask = () => {
+            IncidentList.one().get(this.params)
+                .then((response) => {
+                    angular.forEach(response.data.pics, function (value, key) {
+                        if (value.startDate!=null) {
+                            controller.startDate = new Date(value.startDate);
+                        }
+                        if (value.finishDate!=null) {
+                            controller.finishDate = new Date(value.finishDate);
+                        }
+                        controller.targetDate = new Date(value.targetDate);
+                    })
+
+                }, function (error) {
+                    console.error('pic-incident-task', error);
+                })
+        }
 
         let issueId = $stateParams.issueId
         this.EditIssueId = issueId;
@@ -122,6 +154,10 @@ class AnalyzingIncidentFormController {
             $scope.popup2.opened = true;
         };
 
+        $scope.open3 = function () {
+            $scope.popup3.opened = true;
+        };
+
         // $scope.setDate = function (year, month, day) {
         //   $scope.dt = new Date(year, month, day);
         // };
@@ -138,6 +174,9 @@ class AnalyzingIncidentFormController {
             opened: false
         };
 
+        $scope.popup3 = {
+            opened: false
+        };
 
         function getDayClass(data) {
             var date = data.date,
@@ -311,8 +350,8 @@ class AnalyzingIncidentFormController {
             this.issueDataEdit.data.recreateStep = this.recreateStep;
             this.issueDataEdit.data.responTaken = this.responTaken;
             this.issueDataEdit.data.decidedSolution = this.decidedSolution;
-            
-            this.issueDataEdit.put()
+            let $picIncident = {picTask: 'Analyzing', picUser: this.userData.id, startDate: this.startDate, finishDate: this.finishDate};
+            this.issueDataEdit.put($picIncident)
                 .then(() => {
                     let disableButtonStepTwo_ = false;
                     let alert = {

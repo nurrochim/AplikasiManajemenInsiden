@@ -1,0 +1,86 @@
+<section class="content-header">
+    <h1>History Incident
+        <!-- <small></small> -->
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a ui-sref="app.landing">
+                <i class="fa fa-dashboard"></i> Home</a>
+        </li>
+        <li class="active">Incident List</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-sm-14 col-md-7">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Search Incident</h3>
+                </div>
+                <form class="form-horizontal" name="frmIssue" novalidate>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Id Incident</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" ng-model="vm.idIncident" name="idIncident" placeholder="Id Incident">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Incident Description</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" ng-model="vm.description" name="idIncident" placeholder="Id Incident">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Raised By</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="sel1" ng-model="vm.selectedReporter" ng-options="reporter as reporter.name for reporter in reporters track by reporter.id"
+                                    />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Raised Date</label>
+                            <div class="col-sm-5">
+                                <p class="input-group">
+                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="vm.raisedDate" is-open="popup1.opened"
+                                        datepicker-options="dateOptions" close-text="Close" alt-input-formats="altInputFormats"
+                                    />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open1()">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="box-footer">
+                    <div class="col-sm-12 ">
+                        <button ng-click="vm.eventSearch()" class="btn btn-primary pull-right">Search</button>
+                        <!-- <a class="btn btn-xs btn-primary" ui-sref="" ng-click="vm.search()"> Searh Incident
+                            <i class="fa fa-search"></i>
+                        </a> -->
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Incident List</h3>
+            <!-- <div class="box-tools pull-right">
+                        <a ui-sref="app.analyzingForm({issueId: 0})" class="btn btn-block btn-success btn-xs"><i class="fa fa-plus"></i> Add New</a>
+                      </div> -->
+        </div>
+        <div class="box-body">
+            <table datatable="" width="100%" class="table table-striped table-bordered" ng-if="vm.displayTable" dt-options="vm.dtOptions"
+                dt-columns="vm.dtColumns"></table>
+        </div>
+        <!-- <div class="box-footer">
+                      Footer
+                    </div> -->
+    </div>
+</section>

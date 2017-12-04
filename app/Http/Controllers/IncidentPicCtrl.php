@@ -53,7 +53,18 @@ class IncidentPicCtrl extends Controller
 
     public function getPicIncident($fidIncident)
     {
-        $pics = IncidentPicModel::where('fidIncident', $fidIncident)->orderBy('idPic', 'asc')->get();
+        $pics = IncidentPicModel::where('fidIncident', $fidIncident)->orderBy('task', 'asc')->get();
+        return response()->success(compact('pics'));
+    }
+
+    public function getPicIncidentTask(Request $request)
+    {
+        $sql = "select startDate, finishDate, targetDate from incident_pic where fidIncident = :idIncident and fidUser = :idUser and task = :task limit 1";
+        
+        $idIncident = $request->input('idIncident');
+        $idUser = $request->input('idUser');
+        $task = $request->input('task');
+        $pics = DB::select($sql, ['idUser'=>$idUser, 'task'=>$task, 'idIncident'=>$idIncident]);
         return response()->success(compact('pics'));
     }
 }

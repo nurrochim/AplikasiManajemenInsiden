@@ -509,7 +509,7 @@ export function RoutesConfig ($stateProvider, $urlRouterProvider) {
         issueId: null
       }
     })
-    .state('app.testing', {
+    .state('app.testing', { 
       url: '/testing', 
       data: {
         auth: true
@@ -528,6 +528,90 @@ export function RoutesConfig ($stateProvider, $urlRouterProvider) {
       views: {
         'main@app': {
           template: '<testing-incident-form></testing-incident-form>'
+        }
+      },
+      params: {
+        alerts: null,
+        disableButtonStepTwo: null,
+        inputState: null,
+        issueId: null
+      }
+    })
+    .state('app.confirm', {
+      url: '/confirm', 
+      data: {
+        auth: true
+      },
+      views: {
+        'main@app': {
+          template: '<confirm-closing-list></confirm-closing-list>'
+        }
+      }
+    })
+    .state('app.confirmForm', {
+      url: '/confirm/:issueId',
+      data: {
+        auth: true
+      },
+      views: {
+        'main@app': {
+          template: '<confirm-form></confirm-form>'
+        }
+      },
+      params: {
+        alerts: null,
+        disableButtonStepTwo: null,
+        inputState: null,
+        issueId: null
+      }
+    })
+    .state('app.confirmApproval', {
+      url: '/confirmApproval', 
+      data: {
+        auth: true
+      },
+      views: {
+        'main@app': {
+          template: '<confirm-approval-list></confirm-approval-list>'
+        }
+      }
+    })
+    .state('app.confirmApprovalForm', {
+      url: '/confirmApproval/:issueId',
+      data: {
+        auth: true
+      },
+      views: { 
+        'main@app': {
+          template: '<confirm-approval-form></confirm-approval-form>'
+        }
+      },
+      params: {
+        alerts: null,
+        disableButtonStepTwo: null,
+        inputState: null,
+        issueId: null
+      }
+    })
+    .state('app.history', {
+      url: '/history', 
+      data: {
+        auth: true
+      },
+      views: {
+        'main@app': {
+          template: '<history-incident-list></history-incident-list>'
+        }
+      }
+    })
+    .state('app.historyView', {
+      url: '/historyView/:issueId',
+      data: {
+        auth: true
+      },
+      views: { 
+        'main@app': {
+          template: '<history-incident-form></history-incident-form>'
         }
       },
       params: {

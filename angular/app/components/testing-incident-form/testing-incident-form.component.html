@@ -8,7 +8,7 @@
                 <i class="fa fa-dashboard"></i> Home</a>
         </li>
         <li>
-            <a ui-sref="app.assignTask">Assign Task</a>
+            <a ui-sref="app.testing">Incident List</a>
         </li>
         <li class="active">{{vm.form_title}}</li>
     </ol>
@@ -69,68 +69,67 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Raised By</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" ng-model="vm.role" name="raiseDate" placeholder="Raised By" required>
+                                            <input type="text" class="form-control" ng-model="vm.raisedBy" name="raiseDate" placeholder="Raised By" ng-disabled="vm.detailIncidentDisable">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Raised Date</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" ng-model="vm.role" name="raiseDate" placeholder="Raised Date" required>
+                                            <input type="text" class="form-control" ng-model="vm.raisedDate" name="raiseDate" placeholder="Raised Date" ng-disabled="vm.detailIncidentDisable">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Division</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.priority" ng-options="option.value as option.name for option in options"
-                                            />
+                                            <input type="text" class="form-control" ng-model="vm.division" name="division" placeholder="Division" ng-disabled="vm.detailIncidentDisable">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Group Division</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.priority" ng-options="option.value as option.name for option in options"
-                                            />
+                                            <input type="text" class="form-control" ng-model="vm.groupDivision" name="groupDivision" placeholder="Group Division" ng-disabled="vm.detailIncidentDisable">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Contact No</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" ng-model="vm.role" name="raiseDate" placeholder="Contact No" required>
+                                            <input type="text" class="form-control" ng-model="vm.contactNo" name="contactNo" placeholder="Contact No" ng-disabled="vm.detailIncidentDisable">
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
+
                             <div class="panel panel-default">
                                 <div class="panel-heading">Detail Incident </div>
+
                                 <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Priority</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" id="sel1" ng-model="vm.priority" ng-options="option.value as option.name for option in options"
+                                                ng-disabled="vm.detailIncidentDisable" />
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Issue Descriptions</label>
                                         <div class="col-sm-8">
                                             <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Issue descriptions"
-                                                value="{{issue_description}}" ng-model="vm.issue_description" ng-required="true"></textarea>
-                                            <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
+                                                ng-model="vm.issueDescription" ng-disabled="vm.detailIncidentDisable"></textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Module</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.raiseBy" ng-options="option.value as option.name for option in options"
-                                            />
+                                            <select class="form-control" id="sel1" ng-model="vm.module" ng-options="option.value as option.name for option in optionsModul"
+                                                ng-disabled="vm.detailIncidentDisable" />
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">Sub Module</label>
+                                        <label class="col-sm-3 control-label">Sub Modul</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.division" ng-options="option.value as option.name for option in options"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Priority</label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.groupDivision" ng-options="option.value as option.name for option in options"
-                                            />
+                                            <select class="form-control" id="sel1" ng-model="vm.subModule" ng-options="option.value as option.name for option in optionsSubModul"
+                                                ng-disabled="vm.detailIncidentDisable" />
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -150,72 +149,79 @@
                         </div>
                         <div ng-show="vm.stepTwo">
                             <div class="panel panel-default">
-                                <div class="panel-heading">Analyzing</div>
+                                <div class="panel-heading">Analyzing Result</div>
                                 <div class="panel-body">
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Category Analysis</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.raiseBy" ng-options="option.value as option.name for option in options"
-                                            />
+                                            <select class="form-control" id="sel1" ng-model="vm.categoryAnalysis" ng-options="option.value as option.name for option in options"
+                                                ng-disabled="vm.detailIncidentDisable" />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Category Group</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.division" ng-options="option.value as option.name for option in options"
-                                            />
+                                            <select class="form-control" id="sel1" ng-model="vm.categoryGroup" ng-options="option.value as option.name for option in options"
+                                                ng-disabled="vm.detailIncidentDisable" />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Category Root Cause</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.groupDivision" ng-options="option.value as option.name for option in options"
-                                            />
+                                            <select class="form-control" id="sel1" ng-model="vm.categoryRootCause" ng-options="option.value as option.name for option in options"
+                                                ng-disabled="vm.detailIncidentDisable" />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Root Cause Modul</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.groupDivision" ng-options="option.value as option.name for option in options"
-                                            />
+                                            <select class="form-control" id="sel1" ng-model="vm.rootCauseModule" ng-options="option.value as option.name for option in options"
+                                                ng-disabled="vm.detailIncidentDisable" />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Root Cause Sub Modul</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.groupDivision" ng-options="option.value as option.name for option in options"
-                                            />
+                                            <select class="form-control" id="sel1" ng-model="vm.rootCauseSubModule" ng-options="option.value as option.name for option in options"
+                                                ng-disabled="vm.detailIncidentDisable" />
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">Suspected Reason</label>
+                                        <label class="col-sm-4 control-label">Function</label>
                                         <div class="col-sm-8">
-                                            <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Suspected Reason"
-                                                value="{{issue_description}}" ng-model="vm.issue_description" ng-required="true"></textarea>
+                                            <input type="text" class="form-control" ng-model="vm.function" name="function" placeholder="Function" ng-disabled="vm.detailIncidentDisable">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Suspected Reason
+                                            <br/>(Root Cause)</label>
+                                        <div class="col-sm-8">
+                                            <textarea type="text" class="form-control has-error" rows="5" id="suspectedReason" name="suspectedReason" placeholder="Suspected Reason"
+                                                ng-model="vm.suspectedReason" ng-disabled="vm.detailIncidentDisable"></textarea>
                                             <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Recreate Step</label>
                                         <div class="col-sm-8">
-                                            <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Recreate Step"
-                                                value="{{issue_description}}" ng-model="vm.issue_description" ng-required="true"></textarea>
+                                            <textarea type="text" class="form-control has-error" rows="5" id="recreateStep" name="recreateStep" placeholder="Recreate Step"
+                                                ng-model="vm.recreateStep" ng-disabled="vm.detailIncidentDisable"></textarea>
                                             <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Respon Taken</label>
                                         <div class="col-sm-8">
-                                            <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Respon Taken"
-                                                value="{{issue_description}}" ng-model="vm.issue_description" ng-required="true"></textarea>
+                                            <textarea type="text" class="form-control has-error" rows="5" id="responTaken" name="responTaken" placeholder="Respon Taken"
+                                                ng-model="vm.responTaken" ng-disabled="vm.detailIncidentDisable"></textarea>
                                             <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Decide Solution</label>
                                         <div class="col-sm-8">
-                                            <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Decide Solution"
-                                                value="{{issue_description}}" ng-model="vm.issue_description" ng-required="true"></textarea>
+                                            <textarea type="text" class="form-control has-error" rows="5" id="decideSolution" name="decideSolution" placeholder="Decide Solution"
+                                                ng-model="vm.decidedSolution" ng-disabled="vm.detailIncidentDisable"></textarea>
                                             <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                         </div>
                                     </div>
@@ -223,26 +229,14 @@
                                 </div>
                             </div>
                             <div class="panel panel-default">
-                                <div class="panel-heading">Fixing</div>
+                                <div class="panel-heading">Fixing Result</div>
                                 <div class="panel-body">
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label">Target Fixed</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" ng-model="vm.role" name="raiseDate" placeholder="Raised Date" required>
-                                        </div>
-                                    </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Fixing Note's</label>
                                         <div class="col-sm-8">
                                             <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Fixing Note's"
-                                                value="{{issue_description}}" ng-model="vm.issue_description" ng-required="true"></textarea>
+                                                ng-model="vm.fixingNotes" ng-disabled="vm.detailIncidentDisable"></textarea>
                                             <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label">Finish Fixing Date</label>
-                                        <div class="col-sm-5">
-                                            <input type="text" class="form-control" ng-model="vm.role" name="raiseDate" placeholder="Finish Fixing Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -253,27 +247,70 @@
                                 <div class="panel-heading">Testing</div>
                                 <div class="panel-body">
                                     <div class="form-group">
-                                            <label class="col-sm-4 control-label">Testing Note's</label>
-                                            <div class="col-sm-8">
-                                                <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Testing Note's"
-                                                    value="{{issue_description}}" ng-model="vm.issue_description" ng-required="true"></textarea>
-                                                <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
-                                            </div>
+                                        <label class="col-sm-4 control-label">Start Testing</label>
+                                        <div class="col-sm-5">
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="vm.startDate" is-open="popup2.opened" datepicker-options="dateOptions"
+                                                    close-text="Close" alt-input-formats="altInputFormats" />
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" ng-click="open2()">
+                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                    </button>
+                                                </span>
+                                            </p>
                                         </div>
+                                    </div>
                                     <div class="form-group">
-                                        <label class="col-sm-4 control-label">Test Scenario</label>
+                                        <label class="col-sm-4 control-label">Finish Testing</label>
+                                        <div class="col-sm-5">
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="vm.finishDate" is-open="popup3.opened" datepicker-options="dateOptions"
+                                                    close-text="Close" alt-input-formats="altInputFormats" />
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" ng-click="open3()">
+                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                    </button>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Target Finish</label>
+                                        <div class="col-sm-5">
+                                            <p class="input-group">
+                                                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="vm.targetDate" is-open="popup1.opened" datepicker-options="dateOptions"
+                                                    close-text="Close" alt-input-formats="altInputFormats" ng-disabled="vm.detailIncidentDisable"
+                                                />
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" ng-click="open1()" ng-disabled="vm.detailIncidentDisable">
+                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                    </button>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Testing Note's</label>
                                         <div class="col-sm-8">
-                                            <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Test Scenario"
-                                                value="{{issue_description}}" ng-model="vm.issue_description" ng-required="true"></textarea>
+                                            <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Testing Note's"
+                                                ng-model="vm.testingNotes"></textarea>
                                             <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                            <label class="col-sm-4 control-label">Test Result</label>
-                                            <div class="col-sm-8">
-                                                <input type="text" class="form-control" ng-model="vm.role" name="raiseDate" placeholder="Test Result" required>
-                                            </div>
+                                        <label class="col-sm-4 control-label">Test Scenario</label>
+                                        <div class="col-sm-8">
+                                            <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Test Scenario"
+                                                ng-model="vm.testScenario"></textarea>
+                                            <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                         </div>
+                                    </div>
+                                    <!-- <div class="form-group">
+                                        <label class="col-sm-4 control-label">Test Result</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" ng-model="vm.role" name="raiseDate" placeholder="Test Result" required>
+                                        </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -370,11 +407,15 @@
                     <div class="box-footer">
                         <a ng-show="vm.stepTwo" ng-click="vm.eventStepOne()" class="btn btn-default">
                             <i class="fa fa-angle-double-left"></i> Back</a>
-                        <div ng-show="vm.stepOne">
-                            <button ng-show="!vm.isEdit" ng-click="vm.save(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Next</button>
-                            <button ng-show="vm.isEdit" ng-click="vm.update(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Update</button>
-                        </div>
-                        <a ng-show="vm.stepTwo" ui-sref="app.openissue" class="btn btn-primary pull-right">Finish</a>
+                        <a ng-show="vm.stepThree" ng-click="vm.eventStepTwo()" class="btn btn-default">
+                            <i class="fa fa-angle-double-left"></i> Back</a>
+                        <a ng-show="vm.stepFour" ng-click="vm.eventStepThree()" class="btn btn-default">
+                            <i class="fa fa-angle-double-left"></i> Back</a>
+
+                        <button ng-show="vm.stepOne" ng-click="vm.eventStepTwo()" class="btn btn-primary pull-right">Next</button>
+                        <button ng-show="vm.stepTwo" ng-click="vm.eventStepThree()" class="btn btn-primary pull-right">Next</button>
+                        <button ng-show="vm.stepThree" ng-click="vm.update(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Save</button>
+                        <a ng-show="vm.stepFour" ui-sref="app.testing" class="btn btn-primary pull-right">Finish Task</a>
                     </div>
                 </form>
             </div>

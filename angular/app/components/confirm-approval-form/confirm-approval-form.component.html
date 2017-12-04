@@ -1,0 +1,137 @@
+<section class="content-header">
+    <h1>{{vm.form_title}}
+        <!-- <small>Module description here</small> -->
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a ui-sref="app.landing">
+                <i class="fa fa-dashboard"></i> Home</a>
+        </li>
+        <li>
+            <a ui-sref="app.confirmApproval">Incident List</a>
+        </li>
+        <li class="active">{{vm.form_title}}</li>
+    </ol>
+</section>
+<section class="content">
+
+    <div class="row">
+        <div class="col-sm-12 col-md-7">
+            <div class="box box-primary">
+
+                <div class="box-header">
+                    <h3 class="box-title">{{vm.form_subTitle}}</h3>
+                </div>
+                <div class="box-header with-border"></div>
+                <form class="form-horizontal" name="frmIssue" novalidate>
+                    <div class="box-body">
+                        <div ng-show="vm.showAlert" class="box box-info">
+                            <div ng-if="vm.alerts" class="box-header with-border">
+                                <h3 class="box-title">Info Message</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div ng-if="vm.alerts" class="box-body alert alert-{{alert.type}}" ng-repeat="alert in vm.alerts">
+                                <h4>{{alert.title}}</h4>
+                                <p>{{alert.msg}}</p>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Confirm Option</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="sel1" ng-model="vm.selectedReporter" ng-options="option.value as option.name for option in options"
+                                    ng-change="vm.reloadDivision()" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Reason Descriptions</label>
+                            <div class="col-sm-8">
+                                <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Reason descriptions"
+                                    value="{{issue_description}}" ng-model="vm.issueDescription"></textarea>
+                                <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <a ng-show="vm.stepTwo" ng-click="vm.eventStepOne()" class="btn btn-default">
+                            <i class="fa fa-angle-double-left"></i> Back</a>
+                        <div ng-show="vm.stepOne">
+                            <button ng-show="!vm.isEdit" ng-click="vm.save(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Save</button>
+                            <button ng-show="vm.isEdit" ng-click="vm.update(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Update</button>
+                        </div>
+                        <a ng-show="vm.stepTwo" ui-sref="app.openissue" class="btn btn-primary pull-right">Finish</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div>
+        <style>
+            .full button span {
+                background-color: limegreen;
+                border-radius: 32px;
+                color: black;
+            }
+
+            .partially button span {
+                background-color: orange;
+                border-radius: 32px;
+                color: black;
+            }
+
+            .stepwizard-step p {
+                margin-top: 10px;
+            }
+
+            .stepwizard-row {
+                display: table-row;
+            }
+
+            .stepwizard {
+                display: table;
+                width: 50%;
+                position: relative;
+            }
+
+            .stepwizard-step button[disabled] {
+                opacity: 1 !important;
+                filter: alpha(opacity=100) !important;
+            }
+
+            .stepwizard-row:before {
+                top: 14px;
+                bottom: 0;
+                position: absolute;
+                content: " ";
+                width: 100%;
+                height: 1px;
+                background-color: #ccc;
+                z-order: 0;
+            }
+
+            .stepwizard-step {
+                display: table-cell;
+                text-align: center;
+                position: relative;
+            }
+
+            .btn-circle {
+                width: 30px;
+                height: 30px;
+                text-align: center;
+                padding: 6px 0;
+                font-size: 12px;
+                line-height: 1.428571429;
+                border-radius: 15px;
+            }
+        </style>
+</section>

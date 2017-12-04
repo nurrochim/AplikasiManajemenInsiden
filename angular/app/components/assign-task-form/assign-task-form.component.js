@@ -386,8 +386,8 @@ class AssignTaskFormController {
         value: 'Analyzing'
       },
       {
-        name: 'Programming',
-        value: 'Programming'
+        name: 'Fixing',
+        value: 'Fixing'
       },
       {
         name: 'Testing',

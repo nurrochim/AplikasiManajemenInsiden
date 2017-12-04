@@ -1,28 +1,13 @@
-class FixingIncidentListController{
+class ConfirmApprovalListController{
     constructor($scope, $state, $compile, DTOptionsBuilder, DTColumnBuilder, API, AclService, ContextService) {
         'ngInject';
         this.API = API
         this.$state = $state
 
-
-        let IncidentList = this.API.service('incident-by-user', this.API.all('incidents'))
-        this.params = [];
-        // get Login Data User
-        let analyzingIcident = this;
-        analyzingIcident.can = AclService.can
-
-        ContextService.me(function (data) {
-            analyzingIcident.userData = data; 
-            if (data) {
-                analyzingIcident.params = { idUser: analyzingIcident.userData.id, task: "Fixing" };
-                generateDataTable();
-            }
-        })
-
-        let generateDataTable = () => {
-        IncidentList.one().get(this.params) 
+        let IncidentList = this.API.service('incident-assignment', this.API.all('incidents'))
+        IncidentList.one().get()
             .then((response) => {
-                //         console.info('test', response);
+                console.info('test', response);
                 let dataIncident = response.data.issue;
                 this.dtOptions = DTOptionsBuilder.newOptions()
                     .withOption('data', dataIncident)
@@ -44,7 +29,7 @@ class FixingIncidentListController{
 
                 console.error('save-pic-error', error);
             })
-        }
+
 
         let createdRow = (row) => {
             $compile(angular.element(row).contents())($scope)
@@ -81,20 +66,22 @@ class FixingIncidentListController{
         let actionsHtml = (data) => {
             return `
                         <div style="text-align: center">
-                        <a class="btn btn-xs btn-warning" ui-sref="app.fixingForm({issueId: ${data.idIncident}})" uib-tooltip="Edit">
-                            <i class="fa fa-edit"></i>
-                        </a></div>`
+                        <a class="btn btn-xs btn-primary" ui-sref="app.confirmApprovalForm({issueId: ${data.idIncident}})" uib-tooltip="Edit Confirmation">
+                        <i class="fa fa-check-square-o"></i>
+                        </a>
+                        </div>
+                    ` 
         }
-        
+
     }
 
     $onInit(){
     }
 }
 
-export const FixingIncidentListComponent = {
-    templateUrl: './views/app/components/fixing-incident-list/fixing-incident-list.component.html',
-    controller: FixingIncidentListController,
+export const ConfirmApprovalListComponent = {
+    templateUrl: './views/app/components/confirm-approval-list/confirm-approval-list.component.html',
+    controller: ConfirmApprovalListController,
     controllerAs: 'vm',
     bindings: {}
 };

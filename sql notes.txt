@@ -1,0 +1,31 @@
+select * from tbl_issue where issue_description is not null
+
+update incident 
+set issue_description = '1). Pretermination overdue days in printform is not correct.
+
+2). Customer already paid for his 90 days overdue and remaining 25 days overdue (until 21 August 2015).
+
+3). Pretermination printform shown that this customer has 115 days overdue (90+25) but the penalty amount is correct.'
+where idIncident = 1
+
+SELECT * 
+FROM INCIDENT A LEFT JOIN INCIDENT_PIC B ON A.IDINCIDENT = B.FIDINCIDENT
+WHERE A.IDINCIDENT = 1
+
+SELECT A.* 
+FROM INCIDENT A 
+
+SELECT A.*, coalesce(B.PICNAME, '') Analyzing, coalesce(C.PICNAME, '') Programming, coalesce(D.PICNAME, '') Testing 
+FROM INCIDENT A 
+LEFT JOIN (SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') PICNAME,FIDINCIDENT  FROM INCIDENT_PIC WHERE TASK = 'Analyzing' 
+            GROUP BY FIDINCIDENT LIMIT 1) 
+    B ON A.IDINCIDENT = B.FIDINCIDENT
+LEFT JOIN (SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') PICNAME,FIDINCIDENT  FROM INCIDENT_PIC WHERE TASK = 'Programming' 
+            GROUP BY FIDINCIDENT LIMIT 1) 
+    C ON A.IDINCIDENT = C.FIDINCIDENT
+LEFT JOIN (SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') PICNAME,FIDINCIDENT  FROM INCIDENT_PIC WHERE TASK = 'Testing' 
+            GROUP BY FIDINCIDENT LIMIT 1) 
+    D ON A.IDINCIDENT = D.FIDINCIDENT        
+LEFT JOIN  INCIDENT_PIC E ON A.IDINCIDENT = E.FIDINCIDENT           
+WHERE E.FIDUSER = 1 AND E.TASK = 'ANALYZING'
+

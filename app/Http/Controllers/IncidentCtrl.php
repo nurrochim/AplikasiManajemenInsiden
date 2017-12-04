@@ -6,7 +6,9 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\IncidentModel;
+use App\IncidentPicModel;
 use Input;
+//use Request;
 
 class IncidentCtrl extends Controller
 {
@@ -41,11 +43,21 @@ class IncidentCtrl extends Controller
         return response()->success($issue);
     }
 
-    public function putIncidentShow()
+    public function putIncidentShow(Request $request)
     {
         $issueForm = Input::get('data');
-        $affectedRows = IncidentModel::where('idIncident', '=', intval($issueForm['idIncident']))->update($issueForm);
+        //$issueForms = Input::all();
+        $picTask = $request->input('picTask');
+        $picUser = $request->input('picUser');
+        $startDate = $request->input('startDate');
+        $finishDate = $request->input('finishDate');
 
+        $affectedRows = IncidentModel::where('idIncident', '=', intval($issueForm['idIncident']))->update($issueForm);
+        
+        // update PIC Task
+        if($picTask!=null){
+            DB::update('update incident_pic set startDate = :startDate, finishDate = :finishDate where fidUser =:fidUser and fidIncident =:fidIncident and task =:task' , ['fidUser'=>intval($picUser),'fidIncident'=>intval($issueForm['idIncident']), 'startDate'=>$startDate, 'finishDate'=>$finishDate, 'task'=>$picTask]);
+        }
         return response()->success($issueForm);
     }
 
@@ -64,17 +76,20 @@ class IncidentCtrl extends Controller
                        coalesce(A.module, '') module,
                        coalesce(A.subModule, '') subModule,
                        A.issueDescription,
-                       coalesce(B.PICNAME, '') pic_analyzing, coalesce(C.PICNAME, '') pic_fixing, coalesce(D.PICNAME, '') pic_testing 
+                        coalesce((SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') 
+                                FROM INCIDENT_PIC 
+                                WHERE TASK = 'Analyzing' AND FIDINCIDENT = A.IDINCIDENT
+                                GROUP BY FIDINCIDENT LIMIT 1), '') pic_analyzing, 
+                        coalesce((SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') 
+                                    FROM INCIDENT_PIC 
+                                    WHERE TASK = 'Fixing' AND FIDINCIDENT = A.IDINCIDENT
+                                    GROUP BY FIDINCIDENT LIMIT 1), '') pic_fixing, 
+                        coalesce((SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') 
+                                FROM INCIDENT_PIC 
+                                WHERE TASK = 'Testing' AND FIDINCIDENT = A.IDINCIDENT
+                                GROUP BY FIDINCIDENT LIMIT 1), '') pic_testing 
+
                     FROM INCIDENT A 
-                    LEFT JOIN (SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') PICNAME,FIDINCIDENT  FROM INCIDENT_PIC WHERE TASK = 'Analyzing' 
-                                GROUP BY FIDINCIDENT LIMIT 1) 
-                        B ON A.IDINCIDENT = B.FIDINCIDENT 
-                    LEFT JOIN (SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') PICNAME,FIDINCIDENT  FROM INCIDENT_PIC WHERE TASK = 'Programming' 
-                                GROUP BY FIDINCIDENT LIMIT 1) 
-                        C ON A.IDINCIDENT = C.FIDINCIDENT 
-                    LEFT JOIN (SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') PICNAME,FIDINCIDENT  FROM INCIDENT_PIC WHERE TASK = 'Testing' 
-                                GROUP BY FIDINCIDENT LIMIT 1) 
-                        D ON A.IDINCIDENT = D.FIDINCIDENT    
                     ORDER BY A.idIncident    ";
         // $issue = DB::connection()->getPdo()->exec($sql);
         $issue = DB::select($sql);
@@ -90,19 +105,21 @@ class IncidentCtrl extends Controller
                        coalesce(A.module, '') module,
                        coalesce(A.subModule, '') subModule,
                        A.issueDescription,
-                       coalesce(B.PICNAME, '') pic_analyzing, coalesce(C.PICNAME, '') pic_fixing, coalesce(D.PICNAME, '') pic_testing 
+                        coalesce((SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') 
+                                FROM INCIDENT_PIC 
+                                WHERE TASK = 'Analyzing' AND FIDINCIDENT = A.IDINCIDENT
+                                GROUP BY FIDINCIDENT LIMIT 1), '') pic_analyzing, 
+                        coalesce((SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') 
+                                    FROM INCIDENT_PIC 
+                                    WHERE TASK = 'Fixing' AND FIDINCIDENT = A.IDINCIDENT
+                                    GROUP BY FIDINCIDENT LIMIT 1), '') pic_fixing, 
+                        coalesce((SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') 
+                                FROM INCIDENT_PIC 
+                                WHERE TASK = 'Testing' AND FIDINCIDENT = A.IDINCIDENT
+                                GROUP BY FIDINCIDENT LIMIT 1), '') pic_testing 
                     FROM INCIDENT A 
-                    LEFT JOIN (SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') PICNAME,FIDINCIDENT  FROM INCIDENT_PIC WHERE TASK = 'Analyzing' 
-                                GROUP BY FIDINCIDENT LIMIT 1) 
-                        B ON A.IDINCIDENT = B.FIDINCIDENT 
-                    LEFT JOIN (SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') PICNAME,FIDINCIDENT  FROM INCIDENT_PIC WHERE TASK = 'Programming' 
-                                GROUP BY FIDINCIDENT LIMIT 1) 
-                        C ON A.IDINCIDENT = C.FIDINCIDENT 
-                    LEFT JOIN (SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') PICNAME,FIDINCIDENT  FROM INCIDENT_PIC WHERE TASK = 'Testing' 
-                                GROUP BY FIDINCIDENT LIMIT 1) 
-                        D ON A.IDINCIDENT = D.FIDINCIDENT    
-                    LEFT JOIN  INCIDENT_PIC E ON A.IDINCIDENT = E.FIDINCIDENT           
-                    WHERE E.FIDUSER = :idUser AND E.TASK = :task
+                    LEFT JOIN  INCIDENT_PIC B ON A.IDINCIDENT = B.FIDINCIDENT           
+                    WHERE B.FIDUSER = :idUser AND B.TASK = :task
                     ORDER BY A.idIncident    
                     ";
         // $issue = DB::connection()->getPdo()->exec($sql);
@@ -110,6 +127,39 @@ class IncidentCtrl extends Controller
         $idUser = $request->input('idUser');
         $task = $request->input('task');
         $issue = DB::select($sql, ['idUser'=>$idUser, 'task'=>$task]);
+        return response()->success(compact('issue'));
+    }
+
+    public function getIncidentFilter(Request $request)
+    { 
+        $sql = "SELECT A.idIncident, 
+                       A.raisedDate,
+                       A.raisedBy,
+                       coalesce(A.priority, '') priority,
+                       coalesce(A.module, '') module,
+                       coalesce(A.subModule, '') subModule,
+                       A.issueDescription,
+                        coalesce((SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') 
+                                FROM INCIDENT_PIC 
+                                WHERE TASK = 'Analyzing' AND FIDINCIDENT = A.IDINCIDENT
+                                GROUP BY FIDINCIDENT LIMIT 1), '') pic_analyzing, 
+                        coalesce((SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') 
+                                    FROM INCIDENT_PIC 
+                                    WHERE TASK = 'Fixing' AND FIDINCIDENT = A.IDINCIDENT
+                                    GROUP BY FIDINCIDENT LIMIT 1), '') pic_fixing, 
+                        coalesce((SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') 
+                                FROM INCIDENT_PIC 
+                                WHERE TASK = 'Testing' AND FIDINCIDENT = A.IDINCIDENT
+                                GROUP BY FIDINCIDENT LIMIT 1), '') pic_testing 
+                    FROM INCIDENT A 
+                    WHERE A.idIncident = :idIncident
+                    ORDER BY A.idIncident    
+                    ";
+        // $issue = DB::connection()->getPdo()->exec($sql);
+        //$task = 'Analyzing';
+        $idIncident = $request->input('idIncident');
+        $task = $request->input('task');
+        $issue = DB::select($sql, ['idIncident'=>$idIncident]);
         return response()->success(compact('issue'));
     }
 }
