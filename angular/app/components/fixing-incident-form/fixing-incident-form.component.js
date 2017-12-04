@@ -70,10 +70,10 @@ class FixingIncidentFormController {
         }
 
         if ($stateParams.disableButtonStepTwo !== null) {
-            this.eventStepFour();
+            this.eventStepTwo();
         }
 
-        this.form_title = "Edit Fixing Incident";
+        this.form_title = "Fixing Incident";
         this.form_subTitle = "Incident Number : " + issueId;
 
 
@@ -337,7 +337,7 @@ class FixingIncidentFormController {
         } else {
             this.formSubmitted = true
         }
-    }
+    } 
 
     eventStepOne() {
         this.stepOne = true;

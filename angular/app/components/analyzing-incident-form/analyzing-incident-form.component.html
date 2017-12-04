@@ -17,134 +17,153 @@
 
     <div class="row">
         <div class="col-sm-12 col-md-7">
-            <div class="box box-primary">
-
-                <div class="box-header">
-                    <h3 class="box-title">{{vm.form_subTitle}}</h3>
-                </div>
-                <div class="stepwizard col-md-offset-3 ">
-                    <div class="stepwizard-row setup-panel">
-                        <div class="stepwizard-step">
-                            <a type="button" class="btn btn-primary btn-circle" ng-click="vm.eventStepOne()">1</a>
-                        </div>
-                        <div class="stepwizard-step">
-                            <a type="button" ng-class="vm.classElemetStepTwo" ng-click="vm.eventStepTwo()">2</a>
-                        </div>
-                        <div class="stepwizard-step">
-                            <a type="button" ng-class="vm.classElemetStepThree" ng-click="vm.eventStepThree()">3</a>
-                        </div>
+            <form class="form-horizontal" name="frmIssue" novalidate>
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">{{vm.form_subTitle}}</h3>
                     </div>
-
-                </div>
-
-                <div class="box-header with-border"></div>
-                <form class="form-horizontal" name="frmIssue" novalidate>
                     <div class="box-body">
-                        <div ng-show="vm.showAlert" class="box box-info">
-                            <div ng-if="vm.alerts" class="box-header with-border">
-                                <h3 class="box-title">Info Message</h3>
+                        <div class="box box-warning collapsed-box">
+                            <div class="box-header with-border">
+                                <h6 class="box-title">End User Info</h6>
                                 <div class="box-tools pull-right">
                                     <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                                        <i class="fa fa-minus"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-box-tool" data-widget="remove">
-                                        <i class="fa fa-times"></i>
+                                        <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
                             </div>
+                            <div class="box-body">
 
-                            <div ng-if="vm.alerts" class="box-body alert alert-{{alert.type}}" ng-repeat="alert in vm.alerts">
-                                <h4>{{alert.title}}</h4>
-                                <p>{{alert.msg}}</p>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Raised By</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" ng-model="vm.raisedBy" name="raiseDate" placeholder="Raised By" ng-disabled="vm.detailIncidentDisable">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Raised Date</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" ng-model="vm.raisedDate" name="raiseDate" placeholder="Raised Date" ng-disabled="vm.detailIncidentDisable">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Division</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" ng-model="vm.division" name="division" placeholder="Division" ng-disabled="vm.detailIncidentDisable">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Group Division</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" ng-model="vm.groupDivision" name="groupDivision" placeholder="Group Division" ng-disabled="vm.detailIncidentDisable">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Contact No</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" ng-model="vm.contactNo" name="contactNo" placeholder="Contact No" ng-disabled="vm.detailIncidentDisable">
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
+                        <div class="box box-warning collapsed-box">
+                            <div class="box-header with-border">
+                                <h6 class="box-title">Detail Incident</h6>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <!-- <div class="panel panel-default">
+                            <div class="panel-heading">Detail Incident </div>
+
+                            <div class="panel-body"> -->
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Priority</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="sel1" ng-model="vm.priority" ng-options="option.value as option.name for option in options"
+                                            ng-disabled="vm.detailIncidentDisable" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Issue Descriptions</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Issue descriptions"
+                                            ng-model="vm.issueDescription" ng-disabled="vm.detailIncidentDisable"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Module</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="sel1" ng-model="vm.module" ng-options="option.value as option.name for option in optionsModul"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Sub Modul</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="sel1" ng-model="vm.subModule" ng-options="option.value as option.name for option in optionsSubModul"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">File Incident</label>
+                                    <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
+                                        <a>File Download</a>
+                                        <br/>
+                                        <a>File Download</a>
+                                        <br/>
+                                        <a>File Download</a>
+                                        <br/>
+                                        <a>File Download</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box box-danger">
+                    <div class="box-header">
+                    </div>
+                    <div class="stepwizard col-md-offset-3 ">
+                        <div class="stepwizard-row setup-panel">
+                            <div class="stepwizard-step">
+                                <a type="button" class="btn btn-primary btn-circle" ng-click="vm.eventStepOne()">1</a>
+                            </div>
+                            <div class="stepwizard-step">
+                                <a type="button" ng-class="vm.classElemetStepTwo" ng-click="vm.eventStepTwo()">2</a>
+                            </div>
+                            <div class="stepwizard-step">
+                                <a type="button" ng-class="vm.classElemetStepThree" ng-click="vm.eventStepThree()">3</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="box-header with-border"></div>
+                    <div ng-show="vm.showAlert" class="box box-info">
+                        <div ng-if="vm.alerts" class="box-header with-border">
+                            <h3 class="box-title">Info Message</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div ng-if="vm.alerts" class="box-body alert alert-{{alert.type}}" ng-repeat="alert in vm.alerts">
+                            <h4>{{alert.title}}</h4>
+                            <p>{{alert.msg}}</p>
+                        </div>
+
+                    </div>
+                    <div class="box-body">
                         <div ng-show="vm.stepOne">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">End User Info</div>
-                                <div class="panel-body">
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Raised By</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" ng-model="vm.raisedBy" name="raiseDate" placeholder="Raised By" ng-disabled="vm.detailIncidentDisable">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Raised Date</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" ng-model="vm.raisedDate" name="raiseDate" placeholder="Raised Date" ng-disabled="vm.detailIncidentDisable">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Division</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" ng-model="vm.division" name="division" placeholder="Division" ng-disabled="vm.detailIncidentDisable">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Group Division</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" ng-model="vm.groupDivision" name="groupDivision" placeholder="Group Division" ng-disabled="vm.detailIncidentDisable">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Contact No</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" ng-model="vm.contactNo" name="contactNo" placeholder="Contact No" ng-disabled="vm.detailIncidentDisable">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="panel panel-default">
-                                <div class="panel-heading">Detail Incident </div>
-
-                                <div class="panel-body">
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Priority</label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.priority" ng-options="option.value as option.name for option in options"
-                                                ng-disabled="vm.detailIncidentDisable" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Issue Descriptions</label>
-                                        <div class="col-sm-8">
-                                            <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Issue descriptions"
-                                                ng-model="vm.issueDescription" ng-disabled="vm.detailIncidentDisable"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Module</label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.module" ng-options="option.value as option.name for option in optionsModul"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">Sub Modul</label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.subModule" ng-options="option.value as option.name for option in optionsSubModul"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">File Incident</label>
-                                        <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
-                                            <a>File Download</a>
-                                            <br/>
-                                            <a>File Download</a>
-                                            <br/>
-                                            <a>File Download</a>
-                                            <br/>
-                                            <a>File Download</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div ng-show="vm.stepTwo">
                             <div class="panel panel-default">
                                 <div class="panel-heading">Analyzing Task</div>
                                 <div class="panel-body">
@@ -183,9 +202,9 @@
                                             <label class="col-sm-4 control-label">Target Finish</label>
                                             <div class="col-sm-5">
                                                 <p class="input-group">
-                                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="vm.targetDate" is-open="popup1.opened" datepicker-options="dateOptions"
-                                                        close-text="Close" alt-input-formats="altInputFormats" ng-disabled="vm.detailIncidentDisable"
-                                                    />
+                                                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="vm.targetDate" is-open="popup1.opened"
+                                                        datepicker-options="dateOptions" close-text="Close" alt-input-formats="altInputFormats"
+                                                        ng-disabled="vm.detailIncidentDisable" />
                                                     <span class="input-group-btn">
                                                         <button type="button" class="btn btn-default" ng-click="open1()" ng-disabled="vm.detailIncidentDisable">
                                                             <i class="glyphicon glyphicon-calendar"></i>
@@ -197,6 +216,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div ng-show="vm.stepTwo">
                             <div class="panel panel-default">
                                 <div class="panel-heading">Analyzing Result</div>
                                 <div class="panel-body">
@@ -278,92 +299,97 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-11" ng-show="vm.stepThree">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label" style="padding-top: 0px">Select images</label>
-                                <div class="col-sm-9">
-                                    <input type="file" nv-file-select="" uploader="uploader" multiple />
-                                    <br/>
-                                    <div ng-show="uploader.isHTML5">
-                                        <div nv-file-drop="" uploader="uploader" options="{ url: '/foo' }">
-                                            <div nv-file-over="" uploader="uploader" over-class="another-file-over-class" class="well my-drop-zone">
-                                                Drag and Drop Image in here.
+                        <div ng-show="vm.stepThree">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Upload File Analyzing</div>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label" style="padding-top: 0px">Select images</label>
+                                        <div class="col-sm-9">
+                                            <input type="file" nv-file-select="" uploader="uploader" multiple />
+                                            <br/>
+                                            <div ng-show="uploader.isHTML5">
+                                                <div nv-file-drop="" uploader="uploader" options="{ url: '/foo' }">
+                                                    <div nv-file-over="" uploader="uploader" over-class="another-file-over-class" class="well my-drop-zone">
+                                                        Drag and Drop Image in here.
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12" style="margin-bottom: 40px">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th width="50%">Name</th>
-                                            <th ng-show="uploader.isHTML5">Size</th>
-                                            <th ng-show="uploader.isHTML5">Progress</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="item in uploader.queue">
-                                            <td>
-                                                <strong>{{ item.file.name }}</strong>
-                                                <!-- Image preview -->
-                                                <!--auto height-->
-                                                <!--<div ng-thumb="{ file: item.file, width: 100 }"></div>-->
-                                                <!--auto width-->
-                                                <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
-                                                <!--fixed width and height -->
-                                                <!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>-->
-                                            </td>
-                                            <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
-                                            <td ng-show="uploader.isHTML5">
-                                                <div class="progress" style="margin-bottom: 0;">
-                                                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <span ng-show="item.isSuccess">
-                                                    <i class="glyphicon glyphicon-ok"></i>
-                                                </span>
-                                                <span ng-show="item.isCancel">
-                                                    <i class="glyphicon glyphicon-ban-circle"></i>
-                                                </span>
-                                                <span ng-show="item.isError">
-                                                    <i class="glyphicon glyphicon-remove"></i>
-                                                </span>
-                                            </td>
-                                            <td nowrap>
-                                                <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
-                                                    <span class="glyphicon glyphicon-upload"></span> Upload
-                                                </button>
-                                                <!-- <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                    <div class="col-md-12" style="margin-bottom: 40px">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th width="50%">Name</th>
+                                                    <th ng-show="uploader.isHTML5">Size</th>
+                                                    <th ng-show="uploader.isHTML5">Progress</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="item in uploader.queue">
+                                                    <td>
+                                                        <strong>{{ item.file.name }}</strong>
+                                                        <!-- Image preview -->
+                                                        <!--auto height-->
+                                                        <!--<div ng-thumb="{ file: item.file, width: 100 }"></div>-->
+                                                        <!--auto width-->
+                                                        <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+                                                        <!--fixed width and height -->
+                                                        <!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>-->
+                                                    </td>
+                                                    <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                                    <td ng-show="uploader.isHTML5">
+                                                        <div class="progress" style="margin-bottom: 0;">
+                                                            <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span ng-show="item.isSuccess">
+                                                            <i class="glyphicon glyphicon-ok"></i>
+                                                        </span>
+                                                        <span ng-show="item.isCancel">
+                                                            <i class="glyphicon glyphicon-ban-circle"></i>
+                                                        </span>
+                                                        <span ng-show="item.isError">
+                                                            <i class="glyphicon glyphicon-remove"></i>
+                                                        </span>
+                                                    </td>
+                                                    <td nowrap>
+                                                        <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                                            <span class="glyphicon glyphicon-upload"></span> Upload
+                                                        </button>
+                                                        <!-- <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
                                                                             <span class="glyphicon glyphicon-ban-circle"></span> Cancel
                                                                         </button> -->
-                                                <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove();deleteImage(item.file.name)">
-                                                    <span class="glyphicon glyphicon-trash"></span> Remove
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                                        <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove();deleteImage(item.file.name)">
+                                                            <span class="glyphicon glyphicon-trash"></span> Remove
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
 
-                                <div>
-                                    <div>
-                                        Queue progress:
-                                        <div class="progress" style="">
-                                            <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
-                                        </div>
-                                    </div>
-                                    <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
-                                        <span class="glyphicon glyphicon-upload"></span> Upload all
-                                    </button>
-                                    <!-- <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
+                                        <div>
+                                            <div>
+                                                Queue progress:
+                                                <div class="progress" style="">
+                                                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                                                <span class="glyphicon glyphicon-upload"></span> Upload all
+                                            </button>
+                                            <!-- <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
                                                                 <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
                                                             </button> -->
-                                    <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
-                                        <span class="glyphicon glyphicon-trash"></span> Remove all
-                                    </button>
+                                            <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                                                <span class="glyphicon glyphicon-trash"></span> Remove all
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -379,8 +405,9 @@
                         <button ng-show="vm.stepTwo" ng-click="vm.update(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Save</button>
                         <a ng-show="vm.stepThree" ui-sref="app.analyzing" class="btn btn-primary pull-right">Send For Fixing</a>
                     </div>
-                </form>
-            </div>
+
+                </div>
+            </form>
         </div>
     </div>
 

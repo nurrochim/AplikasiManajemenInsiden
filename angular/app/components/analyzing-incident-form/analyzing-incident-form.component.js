@@ -72,7 +72,7 @@ class AnalyzingIncidentFormController {
             this.eventStepThree();
         }
 
-        this.form_title = "Edit Analyzing Incident";
+        this.form_title = "Analyzing Incident";
         this.form_subTitle = "Incident Number : " + issueId;
 
 

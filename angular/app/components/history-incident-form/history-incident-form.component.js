@@ -56,7 +56,7 @@ class HistoryIncidentFormController{
             this.eventStepFour();
         }
 
-        this.form_title = "Edit Confirm History";
+        this.form_title = "History Incident";
         this.form_subTitle = "Incident Number : " + issueId;
 
 

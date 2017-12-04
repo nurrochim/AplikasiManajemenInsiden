@@ -71,10 +71,10 @@ class TestingIncidentFormController {
         }
 
         if ($stateParams.disableButtonStepTwo !== null) {
-            this.eventStepFour();
+            this.eventStepTwo();
         }
 
-        this.form_title = "Edit Testing Incident";
+        this.form_title = "Testing Incident";
         this.form_subTitle = "Incident Number : " + issueId;
 
 
