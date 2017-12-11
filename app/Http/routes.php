@@ -10,6 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+use JasperPHP\JasperPHP as JasperPHP;
 
 Route::group(['middleware' => ['web']], function () {
     Route::get('/', 'AngularController@serveApp');
@@ -21,6 +22,49 @@ Route::group(['middleware' => ['web']], function () {
 });
 Route::post('/upload', function(){return view('upload');});
 Route::post('/destroy-image', 'ImageController@destroyImage');
+Route::post('/file-upload', 'ImageController@uploadImage');
+Route::get('/download', 'ImageController@getDownload');
+Route::get('/download-report', 'ImageController@getCreatePdf');
+Route::get('/download-report3', 'ImageController@createTcpdf');
+Route::get('/download-report2', function () {
+    
+        $jasper = new JasperPHP;
+    
+        // Compile a JRXML to Jasper
+        //$jasper->compile(public_path().'/file_incident/hello_world.jrxml')->execute();
+    
+        // Process a Jasper file to PDF and RTF (you can use directly the .jrxml)
+        $jasper->process(
+            public_path().'/file_incident/hello_world.jasper',
+            false,
+            array("pdf", "rtf"),
+            array("php_version" => "xxx")
+        )->output();
+        echo "<pre>";
+        print_r($jasper) ;
+        echo "<pre>";
+    
+        // List the parameters from a Jasper file.
+        $array = $jasper->list_parameters(
+            public_path().'/file_incident/hello_world.jasper'
+        )->output();
+    
+        return view('welcome');
+    });
+Route::get('/download/{idIncident}/{filename}', function ($idIncident,$filename)
+{
+    $path = public_path()."/file_incident/".$idIncident."/". $filename;
+
+    if(!File::exists($path)) abort(404);
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+
+    return $response;
+});
 
 $api->group(['middleware' => ['api']], function ($api) {
     $api->controller('auth', 'Auth\AuthController');
@@ -44,5 +88,6 @@ $api->group(['middleware' => ['api', 'api.auth']], function ($api) {
     $api->controller('issues', 'ControllerIssueList');
     $api->controller('incidents', 'IncidentCtrl');
     $api->controller('incidentpics', 'IncidentPicCtrl');
+    $api->controller('files', 'ImageController');
 });
 

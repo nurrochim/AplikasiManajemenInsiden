@@ -2,68 +2,86 @@
   <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
       <div class="info-box">
-        <span class="info-box-icon bg-red"><i class="fa fa-plus-circle"></i></span>
+        <span class="info-box-icon bg-aqua">
+          <i class="fa fa-plus-circle"></i>
+        </span>
         <div class="info-box-content">
           <span class="info-box-text">New Incident</span>
-          <span class="info-box-number">90<small>%</small></span>
+          <span class="info-box-number">5</span>
         </div>
       </div>
     </div>
     <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box">
-          <span class="info-box-icon bg-silver"><i class="ion ion-ios-people-outline"></i></span>
-          <div class="info-box-content">
-            <span class="info-box-text">Assigned</span>
-            <span class="info-box-number">760</span>
-          </div>
+      <div class="info-box">
+        <span class="info-box-icon bg-aqua">
+          <i class="ion ion-ios-people-outline"></i>
+        </span>
+        <div class="info-box-content">
+          <span class="info-box-text">Assigned</span>
+          <span class="info-box-number">5</span>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
       <div class="info-box">
-        <span class="info-box-icon bg-blue"><i class="fa fa-file-text-o"></i></span>
+        <span class="info-box-icon bg-yellow">
+          <i class="fa fa-file-text-o"></i>
+        </span>
         <div class="info-box-content">
           <span class="info-box-text">Analyzing</span>
-          <span class="info-box-number">41,410</span>
+          <span class="info-box-number">3</span>
         </div>
       </div>
     </div>
     <div class="clearfix visible-sm-block"></div>
     <div class="col-md-3 col-sm-6 col-xs-12">
       <div class="info-box">
-        <span class="info-box-icon bg-teal"><i class="ion ion-ios-gear-outline"></i></span>
+        <span class="info-box-icon bg-yellow">
+          <i class="fa fa-code"></i>
+        </span>
         <div class="info-box-content">
           <span class="info-box-text">Fixing</span>
-          <span class="info-box-number">760</span>
+          <span class="info-box-number">17</span>
         </div>
       </div>
     </div>
     <div class="col-md-3 col-sm-6 col-xs-12">
       <div class="info-box">
-        <span class="info-box-icon bg-yellow"><i class="ion ion-android-done-all"></i></span>
+        <span class="info-box-icon bg-yellow">
+          <i class="ion ion-android-done-all"></i>
+        </span>
         <div class="info-box-content">
           <span class="info-box-text">Testing</span>
-          <span class="info-box-number">2,000</span>
+          <span class="info-box-number">5</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-green">
+          <i class="ion ion-ios-chatboxes-outline"></i>
+        </span>
+        <div class="info-box-content">
+          <span class="info-box-text">In Confirmation</span>
+          <span class="info-box-number">20</span>
         </div>
       </div>
     </div>
     <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box">
-          <span class="info-box-icon bg-aqua"><i class="ion ion-ios-chatboxes-outline"></i></span>
-          <div class="info-box-content">
-            <span class="info-box-text">In Confirmation</span>
-            <span class="info-box-number">2,000</span>
-          </div>
+      <div class="info-box">
+        <span class="info-box-icon bg-green">
+          <i class="fa fa-book"></i>
+        </span>
+        <div class="info-box-content">
+          <span class="info-box-text">Closed</span>
+          <span class="info-box-number">700</span>
         </div>
       </div>
-      <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-green"><i class="fa fa-tags"></i></span>
-            <div class="info-box-content">
-              <span class="info-box-text">Closed</span>
-              <span class="info-box-number">2,000</span>
-            </div>
-          </div>
-        </div>
+    </div>
   </div>
   <div class="row">
     <div class="col-md-12">
@@ -71,34 +89,60 @@
         <div class="box-header with-border">
           <h3 class="box-title">Monthly Recap Report</h3>
           <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-minus"></i>
             </button>
-            <div class="btn-group">
-              <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
+            <!-- <div class="btn-group dropdown">
+              <button type="button" class="btn btn-box-tool dropdown-toggle" dropdown-toggle>
                 <i class="fa fa-wrench"></i></button>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
+                <div class="dropdown-menu" role="menu">
+                  <a class="dropdown-item" href="#">Action</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Separated link</a>
+                </div>
+            </div> -->
+            <div class="btn-group" uib-dropdown is-open="status.isopen">
+              <button id="single-button" type="button" class="btn btn-box-tool" uib-dropdown-toggle ng-disabled="disabled">
+                <!-- Button dropdown <span class="caret"></span> -->
+                <i class="fa fa-wrench"></i>
+              </button>
+              <!-- </button> -->
+              <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                <li role="menuitem">
+                  <a href="#">Action</a>
+                </li>
+                <li role="menuitem">
+                  <a href="#">Another action</a>
+                </li>
+                <li role="menuitem">
+                  <a href="#">Something else here</a>
+                </li>
                 <li class="divider"></li>
-                <li><a href="#">Separated link</a></li>
+                <li role="menuitem">
+                  <a href="#">Separated link</a>
+                </li>
               </ul>
             </div>
-            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            <button type="button" class="btn btn-box-tool" data-widget="remove">
+              <i class="fa fa-times"></i>
+            </button>
           </div>
         </div>
         <div class="box-body">
           <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
               <p class="text-center">
-                <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
+                <strong>Incident: 1 Jan 2017 - 30 Jul 2017</strong>
               </p>
               <div class="chart">
-                <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="false" chart-series="series" chart-click="onClick" style="height: 180px;">
+                <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="false" chart-series="series"
+                  chart-click="onClick" style="height: 250px;">
                 </canvas>
               </div>
             </div>
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
               <p class="text-center">
                 <strong>Goal Completion</strong>
               </p>
@@ -130,10 +174,10 @@
                   <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
-        <div class="box-footer">
+        <!-- <div class="box-footer">
           <div class="row">
             <div class="col-sm-3 col-xs-6">
               <div class="description-block border-right">
@@ -164,7 +208,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

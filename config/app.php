@@ -164,7 +164,8 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Bican\Roles\RolesServiceProvider::class,
-
+        JasperPHP\JasperPHPServiceProvider::class,
+        Elibyy\TCPDF\ServiceProvider::class,
     ],
 
     /*
@@ -213,6 +214,7 @@ return [
         'Input'     => Illuminate\Support\Facades\Input::class,
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'PDF' => Elibyy\TCPDF\Facades\TCPDF::class
     ],
 
 ];

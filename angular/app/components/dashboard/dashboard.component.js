@@ -1,5 +1,5 @@
 class DashboardController {
-  constructor ($scope) {
+  constructor ($scope, $log) {
     'ngInject'
 
     $scope.labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
@@ -13,6 +13,28 @@ class DashboardController {
 
     $scope.pieLabels = ['Download Sales', 'In-Store Sales', 'Mail-Order Sales']
     $scope.pieData = [300, 500, 100]
+
+    $scope.items = [
+      'The first choice!',
+      'And another choice for you.',
+      'but wait! A third!'
+    ];
+  
+    $scope.status = {
+      isopen: false
+    };
+  
+    $scope.toggled = function(open) {
+      $log.log('Dropdown is now: ', open);
+    };
+  
+    $scope.toggleDropdown = function($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      $scope.status.isopen = !$scope.status.isopen;
+    };
+  
+    $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
   }
 }
 

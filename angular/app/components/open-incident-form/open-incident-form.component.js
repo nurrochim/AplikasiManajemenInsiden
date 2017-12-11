@@ -1,5 +1,5 @@
 class OpenIncidentFormController {
-  constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, AclService, ContextService) {
+  constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, AclService, ContextService, $window) {
     'ngInject'
 
     this.$state = $state;
@@ -8,6 +8,7 @@ class OpenIncidentFormController {
     this.form_title = '';
     this.API = API;
     this.$scope = $scope;
+    this.$window = $window; 
     this.raise_date = "2017-09-21T18:25:43-05:00";
     this.EditIssueId = '';
     this.stepOne = true;
@@ -15,12 +16,14 @@ class OpenIncidentFormController {
     this.classElemetStepTwo = 'btn btn-default btn-circle';
     this.disableButtonStepTwo = true;
     this.showAlert = false;
+    this.$http = $http;
     //this.issueDataEdit = {};
 
 
 
     let issueId = $stateParams.issueId
     this.EditIssueId = issueId;
+    this.$scope.idIncident = issueId;
     let inputState = $stateParams.inputState
     //$log.info(issueId+' '+inputState);
 
@@ -113,11 +116,13 @@ class OpenIncidentFormController {
       })
 
     let openIcident = this;
+    $scope.userName = '';
     openIcident.can = AclService.can
 
     ContextService.me(function (data) {
       openIcident.userData = data;
-      if (data) {
+      openIcident.$scope.userName = openIcident.userData.name;
+      if (openIcident.userData) {
         switch (inputState) {
           case 'add':
             openIcident.selectedReporter = { id: openIcident.userData.id, name: openIcident.userData.name, division: openIcident.userData.division, groupDivision: openIcident.userData.group_division };
@@ -127,6 +132,23 @@ class OpenIncidentFormController {
         }
       }
     })
+
+
+    // get file incident
+    $scope.files = [];
+    let fileOpen = API.service('file-by-group', API.all('files'))
+    fileOpen.one().get({idIncident:this.EditIssueId, fileGroup:'Open'})
+      .then((response) => {
+        let filesOpen = response.data.files;
+        angular.forEach(response.data.files, function (value, key) {
+          $scope.files.push({
+            id: value.id,
+            fidIncident: value.fidIncident,
+            fileName: value.fileName,
+            fileUrl: "http://" + $window.location.host +"/download/"+value.fidIncident+"/"+value.fileName
+          });
+        })
+      })
 
     function getIssueData() {
 
@@ -228,8 +250,13 @@ class OpenIncidentFormController {
     }
 
     var uploader = $scope.uploader = new FileUploader({
-      url: 'upload'
+      url: 'file-upload',
+      method: 'POST'
     });
+
+    uploader.onBeforeUploadItem = function (item) {
+      item.formData = [{ idIncident: $scope.idIncident, fileGorup: 'Open', userName: $scope.userName }];
+    };
 
     $scope.deleteImage = function (id) {
       console.info('removeId', id);
@@ -268,30 +295,37 @@ class OpenIncidentFormController {
     //   }
     // });
 
-     // a sync filter
-     uploader.filters.push({
+    // a sync filter
+    uploader.filters.push({
       name: 'syncFilter',
-      fn: function(item /*{File|FileLikeObject}*/, options) {
-          console.log('syncFilter');
-          return this.queue.length < 10;
+      fn: function (item /*{File|FileLikeObject}*/, options) {
+        console.log('syncFilter');
+        return this.queue.length < 10;
       }
-  });
+    });
 
-  // an async filter
-  uploader.filters.push({
+    // an async filter
+    uploader.filters.push({
       name: 'asyncFilter',
-      fn: function(item /*{File|FileLikeObject}*/, options, deferred) {
-          console.log('asyncFilter');
-          setTimeout(deferred.resolve, 1e3);
+      fn: function (item /*{File|FileLikeObject}*/, options, deferred) {
+        console.log('asyncFilter');
+        setTimeout(deferred.resolve, 1e3);
       }
-  });
+    });
 
+
+    uploader.onCompleteItem = function (fileItem, response, status, headers) {
+      console.info('onCompleteItem', fileItem, response, status, headers);
+    };
+    uploader.onCompleteAll = function () {
+      console.info('onCompleteAll');
+    };
 
     //console.info('uploader', uploader);
 
   }
 
-  filterImage(item){
+  filterImage(item) {
     var type = item.slice((item.lastIndexOf(".") - 1 >>> 0) + 2);
     return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
   }
@@ -312,6 +346,51 @@ class OpenIncidentFormController {
     this.division = this.selectedReporter.division;
     this.groupDivision = this.selectedReporter.groupDivision;
   }
+
+  downloadAttachment($idIncident, $fileName) {
+    let $http = this.$http;
+    var path = 'download/'.concat($idIncident,"/",$fileName);
+    $http({
+      url: path,
+      method: 'GET',
+      headers: {
+        'Content-Type': undefined
+      }
+    }) 
+      // .success(function (respon) {
+        //alert(result);
+        //console.info('remove', result);
+      // });
+    // let CreateIssue = this.API.service('download', this.API.all('files'))
+    // CreateIssue.one().get()
+    .then((respon) => { 
+      //console.info('download respon', respon);
+        // var url = (window.URL || window.webkitURL).createObjectURL(response);
+        // window.open(url); 
+
+        //create sample hidden link in document, to accept Blob returned in the response from back end
+    
+	    	var downloadLink = document.createElement("a");
+    
+        document.body.appendChild(downloadLink);
+        downloadLink.style = "display: none";
+    
+    //This service is written Below how does it work, by aceepting necessary params
+        
+     
+          var fName = 'Kartu Ujian.pdf'; 
+          var file = new Blob([respon]);
+          var fileURL = (window.URL || window.webkitURL).createObjectURL(file);
+    
+              
+    //Blob, client side object created to with holding browser specific download popup, on the URL created with the help of window obj.
+              
+          downloadLink.href = fileURL;
+          downloadLink.download = fName;
+          downloadLink.click();
+      })
+    }
+  
 
   save(isValid) {
     if (isValid) {
@@ -348,8 +427,8 @@ class OpenIncidentFormController {
       //console.log('Is Update');
       this.issueDataEdit.data.raisedDate = this.$scope.dt;
       this.issueDataEdit.data.raisedBy = this.selectedReporter.name,
-      this.issueDataEdit.data.fidUserRaised = this.selectedReporter.id,
-      this.issueDataEdit.data.division = this.division;
+        this.issueDataEdit.data.fidUserRaised = this.selectedReporter.id,
+        this.issueDataEdit.data.division = this.division;
       this.issueDataEdit.data.groupDivision = this.groupDivision;
       this.issueDataEdit.data.issueDescription = this.issueDescription;
 

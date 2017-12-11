@@ -66,7 +66,7 @@
                                             ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="open1()">
-                                                <i class="glyphicon glyphicon-calendar"></i>
+                                                <i class="fa fa-calendar"></i>
                                             </button>
                                         </span>
                                     </p>
@@ -108,6 +108,27 @@
                             </div>
                         </div>
                         <div class="col-sm-11" ng-show="vm.stepTwo">
+                                <div class="form-group">
+                                        <label class="col-sm-3 control-label">File Attachment</label>
+                                        <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
+                                                <li ng-repeat="file_item in files">
+                                                        <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
+                                                        <br/>
+                                                </li>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-group">
+                                            <label class="col-sm-3 control-label">File Attachment</label>
+                                            <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
+                                                <a ng-click="vm.downloadAttachment()">File Download Kartu Ujian</a>
+                                                <br/>
+                                                <a href="http://localhost:8000/download">File Download Direct</a>
+                                                <br/>
+                                                <a>File Download</a>
+                                                <br/>
+                                                <a>File Download</a>
+                                            </div>
+                                        </div> -->
                             <div class="form-group">
                                 <label class="col-sm-3 control-label" style="padding-top: 0px">Select images</label>
                                 <div class="col-sm-9">
@@ -155,24 +176,24 @@
                                             </td>
                                             <td class="text-center">
                                                 <span ng-show="item.isSuccess">
-                                                    <i class="glyphicon glyphicon-ok"></i>
+                                                    <i class="fa fa-check"></i>
                                                 </span>
                                                 <span ng-show="item.isCancel">
-                                                    <i class="glyphicon glyphicon-ban-circle"></i>
+                                                    <i class="fa fa-ban"></i>
                                                 </span>
                                                 <span ng-show="item.isError">
-                                                    <i class="glyphicon glyphicon-remove"></i>
+                                                    <i class="fa fa-times"></i>
                                                 </span>
                                             </td>
                                             <td nowrap>
                                                 <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
-                                                    <span class="glyphicon glyphicon-upload"></span> Upload
+                                                    <span class="fa fa-upload"></span> Upload
                                                 </button>
                                                 <!-- <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
-                                                                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                                                        <span class="fa fa-ban"></span> Cancel
                                                                     </button> -->
                                                 <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove();deleteImage(item.file.name)">
-                                                    <span class="glyphicon glyphicon-trash"></span> Remove
+                                                    <span class="fa fa-trash-o"></span> Remove
                                                 </button>
                                             </td>
                                         </tr>
@@ -182,18 +203,18 @@
                                 <div>
                                     <div>
                                         Queue progress:
-                                        <div class="progress" style="">
+                                        <div class="progress" >
                                             <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
                                         </div>
-                                    </div>
+                                    </div> 
                                     <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
-                                        <span class="glyphicon glyphicon-upload"></span> Upload all
+                                        <span class="fa fa-upload"></span> Upload all
                                     </button>
                                     <!-- <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
                                                             <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
                                                         </button> -->
                                     <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
-                                        <span class="glyphicon glyphicon-trash"></span> Remove all
+                                        <span class="fa fa-trash-o"></span> Remove all
                                     </button>
                                 </div>
 

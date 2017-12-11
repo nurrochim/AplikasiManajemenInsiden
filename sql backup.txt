@@ -1,0 +1,396 @@
+# Host: localhost  (Version 5.5.11)
+# Date: 2017-12-07 22:44:04
+# Generator: MySQL-Front 5.4  (Build 4.8)
+# Internet: http://www.mysqlfront.de/
+
+/*!40101 SET NAMES utf8 */;
+
+#
+# Structure for table "cmn_id_counter"
+#
+
+DROP TABLE IF EXISTS `cmn_id_counter`;
+CREATE TABLE `cmn_id_counter` (
+  `Id` varchar(5) NOT NULL DEFAULT '',
+  `current_seq` int(5) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+#
+# Data for table "cmn_id_counter"
+#
+
+INSERT INTO `cmn_id_counter` VALUES ('MBF',2);
+
+#
+# Structure for table "incident"
+#
+
+DROP TABLE IF EXISTS `incident`;
+CREATE TABLE `incident` (
+  `idIncident` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `raisedBy` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `raisedDate` date NOT NULL,
+  `priority` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `module` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `subModule` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `division` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `groupDivision` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `categoryGroup` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `categoryRootCause` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `categoryAnalysis` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `issueDescription` text COLLATE utf8_unicode_ci,
+  `expectedResult` text COLLATE utf8_unicode_ci,
+  `suspectedReason` text COLLATE utf8_unicode_ci,
+  `function` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `statusTask` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `statusAssignment` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `needCr` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `estimationDurationCr` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `rootCauseModule` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `rootCauseSubmodule` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `recreateStep` text COLLATE utf8_unicode_ci,
+  `responTaken` text COLLATE utf8_unicode_ci,
+  `decidedSolution` text COLLATE utf8_unicode_ci,
+  `targetFixedDate` date DEFAULT NULL,
+  `finishFixedDate` date DEFAULT NULL,
+  `fixingNotes` text COLLATE utf8_unicode_ci,
+  `testScenario` text COLLATE utf8_unicode_ci,
+  `testNotes` text COLLATE utf8_unicode_ci,
+  `testResult` text COLLATE utf8_unicode_ci,
+  `closedDate` date DEFAULT NULL,
+  `closedBy` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `createBy` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `updateBy` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `fidUserRaised` int(10) DEFAULT NULL,
+  PRIMARY KEY (`idIncident`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "incident"
+#
+
+INSERT INTO `incident` VALUES (1,'ochim','2017-08-01','Critical','New','CBCS','Finance Report','BU-Pangjay','Accounting','High','Medium','Critical','1). Pretermination overdue days in printform is not correct.\n\n2). Customer already paid for his 90 days overdue and remaining 25 days overdue (until 21 August 2015).\n\n3). Pretermination printform shown that this customer has 115 days overdue (90+25) but the penalty amount is correct.',NULL,'Suspected','Function','New',NULL,NULL,NULL,'Low','Low','recreateStep','Respon Taken','Solution',NULL,'2017-12-05','Fixing is done','Testing notes','Fixing is done',NULL,NULL,NULL,NULL,NULL,NULL,'2017-11-25 05:33:42',75),(2,'ochim','2017-11-24','High',NULL,'BackEnd Tools','Insurance Payment','Coba Aja','Coba Edit',NULL,NULL,NULL,'Test Update',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2017-11-24 12:31:45','2017-11-24 12:31:45',75),(3,'ochim','2017-11-24','High',NULL,'All Modules','Update Additional Info','Coba','Coba',NULL,NULL,NULL,'Coba Ke Dua',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2017-11-24 16:05:59','2017-11-24 16:05:59',75),(4,'ochim','2017-11-24',NULL,NULL,NULL,NULL,'Test Ke 3','Test Ke 3',NULL,NULL,NULL,'Test Ke 3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2017-11-24 16:07:09','2017-11-24 16:07:09',75),(5,'test3','2017-11-24',NULL,NULL,NULL,NULL,'Test aja yah','Test Test Test',NULL,NULL,NULL,'Description Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2017-11-24 19:47:07','2017-11-24 19:47:07',73),(6,'test2','2017-11-25',NULL,NULL,NULL,NULL,'BA CKR','Marketing',NULL,NULL,NULL,'Test Ke 4',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2017-11-25 18:44:37','2017-11-25 18:44:37',72),(7,'admin','2017-12-02',NULL,NULL,NULL,NULL,'ITSPD','ITSPD',NULL,NULL,NULL,'Coba',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2017-12-02 08:21:53','2017-12-02 08:21:53',1),(8,'admin','2017-12-05',NULL,NULL,NULL,NULL,'ITSPD','ITSPD',NULL,NULL,NULL,'Test Counter',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'MBF-0001',NULL,NULL,NULL,NULL,'2017-12-05 07:37:10','2017-12-05 07:37:10',1),(9,'admin','2017-12-05',NULL,NULL,NULL,NULL,'ITSPD','ITSPD',NULL,NULL,NULL,'Test Counter MBF Issue',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'MBF-0002',NULL,NULL,NULL,NULL,'2017-12-05 07:40:19','2017-12-05 07:40:19',1);
+
+#
+# Structure for table "incident_confirm_history"
+#
+
+DROP TABLE IF EXISTS `incident_confirm_history`;
+CREATE TABLE `incident_confirm_history` (
+  `idHistory` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fidIncident` int(10) NOT NULL DEFAULT '0',
+  `fidUser` int(10) DEFAULT NULL,
+  `userName` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `submitDate` date DEFAULT NULL,
+  `receiveResponDate` date DEFAULT NULL,
+  `responDescription` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idHistory`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "incident_confirm_history"
+#
+
+
+#
+# Structure for table "incident_files"
+#
+
+DROP TABLE IF EXISTS `incident_files`;
+CREATE TABLE `incident_files` (
+  `idFile` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `filePath` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fileName` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fileType` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `fileGroup` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `createBy` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `createDate` date DEFAULT NULL,
+  `fidIncident` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`idFile`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "incident_files"
+#
+
+INSERT INTO `incident_files` VALUES (9,'E:\\My Project\\PHP Tutorial\\AplikasiManajemenInsiden\\public\\file_incident\\1\\Kartu Ujian.pdf','Kartu Ujian.pdf','application/pdf','Open','admin','2017-12-05',1,'2017-12-05 18:54:38','2017-12-05 18:54:38'),(10,'E:\\My Project\\PHP Tutorial\\AplikasiManajemenInsiden\\public\\file_incident\\1\\umb_logo.jpg','umb_logo.jpg','image/jpeg','Open','admin','2017-12-05',1,'2017-12-05 18:54:38','2017-12-05 18:54:38'),(11,'E:\\My Project\\PHP Tutorial\\AplikasiManajemenInsiden\\public\\file_incident\\1\\Analisa Biaya.xlsx','Analisa Biaya.xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','Open','admin','2017-12-05',1,'2017-12-05 19:11:22','2017-12-05 19:11:22'),(12,'E:\\My Project\\PHP Tutorial\\AplikasiManajemenInsiden\\public\\file_incident\\1\\gant.jpg','gant.jpg','image/jpeg','Open','admin','2017-12-06',1,'2017-12-06 05:18:01','2017-12-06 05:18:01');
+
+#
+# Structure for table "incident_pic"
+#
+
+DROP TABLE IF EXISTS `incident_pic`;
+CREATE TABLE `incident_pic` (
+  `idPic` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fidIncident` int(10) NOT NULL DEFAULT '0',
+  `fidUser` int(10) NOT NULL DEFAULT '0',
+  `task` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `startDate` date DEFAULT NULL,
+  `finishDate` date DEFAULT NULL,
+  `targetDate` date DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `picName` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`idPic`)
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "incident_pic"
+#
+
+INSERT INTO `incident_pic` VALUES (22,1,1,'Fixing','2017-12-01','2017-12-05','2017-11-27','2017-11-27 19:09:20','2017-11-27 19:09:20','Suwandi'),(23,1,1,'Analyzing',NULL,NULL,'2017-11-27','2017-11-27 19:13:01','2017-11-27 19:13:01','admin'),(24,1,1,'Testing','2017-12-06','2017-12-11','2017-11-27','2017-11-27 19:13:43','2017-11-27 19:13:43','Faisal'),(25,2,1,'Analyzing',NULL,NULL,'2017-12-01','2017-12-01 07:30:52','2017-12-01 07:30:52','Faisal'),(26,2,1,'Fixing',NULL,NULL,'2017-12-13','2017-12-01 07:31:10','2017-12-01 07:31:10','Nurochim'),(27,2,1,'Testing',NULL,NULL,'2017-12-21','2017-12-01 07:31:28','2017-12-01 07:31:28','Faisal'),(28,3,2,'Analyzing',NULL,NULL,'2017-12-02','2017-12-02 08:22:35','2017-12-02 08:22:35','Dili');
+
+#
+# Structure for table "migrations"
+#
+
+DROP TABLE IF EXISTS `migrations`;
+CREATE TABLE `migrations` (
+  `migration` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `batch` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "migrations"
+#
+
+INSERT INTO `migrations` VALUES ('2014_10_12_000000_create_users_table',1),('2014_10_12_100000_create_password_resets_table',1),('2015_01_15_105324_create_roles_table',1),('2015_01_15_114412_create_role_user_table',1),('2015_01_26_115212_create_permissions_table',1),('2015_01_26_115523_create_permission_role_table',1),('2015_02_09_132439_create_permission_user_table',1),('2016_04_11_070428_create_posts_table',1),('2017_07_03_173000_create_issue_table',2),('2017_11_14_095443_create_incident_table',3),('2017_11_14_095508_create_incident_pic_table',3),('2017_11_14_095524_create_incident_files_table',3),('2017_11_14_095532_create_incident_confirm_history_table',3);
+
+#
+# Structure for table "password_resets"
+#
+
+DROP TABLE IF EXISTS `password_resets`;
+CREATE TABLE `password_resets` (
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  KEY `password_resets_email_index` (`email`),
+  KEY `password_resets_token_index` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "password_resets"
+#
+
+INSERT INTO `password_resets` VALUES ('masnur.bangett@gmail.com','I9EJmTrL6F','2017-09-21 10:02:03');
+
+#
+# Structure for table "permissions"
+#
+
+DROP TABLE IF EXISTS `permissions`;
+CREATE TABLE `permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `model` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `permissions_slug_unique` (`slug`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "permissions"
+#
+
+INSERT INTO `permissions` VALUES (1,'Manage Users','manage.users','Test Aja Yah Ddd yah yah',NULL,'2017-09-13 18:37:56','2017-09-13 18:37:56'),(2,'Manage Roles','manage.roles',NULL,NULL,'2017-09-13 18:37:56','2017-09-13 18:37:56'),(3,'Manage Permissions','manage.permissions','Coba Save',NULL,'2017-09-13 18:37:56','2017-09-13 18:37:56');
+
+#
+# Structure for table "posts"
+#
+
+DROP TABLE IF EXISTS `posts`;
+CREATE TABLE `posts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `topic` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "posts"
+#
+
+
+#
+# Structure for table "roles"
+#
+
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE `roles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `level` int(11) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `roles_slug_unique` (`slug`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "roles"
+#
+
+INSERT INTO `roles` VALUES (1,'Super Admin','admin.super','Super Admin',1,'2017-09-13 18:37:56','2017-09-13 18:37:56'),(2,'User Admin','admin.user','Can manage users',1,'2017-09-13 18:37:56','2017-09-13 18:37:56'),(3,'Role Admin','admin.role','Can manage user roles',1,'2017-09-13 18:37:56','2017-09-13 18:37:56'),(4,'Permission Admin','admin.permission','Can manage permissions',1,'2017-09-13 18:37:56','2017-09-13 18:37:56'),(5,'admin coba','admin.coba','admin coba aja',1,'2017-09-18 15:09:15','2017-09-22 10:27:21'),(6,'programmer','role.programmer','role untuk programmer',1,'2017-11-15 18:36:26','2017-11-15 18:36:26');
+
+#
+# Structure for table "permission_role"
+#
+
+DROP TABLE IF EXISTS `permission_role`;
+CREATE TABLE `permission_role` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `permission_id` int(10) unsigned NOT NULL,
+  `role_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `permission_role_permission_id_index` (`permission_id`),
+  KEY `permission_role_role_id_index` (`role_id`),
+  CONSTRAINT `permission_role_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `permission_role_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "permission_role"
+#
+
+INSERT INTO `permission_role` VALUES (1,1,1,'2017-09-13 18:37:56','2017-09-13 18:37:56'),(2,2,3,'2017-09-13 18:37:56','2017-09-13 18:37:56'),(3,3,4,'2017-09-13 18:37:56','2017-09-13 18:37:56'),(4,1,1,'2017-09-13 18:37:56','2017-09-13 18:37:56'),(5,2,1,'2017-09-13 18:37:56','2017-09-13 18:37:56'),(6,3,1,'2017-09-13 18:37:56','2017-09-13 18:37:56'),(7,1,5,'2017-09-22 10:27:21','2017-09-22 10:27:21');
+
+#
+# Structure for table "tbl_issue"
+#
+
+DROP TABLE IF EXISTS `tbl_issue`;
+CREATE TABLE `tbl_issue` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `raise_date` date NOT NULL,
+  `priority` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `module` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sub_module` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `pic` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `category_group` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `category_root_cause` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `issue_description` text COLLATE utf8_unicode_ci,
+  `suspected_reason` text COLLATE utf8_unicode_ci,
+  `respon_taken` text COLLATE utf8_unicode_ci,
+  `decided_solution` text COLLATE utf8_unicode_ci,
+  `target_fixed_date` date DEFAULT NULL,
+  `finish_fixed_date` date DEFAULT NULL,
+  `closed_date` date DEFAULT NULL,
+  `closed_by` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `pic_analyzing` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `finish_analyzing` date DEFAULT NULL,
+  `pic_fixing` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `finish_fixing` date DEFAULT NULL,
+  `pic_testing` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `finish_testing` date DEFAULT NULL,
+  `deployment_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `deployment_date` date DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "tbl_issue"
+#
+
+INSERT INTO `tbl_issue` VALUES (1,'2017-07-04','High','','Report','Finance Report','','','','1). Pretermination overdue days in printform is not correct.\n2). Customer already paid for his 90 days overdue and remaining 25 days overdue (until 21 August 2015).\n3). Pretermination printform shown that this customer has 115 days overdue (90+25) but the penalty amount is correct.','','','','0000-00-00','0000-00-00','0000-00-00','','Nurochim','0000-00-00','Nurochim','0000-00-00','Aulia','0000-00-00','','0000-00-00','2017-07-04 18:42:35','2017-07-05 16:47:31'),(2,'2017-07-11','Medium','','CDB','Other','','System Issue','Business Case','1). This customer have advance that fit for 1 installment payment.\n\n2). Due date of this contract is 01 August 2015.\n\n3). Fintegrity do the automated allocation for August Installment on 2 August 2015 ~ that\'s why this contract have 1 days overdue.\n\n4). MF record that this customer have paid the same time with due date 01 August 2015.\n\n5). Automatic allocation should be on 1st day of each month','User Input not match wit SOP','Prevent Code with More Validation','Prevent Code with More Validation','0000-00-00','0000-00-00','0000-00-00','','Aulia','0000-00-00','Nurochim','0000-00-00','Aulia','0000-00-00','','0000-00-00','2017-07-05 14:55:27','2017-07-05 16:47:45'),(3,'2017-07-11','Critical','','General Ledger','Payment','','','','Sorting on Cash Payment Task has changed. Usually system shows sorting on Cash Transaction ID.','','','','0000-00-00','0000-00-00','0000-00-00','','Aulia','0000-00-00','Faisal','0000-00-00','Aulia','0000-00-00','','0000-00-00','2017-07-05 16:12:26','2017-07-05 16:12:26'),(4,'2017-07-08','Low','','Facility','Facility Register','','Operation Issue','Business Case','Can\'t save facilty register sc','Tidak di define dari awal project','Call to confirm','contoh','0000-00-00','0000-00-00','0000-00-00','','Aulia','0000-00-00','Nurochim','0000-00-00','Fatma','0000-00-00','','0000-00-00','2017-07-08 13:38:15','2017-07-08 14:09:31'),(9,'2017-08-08','Medium',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test Edit',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Julda',NULL,'Deny',NULL,'Candra',NULL,NULL,NULL,'2017-09-27 17:31:24','2017-09-27 17:31:24'),(14,'2017-09-22','Low',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Jumadi',NULL,'Asvian',NULL,NULL,NULL,'2017-10-02 19:01:12','2017-10-02 19:01:12'),(15,'2017-10-10','High',NULL,'Procurement','Insurance Payment',NULL,NULL,NULL,'Test Aja',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-02 20:14:04','2017-10-02 20:14:04'),(16,'2017-10-09','High',NULL,'BackEnd Tools','Cash Overbook',NULL,NULL,NULL,'sasg',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Faisal Amir',NULL,NULL,NULL,'2017-10-02 20:16:33','2017-10-02 20:16:33'),(17,'2017-10-23','Low',NULL,'Batch Process','New Report',NULL,NULL,NULL,'Test Edit',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-02 20:16:55','2017-10-02 20:16:55'),(18,'2017-10-09','Low',NULL,'CDB','Insurance Payment',NULL,NULL,NULL,'Test Terakhir Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Aulia',NULL,NULL,NULL,'2017-10-02 20:18:00','2017-10-02 20:18:00'),(19,'2017-10-02','Critical',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Iskandar',NULL,NULL,NULL,'2017-10-02 20:21:02','2017-10-02 20:21:02'),(20,'2017-10-02','Medium',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Julda',NULL,NULL,NULL,'2017-10-02 20:21:14','2017-10-02 20:21:14'),(21,'2017-10-10','Medium',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Iskandar',NULL,NULL,NULL,'2017-10-02 20:21:33','2017-10-02 20:21:33'),(22,'2017-10-11','Critical',NULL,'BackEnd Tools','Cash Overbook',NULL,NULL,NULL,'Test Save then edit',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Julda',NULL,'Julda',NULL,NULL,NULL,'2017-10-03 03:08:37','2017-10-03 03:08:37'),(23,'2017-10-11','High',NULL,'BackEnd Tools','Cash Overbook',NULL,NULL,NULL,'Coba coba',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 03:10:05','2017-10-03 03:10:05'),(24,'2017-10-12','High',NULL,'BackEnd Tools','Cash Overbook',NULL,NULL,NULL,'Coba coba',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 03:16:44','2017-10-03 03:16:44'),(25,'2017-10-05','High',NULL,'Batch Process','Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 03:19:26','2017-10-03 03:19:26'),(26,'2017-10-05','High',NULL,'Batch Process','Cash Overbook',NULL,NULL,NULL,'Coba',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Deny',NULL,'Deny',NULL,'Jumadi',NULL,NULL,NULL,'2017-10-03 03:23:08','2017-10-03 03:23:08'),(27,'2017-10-11','Medium',NULL,'Procurement','CDB',NULL,NULL,NULL,'Coba',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Candra',NULL,'Iskandar',NULL,'Candra',NULL,NULL,NULL,'2017-10-03 03:24:06','2017-10-03 03:24:06'),(28,'2017-10-11','Medium',NULL,'Procurement','CDB',NULL,NULL,NULL,'Coba',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Candra',NULL,'Iskandar',NULL,'Candra',NULL,NULL,NULL,'2017-10-03 03:24:10','2017-10-03 03:24:10'),(29,'2017-10-03','High',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 03:30:37','2017-10-03 03:30:37'),(30,'2017-10-12','Low',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 03:45:35','2017-10-03 03:45:35'),(31,'2017-10-05','High',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'TEst',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 03:47:39','2017-10-03 03:47:39'),(32,'2017-10-11','Low',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 03:51:02','2017-10-03 03:51:02'),(33,'2017-10-03','Medium',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 03:54:33','2017-10-03 03:54:33'),(34,'2017-10-03','Medium',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 03:54:35','2017-10-03 03:54:35'),(35,'2017-10-04','High',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 03:56:03','2017-10-03 03:56:03'),(36,'2017-10-10','Low',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 03:57:09','2017-10-03 03:57:09'),(37,'2017-10-03','High',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 03:59:49','2017-10-03 03:59:49'),(38,'2017-10-03','Low',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 04:03:23','2017-10-03 04:03:23'),(39,'2017-10-04','Medium',NULL,'Batch Process','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 04:04:24','2017-10-03 04:04:24'),(40,'2017-10-11','High',NULL,'General Setting','CDB',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Asvian',NULL,'Candra',NULL,NULL,NULL,'2017-10-03 04:27:02','2017-10-03 04:27:02'),(41,'2017-09-27','High',NULL,'CDB','Insurance Payment',NULL,NULL,NULL,'Test Edittttttt',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Jumadi',NULL,NULL,NULL,'2017-10-03 04:32:22','2017-10-03 04:32:22'),(42,'2017-10-04','Low',NULL,'CBCS','Insurance Payment',NULL,NULL,NULL,'Test Save Then Edit Ok 1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Asvian',NULL,'Jumadi',NULL,NULL,NULL,'2017-10-03 04:36:33','2017-10-03 04:36:33'),(43,'2017-10-03','High',NULL,'Payment','Cash Overbook',NULL,NULL,NULL,'Test Save Edit 1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 04:37:46','2017-10-03 04:37:46'),(44,'2017-10-03','High',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Test Save Edit 2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 04:39:09','2017-10-03 04:39:09'),(45,'2017-10-12','Critical',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Testt',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Asvian',NULL,'Jumadi',NULL,NULL,NULL,'2017-10-03 04:41:47','2017-10-03 04:41:47'),(46,'2017-10-03','Low',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'TEst Save Edit 3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 04:43:19','2017-10-03 04:43:19'),(47,'2017-10-11','Medium',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 04:50:34','2017-10-03 04:50:34'),(48,'2017-09-28','Medium',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Jumadi',NULL,'Julda',NULL,NULL,NULL,'2017-10-03 04:51:44','2017-10-03 04:51:44'),(49,'2017-10-03','Medium',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 04:53:02','2017-10-03 04:53:02'),(50,'2017-10-05','Low',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Save Edit 5',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 04:54:57','2017-10-03 04:54:57'),(51,'2017-10-11','Medium',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test Save Edit 12-3',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 05:01:29','2017-10-03 05:01:29'),(52,'2017-10-11','High',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Save Edit 14-1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Jumadi',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 05:07:57','2017-10-03 05:07:57'),(53,'2017-10-11','High',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Save Edit 14-10',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Jumadi',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 05:07:58','2017-10-03 05:07:58'),(54,'2017-10-11','Medium',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Julda',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 15:16:24','2017-10-03 15:16:24'),(55,'2017-10-25','Medium',NULL,'BackEnd Tools','Cash Overbook',NULL,NULL,NULL,'Test Aja',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Jumadi',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 15:57:03','2017-10-03 15:57:03'),(56,'2017-10-11','High',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test Aja',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Jumadi',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 15:58:16','2017-10-03 15:58:16'),(57,'2017-10-11','Medium',NULL,'BackEnd Tools','Insurance Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Jumadi',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 16:18:38','2017-10-03 16:18:38'),(58,'2017-10-03','High',NULL,'Batch Process','Cash Overbook',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Nurochim',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 16:20:23','2017-10-03 16:20:23'),(59,'2017-10-04','High',NULL,'Report','Finance Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Deny',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 16:24:10','2017-10-03 16:24:10'),(60,'2017-10-03','High',NULL,'Batch Process','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Julda',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 16:26:45','2017-10-03 16:26:45'),(61,'2017-10-19','High',NULL,'Batch Process','Cash Overbook',NULL,NULL,NULL,'tEST',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 16:27:35','2017-10-03 16:27:35'),(62,'2017-10-11','High',NULL,'Batch Process','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Jumadi',NULL,NULL,NULL,'2017-10-03 16:32:14','2017-10-03 16:32:14'),(63,'2017-10-10','High',NULL,'Batch Process','New Report',NULL,NULL,NULL,'TEst',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Nurochim',NULL,'Jumadi',NULL,NULL,NULL,'2017-10-03 16:39:26','2017-10-03 16:39:26'),(64,'2017-10-03','High',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Jumadi',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 16:40:34','2017-10-03 16:40:34'),(65,'2017-10-03','Medium',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 16:41:03','2017-10-03 16:41:03'),(66,'2017-10-03','Low',NULL,'Collection','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 16:42:04','2017-10-03 16:42:04'),(67,'2017-10-12','Medium',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Jumadi',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 16:44:34','2017-10-03 16:44:34'),(68,'2017-10-05','Medium',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 16:51:23','2017-10-03 16:51:23'),(69,'2017-10-04','Medium',NULL,'Batch Process','New Report',NULL,NULL,NULL,'Test Upload',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Julda',NULL,'Jumadi',NULL,NULL,NULL,'2017-10-03 17:00:59','2017-10-03 17:00:59'),(70,'2017-09-28','Low',NULL,'Batch Process','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Jumadi',NULL,'Julda',NULL,NULL,NULL,'2017-10-03 17:06:14','2017-10-03 17:06:14'),(71,'2017-10-17','Low',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test Aja',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 17:07:59','2017-10-03 17:07:59'),(72,'2017-10-02','Low',NULL,'Batch Process','Cash Overbook',NULL,NULL,NULL,'Test Aja',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Julda',NULL,'Jumadi',NULL,'Jumadi',NULL,NULL,NULL,'2017-10-03 17:09:11','2017-10-03 17:09:11'),(73,'2017-10-11','Low',NULL,'Batch Process','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Nurochim',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 17:11:23','2017-10-03 17:11:23'),(74,'2017-10-05','Low',NULL,'Batch Process','Cash Overbook',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Jumadi',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 17:12:19','2017-10-03 17:12:19'),(75,'2017-10-03','High',NULL,'BackEnd Tools','New Report',NULL,NULL,NULL,'Test Alert',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 17:22:42','2017-10-03 17:22:42'),(76,'2017-10-04','Medium',NULL,'Batch Process','Cash Overbook',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Jumadi',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 17:23:36','2017-10-03 17:23:36'),(77,'2017-10-12','Medium',NULL,'Batch Process','Cash Overbook',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Jumadi',NULL,'Jumadi',NULL,NULL,NULL,'2017-10-03 17:24:30','2017-10-03 17:24:30'),(78,'2017-10-11','Medium',NULL,'Collection','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 17:26:08','2017-10-03 17:26:08'),(79,'2017-10-03','Medium',NULL,'Batch Process','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Jumadi',NULL,'Faisal Amir',NULL,NULL,NULL,'2017-10-03 17:27:13','2017-10-03 17:27:13'),(80,'2017-09-26','Low',NULL,'Batch Process','New Report',NULL,NULL,NULL,'Test Aja',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Jumadi',NULL,'Nurochim',NULL,NULL,NULL,'2017-10-03 17:30:06','2017-10-03 17:30:06'),(81,'2017-09-28','Medium',NULL,'Batch Process','New Report',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Julda',NULL,'Asvian',NULL,'Asvian',NULL,NULL,NULL,'2017-10-03 17:32:35','2017-10-03 17:32:35'),(82,'2017-10-10','Medium',NULL,'CDB','Cash Overbook',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Asvian',NULL,'Jumadi',NULL,NULL,NULL,'2017-10-03 17:34:54','2017-10-03 17:34:54'),(83,'2017-10-03','Medium',NULL,'Batch Process','Cash Overbook',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Jumadi',NULL,'Jumadi',NULL,'Jumadi',NULL,NULL,NULL,'2017-10-03 17:35:59','2017-10-03 17:35:59'),(84,'2017-11-20','Medium',NULL,'Batch Process','Request Disbursement',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Nurochim',NULL,'Julda',NULL,'Aulia',NULL,NULL,NULL,'2017-11-20 17:11:09','2017-11-20 17:11:09'),(85,'2017-11-24','High',NULL,'All Modules','Payment',NULL,NULL,NULL,'Test',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Asvian',NULL,'Nurochim',NULL,'Candra',NULL,NULL,NULL,'2017-11-24 14:06:06','2017-11-24 14:06:06');
+
+#
+# Structure for table "users"
+#
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `oauth_provider` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `oauth_provider_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `avatar` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email_verified` enum('1','0') COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `email_verification_code` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `status_user` varchar(1) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `job_title` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `division` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `group_division` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `client` enum('1','0') COLLATE utf8_unicode_ci DEFAULT NULL,
+  `contact_no` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_email_unique` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "users"
+#
+
+INSERT INTO `users` VALUES (1,NULL,NULL,'admin','admin@example.com','$2y$10$MBkZNRHgjnsBPQhzk5bBweelGiD5PN/qZALpj9UXWJUG9D07ou9PW',NULL,'1',NULL,NULL,'2017-09-13 18:37:56','2017-09-18 15:36:06',NULL,'ED','ITSPD','ITSPD','1',NULL),(2,NULL,NULL,'Dili','nurochimf@gmail.com','$2y$10$H5oFi5OzlSGr3W.vx9Mrfub5yS/Oe9/P72uwb99p7RXLevwuUYY2e',NULL,'1','M74Kc7OfwKVvQyifL2mVXjJbsRhfnMwWxiB5Rze1',NULL,'2017-09-20 16:12:17','2017-11-16 07:28:09',NULL,NULL,NULL,NULL,'0',NULL),(3,NULL,NULL,'Rizky','nurochimf@ymail.com','$2y$10$guX6ProXMt7Rvx8pPJW1nOpGp/WjryNwYnhOs/aHeuWloZyF9mkri',NULL,'1','ImWOP08anJ3QDk8mBWrjuBRLqpNuSlDhHE3AbvfY',NULL,'2017-09-20 16:50:18','2017-09-20 16:50:18',NULL,NULL,NULL,NULL,'0',NULL),(4,NULL,NULL,'Aulia','nurochims@ymail.com','$2y$10$/qjOZtSRK/s0UiuOUhpz7u0bOZaOK.xsZIefPxJvhzyE21.Jeisgm',NULL,'1','NR6wK1pal3yedrrHGlbMyqNJ1U3Rq8Q4VPfyuGJl',NULL,'2017-09-20 17:01:47','2017-09-22 10:23:20',NULL,NULL,NULL,NULL,'0',NULL),(6,NULL,NULL,'Julda','masnur@ymail.com','$2y$10$Uz6nmwSAqzO3/SlWfQ9Y..JWODDEUKEdGwMS.v6MuqWnK/yY0f5YG',NULL,'1','zkkVNhRhw0qsHm282ObFawUg7QygHizwPi35Mlrf',NULL,'2017-09-20 17:05:39','2017-09-20 17:05:39',NULL,NULL,NULL,NULL,'0',NULL),(10,NULL,NULL,'Nurochim','masnur.bangettu@gmail.com','$2y$10$.gHWZzxilDWidrOEGX8D2eNa5qcujWKwvdTL1YtByBgV34EpB.GUm',NULL,'1','D3z17UeYjKj0P9Jb4If4DnMk59g1xtaA2ixrrv8s',NULL,'2017-09-20 18:00:37','2017-09-20 18:00:37',NULL,NULL,NULL,NULL,'0',NULL),(11,NULL,NULL,'oim','oim@example.com','$2y$10$FBsoyPVvawKz7.Wl7lu4OuIuqHS8/TLNAC4CG.a40HIQk4tDFvnKy',NULL,'0','praZN23dRRuiY0Vhi0TlCzyXAiVLHAKpkKiydnsJ',NULL,'2017-09-20 18:02:39','2017-09-20 18:02:39',NULL,'FID',NULL,NULL,'0',NULL),(12,NULL,NULL,'Suwandi','suwandi@example.com','$2y$10$3iuZHIiFZgkZTi5O.ivsfel3AA0Oqv4kRU4ltBRTfodz//J5Vzf2i',NULL,'0','ui7iYzwOtU6odH72eutxYdCtY3lsNDKzrd3G7Ha2',NULL,'2017-09-20 18:04:28','2017-09-20 18:04:28',NULL,'FID',NULL,NULL,'0',NULL),(13,NULL,NULL,'Faisal','faisal@example.com','$2y$10$qcpcOZl8iumH/piRtMCHT.V6GZesLLLssDR7BqhM9UVfBzvGSGZU6',NULL,'0','FDP3GU4Ljgi7k6kT2sG1liM3hOgm3s0bFQvokTAc',NULL,'2017-09-20 18:04:51','2017-09-20 18:04:51',NULL,'FID',NULL,NULL,'0',NULL),(14,NULL,NULL,'Jumadi','jum@example.com','$2y$10$xqyASG1bExI5gYfgre73Iu38i4TuhjaXI1xeHy0SM.cqsvru36hAC',NULL,'0','3SRdNJnWoLFSZllmsFlXX3gpD9aKkBmTqiIVbytS',NULL,'2017-09-20 18:05:12','2017-09-20 18:05:12',NULL,'FID',NULL,NULL,'0',NULL),(15,NULL,NULL,'Firman','firman@example.com','$2y$10$WL.Htx5rCE0Ix0HS0T/ElemSar0ZePIxcCmIqjLzivx2xX8aKc2oi',NULL,'0','RqCuP8TUXdXz3TxgnWIv4V4YrYecGAtMgSjfhVQq',NULL,'2017-09-20 18:06:10','2017-09-20 18:06:10',NULL,'FID',NULL,NULL,'0',NULL),(70,NULL,NULL,'Fatma','masnur.bangetts@gmail.com','$2y$10$L.dIp4yvJVYpaedg5bX7jOBtyVEZXo9tI0BXSPThwJ1OuN1JyBoBm',NULL,'0','PwdkUTWON2EA3bY9zC3e9221deJhitWMekpwe85N',NULL,'2017-09-21 15:54:00','2017-09-21 15:54:00',NULL,'FID',NULL,NULL,'0',NULL),(71,NULL,NULL,'test1','admin@examtessple.com','$2y$10$UAx4ubU/CmE.FrLmnc9FcOUE2iReSpA3CeWswT2J5yiw6uONOq7Be',NULL,'0','fXYnbI2aqW4rPA8fACFIGBHQpmnphHzr2NELuEhK',NULL,'2017-09-27 10:26:20','2017-09-27 10:26:20',NULL,'ED','ITSPD','ITSPD','1',NULL),(72,NULL,NULL,'test2','admin@examstgeple.com','$2y$10$MycG7WAuzM28jU5lNhRxEuEUXb121KpzgocQ74cmEPXsAKuCj7hGy',NULL,'0','fGxWFI6rjDKzFwrDsD1PPce754rjchaPmsSqumhC',NULL,'2017-09-27 10:27:54','2017-09-27 10:27:54',NULL,'ED','BA CKR','Marketing','1',NULL),(73,NULL,NULL,'test3','admin@examajayahple.com','$2y$10$SEh7fF9osNZeb4ZzQs4OeuGiU8GGr/PJuunqBcl7Mfpngfz21NXyq',NULL,'0','OuukVNxKVlrRBXjGqdgP62Du7Y8X0M9FL1rrmBAN',NULL,'2017-09-27 10:35:29','2017-09-27 10:35:29',NULL,'ED','Finance','Finance','1',NULL),(75,NULL,NULL,'ochim','masnur.bangett@gmail.com','$2y$10$pMwXvbS6j0Q3oDr7U3eGD.iTlE2bT50RzvqbMyyby2nuJ8OqeMzom',NULL,'1','V8IviGGxWVS8WEVDat0POQ8dcN3kHIx4jktv6MW7',NULL,'2017-10-29 11:40:36','2017-10-29 19:22:13',NULL,'ED','CA PJ','Credit Analyse','1',NULL);
+
+#
+# Structure for table "role_user"
+#
+
+DROP TABLE IF EXISTS `role_user`;
+CREATE TABLE `role_user` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `role_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `role_user_role_id_index` (`role_id`),
+  KEY `role_user_user_id_index` (`user_id`),
+  CONSTRAINT `role_user_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `role_user_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "role_user"
+#
+
+INSERT INTO `role_user` VALUES (5,1,1,'2017-09-18 15:36:06','2017-09-18 15:36:06'),(6,2,1,'2017-09-18 15:36:06','2017-09-18 15:36:06'),(7,3,1,'2017-09-18 15:36:06','2017-09-18 15:36:06'),(8,4,1,'2017-09-18 15:36:06','2017-09-18 15:36:06'),(11,1,4,'2017-09-22 10:23:20','2017-09-22 10:23:20'),(12,2,2,'2017-11-16 07:28:09','2017-11-16 07:28:09'),(13,1,2,'2017-11-16 07:28:10','2017-11-16 07:28:10');
+
+#
+# Structure for table "permission_user"
+#
+
+DROP TABLE IF EXISTS `permission_user`;
+CREATE TABLE `permission_user` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `permission_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `permission_user_permission_id_index` (`permission_id`),
+  KEY `permission_user_user_id_index` (`user_id`),
+  CONSTRAINT `permission_user_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `permission_user_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+#
+# Data for table "permission_user"
+#
+

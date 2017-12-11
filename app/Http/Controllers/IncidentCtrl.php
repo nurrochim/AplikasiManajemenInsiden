@@ -32,7 +32,23 @@ class IncidentCtrl extends Controller
         $issue->division = Input::get('division');
         $issue->groupDivision = Input::get('groupDivision');
         $issue->issueDescription = Input::get('issueDescription');
+
+        // generate id
+        $sqlCounter = "select current_seq from cmn_id_counter where id = :idCounter";
+        $counter = DB::select($sqlCounter, ['idCounter'=>'MBF']);
+        //$counter = array_shift($counter);
+        //$current_seq = $counter['current_seq'];
+        $current_seq = $counter[0]->current_seq;
+        $current_seq = $current_seq+1;
+        
+        
+        $idIncident = sprintf("MBF-%04s",$current_seq);
+        $issue->testResult = $idIncident;
         $issue->save();
+
+        //update sequence
+        $sqlCounterUpdate = "update cmn_id_counter set current_seq=:seq where id = :idCounter";
+        DB::update($sqlCounterUpdate, ['idCounter'=>'MBF', 'seq'=>$current_seq]);
 
         return response()->success($issue);
     }

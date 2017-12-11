@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class IncidentFilesModel extends Model
 {
     protected $fillable = array('idFile', 
+                                'fidIncident',
                                 'filePath',
                                 'fileName',
                                 'fileType',
