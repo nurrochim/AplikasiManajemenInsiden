@@ -34,18 +34,20 @@ class IncidentCtrl extends Controller
         $issue->division = Input::get('division');
         $issue->groupDivision = Input::get('groupDivision');
         $issue->issueDescription = Input::get('issueDescription');
+        $issue->createBy = Input::get('createBy');
+        //$issue->created_at = date('Y-m-d H:i:s');
 
         // generate id
         $sqlCounter = "select current_seq from cmn_id_counter where id = :idCounter";
-        $counter = DB::select($sqlCounter, ['idCounter'=>'MBF']);
+        $counter = DB::select($sqlCounter, ['idCounter'=>'INC']);
         //$counter = array_shift($counter);
         //$current_seq = $counter['current_seq'];
         $current_seq = $counter[0]->current_seq;
         $current_seq = $current_seq+1;
         
         
-        $idIncident = sprintf("MBF-%04s",$current_seq);
-        $issue->testResult = $idIncident;
+        $idIncident = sprintf("INC-%04s",$current_seq);
+        $issue->idIncident = $idIncident;
         $issue->save();
 
         //update sequence
@@ -70,7 +72,7 @@ class IncidentCtrl extends Controller
         $startDate = $request->input('startDate');
         $finishDate = $request->input('finishDate');
 
-        $affectedRows = IncidentModel::where('idIncident', '=', intval($issueForm['idIncident']))->update($issueForm);
+        $affectedRows = IncidentModel::where('idIncident', '=', $issueForm['idIncident'])->update($issueForm);
         
         // update PIC Task
         if($picTask!=null){
@@ -201,4 +203,13 @@ class IncidentCtrl extends Controller
         $issue = DB::select($sql, ['filterValue'=>$filterValue]);
         return response()->success(compact('issue'));
     }
+
+    public function putIncidentStatusUpdate(Request $request)
+    {
+        $idIncident = $request->input('idIncident');
+        $status = $request->input('statusTask');
+        $updateBy = $request->input('updateBy');
+        $issue = DB::update('update incident set statusTask = :status, updated_at = now(), updateBy = :updateBy where idIncident =:idIncident' , ['status'=>$status,'idIncident'=>$idIncident, 'updateBy'=>intval($updateBy)]);
+        return response()->success(compact('issue'));
+    }   
 }

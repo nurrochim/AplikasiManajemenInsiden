@@ -7,6 +7,7 @@ class UserEditController {
     this.alerts = []
     this.userRolesSelected = []
     this.$scope = $scope;
+    this.showDivision = false;
 
     if ($stateParams.alerts) {
       this.alerts.push($stateParams.alerts)
@@ -39,6 +40,11 @@ class UserEditController {
 
         response.data.role = userRole
         this.usereditdata = API.copy(response)
+        if(this.usereditdata.data.job_title===this.$scope.optionsJobTitle[0].value){
+          this.showDivision = true;
+        }else{
+          this.showDivision = false;
+        }
       })
 
       $scope.optionsJobTitle = [
@@ -51,6 +57,9 @@ class UserEditController {
       ];
       $scope.selectedOptionJobTitle = $scope.optionsJobTitle[0].value;
   }
+
+
+  
 
   save (isValid) {
     if (isValid) {
@@ -65,6 +74,14 @@ class UserEditController {
         })
     } else {
       this.formSubmitted = true
+    }
+  }
+
+  jobTitleAction(){
+    if(this.usereditdata.data.job_title===this.$scope.optionsJobTitle[0].value){
+        this.showDivision = true;
+    }else{
+      this.showDivision = false;
     }
   }
 

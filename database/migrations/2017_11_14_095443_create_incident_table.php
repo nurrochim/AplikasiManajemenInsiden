@@ -13,7 +13,7 @@ class CreateIncidentTable extends Migration
     public function up()
     {
         Schema::create('incident', function (Blueprint $table) {
-            $table->increments('idIncident');
+            $table->string('idIncident');
             $table->integer('fidUserRaised')->nullable();
             $table->string('raisedBy')->nullable();
             $table->string('fidUserRaised')->nullable();

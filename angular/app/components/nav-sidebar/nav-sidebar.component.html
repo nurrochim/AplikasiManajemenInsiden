@@ -51,14 +51,14 @@
         </a>
         <ul class="treeview-menu">
           <!-- <li><a ui-sref="app.openissue"><i class="fa fa-circle-o"></i> Open Incident</a></li> -->
-          <li><a ui-sref="app.openincident"><i class="fa fa-circle-o"></i> Open Incident</a></li>
-          <li><a ui-sref="app.assignTask"><i class="fa fa-circle-o"></i> Assign Task</a></li>
-          <li><a ui-sref="app.analyzing"><i class="fa fa-circle-o"></i> Analyzing Incident</a></li>
-          <li><a ui-sref="app.fixing"><i class="fa fa-circle-o"></i> Fixing Incident</a></li>
-          <li><a ui-sref="app.testing"><i class="fa fa-circle-o"></i> Testing Incident</a></li>
-          <li><a ui-sref="app.confirm"><i class="fa fa-circle-o"></i> Confirm & Closing</a></li>
-          <li><a ui-sref="app.confirmApproval"><i class="fa fa-circle-o"></i> Approval Confirmation</a></li>
-          <li><a ui-sref="app.history"><i class="fa fa-circle-o"></i> History Incident</a></li>
+          <li><a ng-show="vm.can('manage.openincident.list')" ui-sref="app.openincident"><i class="fa fa-circle-o"></i> Open Incident</a></li>
+          <li><a ng-show="vm.can('manage,assignttask.list')" ui-sref="app.assignTask"><i class="fa fa-circle-o"></i> Assign Task</a></li>
+          <li><a ng-show="vm.can('manage.analyzing.list')" ui-sref="app.analyzing"><i class="fa fa-circle-o"></i> Analyzing Incident</a></li>
+          <li><a ng-show="vm.can('manage.fixing.list')" ui-sref="app.fixing"><i class="fa fa-circle-o"></i> Fixing Incident</a></li>
+          <li><a ng-show="vm.can('manage.testing.list')" ui-sref="app.testing"><i class="fa fa-circle-o"></i> Testing Incident</a></li>
+          <li><a ng-show="vm.can('manage.confirmclosing.list')" ui-sref="app.confirm"><i class="fa fa-circle-o"></i> Confirm & Closing</a></li>
+          <li><a ng-show="vm.can('manage.approval.confirm')" ui-sref="app.confirmApproval"><i class="fa fa-circle-o"></i> Approval Confirmation</a></li>
+          <li><a ng-show="vm.can('manage.history.list')" ui-sref="app.history"><i class="fa fa-circle-o"></i> History Incident</a></li>
         </ul>
       </li>
       

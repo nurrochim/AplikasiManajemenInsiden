@@ -37,25 +37,25 @@
             <div class="form-group" >
               <label for="inputEmail3" class="col-sm-3 control-label">Contact No</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" ng-model="" name="contactNo" placeholder="Contact No">
+                <input type="text" class="form-control" ng-model="vm.usereditdata.data.contact_no" name="contactNo" placeholder="Contact No">
               </div>
             </div>
             <div class="form-group" >
               <label for="inputEmail3" class="col-sm-3 control-label">Job Title</label>
               <div class="col-sm-9">
-                <select class="form-control" id="jobTitleSelect" ng-model="vm.jobTitle" ng-options="option.value as option.name for option in optionsJobTitle"/>
+                <select class="form-control" id="jobTitleSelect" ng-click="vm.jobTitleAction()" ng-model="vm.usereditdata.data.job_title" ng-options="option.value as option.name for option in optionsJobTitle"/>
               </div>
             </div>
-            <div class="form-group" >
+            <div class="form-group" ng-show="vm.showDivision">
               <label for="inputEmail3" class="col-sm-3 control-label">Division</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" ng-model="" name="division" placeholder="Division">
+                <input type="text" class="form-control" ng-model="vm.usereditdata.data.division" name="division" placeholder="Division">
               </div>
             </div>
-            <div class="form-group" >
+            <div class="form-group" ng-show="vm.showDivision">
               <label for="inputEmail3" class="col-sm-3 control-label">Group Division</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" ng-model="" name="groupDivision" placeholder="Group Division">
+                <input type="text" class="form-control" ng-model="vm.usereditdata.data.group_division" name="groupDivision" placeholder="Group Division">
               </div>
             </div>
             <div class="form-group">

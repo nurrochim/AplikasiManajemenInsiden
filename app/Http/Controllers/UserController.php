@@ -136,7 +136,11 @@ class UserController extends Controller
             app('request')->only(
                 'data.name',
                 'data.email',
-                'data.id'
+                'data.id',
+                'data.contact_no',
+                'data.job_title',
+                'data.division',
+                'data.group_division'
             )
         );
 
@@ -153,6 +157,11 @@ class UserController extends Controller
         $userData = [
             'name' => $userForm['data.name'],
             'email' => $userForm['data.email'],
+            'contact_no' => $userForm['data.contact_no'],
+            'job_title' => $userForm['data.job_title'],
+            'division' => $userForm['data.division'],
+            'group_division' => $userForm['data.group_division'],
+
         ];
 
         $affectedRows = User::where('id', '=', $userId)->update($userData);

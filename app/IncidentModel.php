@@ -42,7 +42,10 @@ class IncidentModel extends Model
                                 ,'closedDate'
                                 ,'closedBy'
                                 ,'createBy'
-                                ,'updateBy');
+                                ,'updateBy'
+                                ,'created_at'
+                            );
     protected $table = 'incident';
     protected $primaryKey = 'idIncident';
+    public $incrementing = false;
 }

@@ -105,7 +105,7 @@
                             </div>
                         </div>
                         <div class="col-sm-11" ng-show="vm.stepTwo">
-                            <div class="form-group" ng-if="files.length > 0"
+                            <div class="form-group" ng-if="files.length > 0">
                                 <label class="col-sm-3 control-label">File Attachment</label>
                                 <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
                                     <li ng-repeat="file_item in files">
@@ -227,7 +227,8 @@
                             <button ng-show="!vm.isEdit" ng-click="vm.save(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Save</button>
                             <button ng-show="vm.isEdit" ng-click="vm.update(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Update</button>
                         </div>
-                        <a ng-show="vm.stepTwo" ui-sref="app.openissue" class="btn btn-primary pull-right">Finish</a>
+                        <a ng-show="vm.finishEdit" ui-sref="app.openincident" class="btn btn-primary pull-right">Finish</a>
+                        <a ng-show="vm.stepTwo && vm.postIncident" ng-click="vm.postOpenIncident()"  class="btn btn-primary pull-right">Post Incident</a>
                     </div>
                 </form>
             </div>

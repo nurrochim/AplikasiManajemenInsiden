@@ -8,11 +8,13 @@ class OpenIncidentFormController {
     this.form_title = '';
     this.API = API;
     this.$scope = $scope;
-    this.$window = $window; 
+    this.$window = $window;
     this.raise_date = "2017-09-21T18:25:43-05:00";
     this.EditIssueId = '';
     this.stepOne = true;
     this.stepTwo = false;
+    this.finishEdit = false;
+    this.postIncident = false;
     this.classElemetStepTwo = 'btn btn-default btn-circle';
     this.disableButtonStepTwo = true;
     this.showAlert = false;
@@ -75,6 +77,14 @@ class OpenIncidentFormController {
             this.issueDescription = issueEdit.data.issueDescription;
 
             this.selectedReporter = { id: this.fidUserRaised, name: this.raiseBy, division: this.division, groupDivision: this.groupDivision };
+
+            if(issueEdit.data.statusTask){
+              this.finishEdit = true;
+              this.postIncident = false;
+            }else{
+              this.finishEdit = false;
+              this.postIncident = true;
+            }
           })
         break;
       case 'editAfterSave':
@@ -95,6 +105,14 @@ class OpenIncidentFormController {
             this.groupDivision = issueEdit.data.groupDivision;
             this.issueDescription = issueEdit.data.issueDescription;
             this.selectedReporter = { id: this.fidUserRaised, name: this.raiseBy, division: this.division, groupDivision: this.groupDivision };
+
+            if(issueEdit.data.statusTask){
+              this.finishEdit = true;
+              this.postIncident = false;
+            }else{
+              this.finishEdit = false;
+              this.postIncident = true;
+            }
           })
         break;
       default:
@@ -138,7 +156,7 @@ class OpenIncidentFormController {
     // get file incident
     $scope.files = [];
     let fileOpen = API.service('file-by-group', API.all('files'))
-    fileOpen.one().get({idIncident:this.EditIssueId, fileGroup:'Open'})
+    fileOpen.one().get({ idIncident: this.EditIssueId, fileGroup: 'Open' })
       .then((response) => {
         let filesOpen = response.data.files;
         angular.forEach(response.data.files, function (value, key) {
@@ -146,7 +164,7 @@ class OpenIncidentFormController {
             id: value.id,
             fidIncident: value.fidIncident,
             fileName: value.fileName,
-            fileUrl: "http://" + $window.location.host +"/download/"+value.fidIncident+"/"+value.fileName
+            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
           });
         })
       })
@@ -350,48 +368,48 @@ class OpenIncidentFormController {
 
   downloadAttachment($idIncident, $fileName) {
     let $http = this.$http;
-    var path = 'download/'.concat($idIncident,"/",$fileName);
+    var path = 'download/'.concat($idIncident, "/", $fileName);
     $http({
       url: path,
       method: 'GET',
       headers: {
         'Content-Type': undefined
       }
-    }) 
+    })
       // .success(function (respon) {
-        //alert(result);
-        //console.info('remove', result);
+      //alert(result);
+      //console.info('remove', result);
       // });
-    // let CreateIssue = this.API.service('download', this.API.all('files'))
-    // CreateIssue.one().get()
-    .then((respon) => { 
-      //console.info('download respon', respon);
+      // let CreateIssue = this.API.service('download', this.API.all('files'))
+      // CreateIssue.one().get()
+      .then((respon) => {
+        //console.info('download respon', respon);
         // var url = (window.URL || window.webkitURL).createObjectURL(response);
         // window.open(url); 
 
         //create sample hidden link in document, to accept Blob returned in the response from back end
-    
-	    	var downloadLink = document.createElement("a");
-    
+
+        var downloadLink = document.createElement("a");
+
         document.body.appendChild(downloadLink);
         downloadLink.style = "display: none";
-    
-    //This service is written Below how does it work, by aceepting necessary params
-        
-     
-          var fName = 'Kartu Ujian.pdf'; 
-          var file = new Blob([respon]);
-          var fileURL = (window.URL || window.webkitURL).createObjectURL(file);
-    
-              
-    //Blob, client side object created to with holding browser specific download popup, on the URL created with the help of window obj.
-              
-          downloadLink.href = fileURL;
-          downloadLink.download = fName;
-          downloadLink.click();
+
+        //This service is written Below how does it work, by aceepting necessary params
+
+
+        var fName = 'Kartu Ujian.pdf';
+        var file = new Blob([respon]);
+        var fileURL = (window.URL || window.webkitURL).createObjectURL(file);
+
+
+        //Blob, client side object created to with holding browser specific download popup, on the URL created with the help of window obj.
+
+        downloadLink.href = fileURL;
+        downloadLink.download = fName;
+        downloadLink.click();
       })
-    }
-  
+  }
+
 
   save(isValid) {
     if (isValid) {
@@ -407,6 +425,7 @@ class OpenIncidentFormController {
         'division': this.division,
         'groupDivision': this.groupDivision,
         'issueDescription': this.issueDescription,
+        'createBy': this.userData.id,
 
       }).then(function (success) {
         let disableButtonStepTwo_ = false;
@@ -424,6 +443,25 @@ class OpenIncidentFormController {
     }
   }
 
+  postOpenIncident() {
+    let $state = this.$state; 
+    let params = {idIncident: this.EditIssueId, statusTask:'Open', updateBy: this.userData.id}; 
+    let IssueUpdateStatus = this.API.service('incident-status-update', this.API.all('incidents'))
+    IssueUpdateStatus.one().put(params) 
+    .then(() => { 
+      // let disableButtonStepTwo_ = false;
+      // let alert = {
+      //   type: 'success', 'title': 'Success!', msg: 'Data has been updated.'
+      //   , inputState: 'edit', issueId: this.EditIssueId
+      // }
+      // $state.go($state.current, { alerts: alert, disableButtonStepTwo: disableButtonStepTwo_ });
+      $state.go("app.openincident");
+    }, (response) => {
+      let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
+      $state.go($state.current, { alerts: alert })
+    })
+  }
+
   update(isValid) {
     if (isValid) {
       let $state = this.$state
@@ -431,9 +469,9 @@ class OpenIncidentFormController {
       let $raisedDate = $filter('date')(this.$scope.dt, "yyyy-MM-dd");
       //console.log('Is Update');
       this.issueDataEdit.data.raisedDate = $raisedDate;
-      this.issueDataEdit.data.raisedBy = this.selectedReporter.name,
-        this.issueDataEdit.data.fidUserRaised = this.selectedReporter.id,
-        this.issueDataEdit.data.division = this.division;
+      this.issueDataEdit.data.raisedBy = this.selectedReporter.name;
+      this.issueDataEdit.data.fidUserRaised = this.selectedReporter.id;
+      this.issueDataEdit.data.division = this.division;
       this.issueDataEdit.data.groupDivision = this.groupDivision;
       this.issueDataEdit.data.issueDescription = this.issueDescription;
 
