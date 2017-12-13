@@ -20,25 +20,32 @@
                 <form class="form-horizontal" name="frmIssue" novalidate>
                     <div class="box-body">
                         <div class="form-group">
+                            <label class="col-sm-4 control-label">Search By</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" id="sel1" ng-model="vm.selectedFilter" ng-options="item as item.name for item in filters track by item.id"
+                                ng-change="vm.reloadFilter()"/>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-if="vm.showFilterId">
                             <label class="col-sm-4 control-label">Id Incident</label>
                             <div class="col-sm-5">
                                 <input type="text" class="form-control" ng-model="vm.idIncident" name="idIncident" placeholder="Id Incident">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-if="vm.showFilterDesc">
                             <label class="col-sm-4 control-label">Issue Description's</label>
                             <div class="col-sm-5">
                                 <input type="text" class="form-control" ng-model="vm.description" name="idIncident" placeholder="Issue Description's">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-if="vm.showFilterRaisedBy">
                             <label class="col-sm-4 control-label">Raised By</label>
                             <div class="col-sm-5">
                                 <select class="form-control" id="sel1" ng-model="vm.selectedReporter" ng-options="reporter as reporter.name for reporter in reporters track by reporter.id"
-                                    />
+                                />
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-if="vm.showFilterRaisedDate">
                             <label class="col-sm-4 control-label">Raised Date</label>
                             <div class="col-sm-5">
                                 <p class="input-group">
@@ -47,7 +54,7 @@
                                     />
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="open1()">
-                                            <i class="glyphicon glyphicon-calendar"></i>
+                                            <i class="fa fa-calendar"></i>
                                         </button>
                                     </span>
                                 </p>

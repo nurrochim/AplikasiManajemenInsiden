@@ -1,5 +1,5 @@
 class TestingIncidentFormController {
-    constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService) {
+    constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService, $window) {
         'ngInject'
 
         this.$state = $state;
@@ -23,13 +23,16 @@ class TestingIncidentFormController {
         this.detailIncidentDisable = true;
         this.params = [];
         //this.issueDataEdit = {};
+        this.$window = $window;
+        $scope.userName = '';
 
         // get data user
         let controller = this;
         controller.can = AclService.can
 
         ContextService.me(function (data) {
-            controller.userData = data; 
+            controller.userData = data;
+            controller.$scope.userName = controller.userData.name;
             if (data) {
                 controller.params = { idIncident: issueId, idUser: controller.userData.id, task: "Testing" };
                 getDataPicIncidentTask();
@@ -41,10 +44,10 @@ class TestingIncidentFormController {
             IncidentList.one().get(this.params)
                 .then((response) => {
                     angular.forEach(response.data.pics, function (value, key) {
-                        if (value.startDate!=null) {
+                        if (value.startDate != null) {
                             controller.startDate = new Date(value.startDate);
                         }
-                        if (value.finishDate!=null) {
+                        if (value.finishDate != null) {
                             controller.finishDate = new Date(value.finishDate);
                         }
                         controller.targetDate = new Date(value.targetDate);
@@ -57,6 +60,7 @@ class TestingIncidentFormController {
 
         let issueId = $stateParams.issueId
         this.EditIssueId = issueId;
+        this.$scope.idIncident = issueId;
         let inputState = $stateParams.inputState
         //$log.info(issueId+' '+inputState);
 
@@ -110,6 +114,47 @@ class TestingIncidentFormController {
                 this.fixingNotes = issueEdit.data.fixingNotes;
                 this.testingNotes = issueEdit.data.fixingNotes;
                 this.testScenario = issueEdit.data.testScenario;
+            })
+
+        // get file incident
+        $scope.filesOpenIcident = [];
+        $scope.filesAnalyzing = [];
+        $scope.filesFixing = [];
+        $scope.filesTesting = [];
+        let fileOpen = API.service('file-by-group', API.all('files'))
+        fileOpen.one().get({ idIncident: this.EditIssueId, fileGroup: 'All' })
+            .then((response) => {
+                angular.forEach(response.data.files, function (value, key) {
+                    if (value.fileGroup === "Open") {
+                        $scope.filesOpenIcident.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    } else if (value.fileGroup === "Analyzing") {
+                        $scope.filesAnalyzing.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    } else if (value.fileGroup === "Fixing") {
+                        $scope.filesFixing.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    } else if (value.fileGroup === "Testing") {
+                        $scope.filesTesting.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    }
+                })
             })
 
         // settingDate
@@ -183,7 +228,7 @@ class TestingIncidentFormController {
             opened: false
         };
 
-        function getDayClass(data) { 
+        function getDayClass(data) {
             var date = data.date,
                 mode = data.mode;
             if (mode === 'day') {
@@ -274,8 +319,13 @@ class TestingIncidentFormController {
 
         // upload method
         var uploader = $scope.uploader = new FileUploader({
-            url: 'upload'
+            url: 'file-upload',
+            method: 'POST'
         });
+
+        uploader.onBeforeUploadItem = function (item) {
+            item.formData = [{ idIncident: $scope.idIncident, fileGorup: 'Testing', userName: $scope.userName }];
+        };
 
         $scope.deleteImage = function (id) {
             console.info('removeId', id);
@@ -306,13 +356,44 @@ class TestingIncidentFormController {
 
         // FILTERS
 
+        // uploader.filters.push({
+        //     name: 'imageFilter',
+        //     fn: function (item /*{File|FileLikeObject}*/, options) {
+        //         var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+        //         return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        //     }
+        // });
+        
+        // a sync filter
         uploader.filters.push({
-            name: 'imageFilter',
+            name: 'syncFilter',
             fn: function (item /*{File|FileLikeObject}*/, options) {
-                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-                return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+                console.log('syncFilter');
+                return this.queue.length < 10;
             }
         });
+
+        // an async filter
+        uploader.filters.push({
+            name: 'asyncFilter',
+            fn: function (item /*{File|FileLikeObject}*/, options, deferred) {
+                console.log('asyncFilter');
+                setTimeout(deferred.resolve, 1e3);
+            }
+        });
+
+
+        uploader.onCompleteItem = function (fileItem, response, status, headers) {
+            console.info('onCompleteItem', fileItem, response, status, headers);
+        };
+        uploader.onCompleteAll = function () {
+            console.info('onCompleteAll');
+        };
+    }
+
+    filterImage(item) {
+        var type = item.slice((item.lastIndexOf(".") - 1 >>> 0) + 2);
+        return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
     }
 
     update(isValid) {
@@ -321,7 +402,7 @@ class TestingIncidentFormController {
             //console.log('Is Update');
             this.issueDataEdit.data.testNotes = this.testingNotes;
             this.issueDataEdit.data.testScenario = this.testScenario;
-            let $picIncident = {picTask: 'Testing', picUser: this.userData.id, startDate: this.startDate, finishDate: this.finishDate};
+            let $picIncident = { picTask: 'Testing', picUser: this.userData.id, startDate: this.startDate, finishDate: this.finishDate };
 
             this.issueDataEdit.put($picIncident)
                 .then(() => {
@@ -338,7 +419,7 @@ class TestingIncidentFormController {
         } else {
             this.formSubmitted = true
         }
-    } 
+    }
 
     eventStepOne() {
         this.stepOne = true;

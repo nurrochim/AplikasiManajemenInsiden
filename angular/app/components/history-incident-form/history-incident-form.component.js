@@ -1,5 +1,5 @@
 class HistoryIncidentFormController{
-    constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService) {
+    constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService, $window) {
         'ngInject'
 
         this.$state = $state;
@@ -25,6 +25,8 @@ class HistoryIncidentFormController{
         this.detailIncidentDisable = true;
         this.params = [];
         //this.issueDataEdit = {};
+        this.$window = $window;
+        $scope.userName = '';
 
         // get data user
         let controller = this;
@@ -95,6 +97,48 @@ class HistoryIncidentFormController{
             })
 
         this.refreshTablePic();    
+
+        // get file incident
+        $scope.filesOpenIcident = [];
+        $scope.filesAnalyzing = [];
+        $scope.filesFixing = [];
+        $scope.filesTesting = [];
+        let fileOpen = API.service('file-by-group', API.all('files'))
+        fileOpen.one().get({ idIncident: this.EditIssueId, fileGroup: 'All' })
+            .then((response) => {
+                angular.forEach(response.data.files, function (value, key) {
+                    if (value.fileGroup === "Open") {
+                        $scope.filesOpenIcident.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    } else if (value.fileGroup === "Analyzing") {
+                        $scope.filesAnalyzing.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    } else if (value.fileGroup === "Fixing") {
+                        $scope.filesFixing.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    } else if (value.fileGroup === "Testing") {
+                        $scope.filesTesting.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    }
+                })
+            })
+            
         // settingDate
         $scope.today = function () {
             $scope.dt = new Date();

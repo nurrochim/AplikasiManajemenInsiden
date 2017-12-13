@@ -1,5 +1,5 @@
 class FixingIncidentFormController {
-    constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService) {
+    constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService, $window) {
         'ngInject'
 
         this.$state = $state;
@@ -23,9 +23,13 @@ class FixingIncidentFormController {
         this.detailIncidentDisable = true;
         this.params = [];
         //this.issueDataEdit = {};
+        this.$window = $window;
+        $scope.userName = '';
 
         let issueId = $stateParams.issueId
         this.EditIssueId = issueId;
+        this.$scope.idIncident = issueId;
+        
         let inputState = $stateParams.inputState
         //$log.info(issueId+' '+inputState);
 
@@ -34,6 +38,7 @@ class FixingIncidentFormController {
 
         ContextService.me(function (data) {
             fixingIncident.userData = data;
+            fixingIncident.$scope.userName = fixingIncident.userData.name;
             if (data) {
                 fixingIncident.params = { idIncident: issueId, idUser: fixingIncident.userData.id, task: "Fixing" };
                 getDataPicIncidentTask();
@@ -45,10 +50,10 @@ class FixingIncidentFormController {
             IncidentList.one().get(this.params)
                 .then((response) => {
                     angular.forEach(response.data.pics, function (value, key) {
-                        if (value.startDate!=null) {
+                        if (value.startDate != null) {
                             fixingIncident.startDate = new Date(value.startDate);
                         }
-                        if (value.finishDate!=null) {
+                        if (value.finishDate != null) {
                             fixingIncident.finishDate = new Date(value.finishDate);
                         }
                         fixingIncident.targetDate = new Date(value.targetDate);
@@ -107,6 +112,39 @@ class FixingIncidentFormController {
                 this.responTaken = issueEdit.data.responTaken;
                 this.decidedSolution = issueEdit.data.decidedSolution;
                 this.fixingNotes = issueEdit.data.fixingNotes;
+            })
+
+        // get file incident
+        $scope.filesOpenIcident = [];
+        $scope.filesAnalyzing = [];
+        $scope.filesFixing = [];
+        let fileOpen = API.service('file-by-group', API.all('files'))
+        fileOpen.one().get({ idIncident: this.EditIssueId, fileGroup: 'All' })
+            .then((response) => {
+                angular.forEach(response.data.files, function (value, key) {
+                    if (value.fileGroup === "Open") {
+                        $scope.filesOpenIcident.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    } else if (value.fileGroup === "Analyzing") {
+                        $scope.filesAnalyzing.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    } else if (value.fileGroup === "Fixing") {
+                        $scope.filesFixing.push({ 
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    }
+                })
             })
 
         // settingDate
@@ -272,8 +310,13 @@ class FixingIncidentFormController {
 
         // upload method
         var uploader = $scope.uploader = new FileUploader({
-            url: 'upload'
+            url: 'file-upload',
+            method: 'POST'
         });
+
+        uploader.onBeforeUploadItem = function (item) {
+            item.formData = [{ idIncident: $scope.idIncident, fileGorup: 'Fixing', userName: $scope.userName }];
+        };
 
         $scope.deleteImage = function (id) {
             console.info('removeId', id);
@@ -304,14 +347,45 @@ class FixingIncidentFormController {
 
         // FILTERS
 
+        // uploader.filters.push({
+        //     name: 'imageFilter',
+        //     fn: function (item /*{File|FileLikeObject}*/, options) {
+        //         var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+        //         return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        //     }
+        // });
+        // a sync filter
         uploader.filters.push({
-            name: 'imageFilter',
+            name: 'syncFilter',
             fn: function (item /*{File|FileLikeObject}*/, options) {
-                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-                return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+                console.log('syncFilter');
+                return this.queue.length < 10;
             }
         });
+
+        // an async filter
+        uploader.filters.push({
+            name: 'asyncFilter',
+            fn: function (item /*{File|FileLikeObject}*/, options, deferred) {
+                console.log('asyncFilter');
+                setTimeout(deferred.resolve, 1e3);
+            }
+        });
+
+
+        uploader.onCompleteItem = function (fileItem, response, status, headers) {
+            console.info('onCompleteItem', fileItem, response, status, headers);
+        };
+        uploader.onCompleteAll = function () {
+            console.info('onCompleteAll');
+        };
     }
+
+    filterImage(item) {
+        var type = item.slice((item.lastIndexOf(".") - 1 >>> 0) + 2);
+        return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+    }
+	
 
     update(isValid) {
         if (isValid) {
@@ -337,7 +411,7 @@ class FixingIncidentFormController {
         } else {
             this.formSubmitted = true
         }
-    } 
+    }
 
     eventStepOne() {
         this.stepOne = true;

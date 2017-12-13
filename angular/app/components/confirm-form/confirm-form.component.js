@@ -1,5 +1,5 @@
 class ConfirmFormController {
-    constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService) {
+    constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService, $window) {
         'ngInject'
 
         this.$state = $state;
@@ -25,6 +25,8 @@ class ConfirmFormController {
         this.detailIncidentDisable = true;
         this.params = [];
         //this.issueDataEdit = {};
+        this.$window = $window;
+        $scope.userName = '';
 
         // get data user
         let controller = this;
@@ -39,6 +41,7 @@ class ConfirmFormController {
 
         let issueId = $stateParams.issueId
         this.EditIssueId = issueId;
+        this.$scope.idIncident = issueId;
         let inputState = $stateParams.inputState
         //$log.info(issueId+' '+inputState);
 
@@ -94,7 +97,49 @@ class ConfirmFormController {
                 this.testScenario = issueEdit.data.testScenario;
             })
 
-        this.refreshTablePic();    
+        this.refreshTablePic();
+
+        // get file incident
+        $scope.filesOpenIcident = [];
+        $scope.filesAnalyzing = [];
+        $scope.filesFixing = [];
+        $scope.filesTesting = [];
+        let fileOpen = API.service('file-by-group', API.all('files'))
+        fileOpen.one().get({ idIncident: this.EditIssueId, fileGroup: 'All' })
+            .then((response) => {
+                angular.forEach(response.data.files, function (value, key) {
+                    if (value.fileGroup === "Open") {
+                        $scope.filesOpenIcident.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    } else if (value.fileGroup === "Analyzing") {
+                        $scope.filesAnalyzing.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    } else if (value.fileGroup === "Fixing") {
+                        $scope.filesFixing.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    } else if (value.fileGroup === "Testing") {
+                        $scope.filesTesting.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    }
+                })
+            })
+
         // settingDate
         $scope.today = function () {
             $scope.dt = new Date();
@@ -320,24 +365,24 @@ class ConfirmFormController {
             })
     }
 
-    reAssignTask(idIncident){
+    reAssignTask(idIncident) {
         let API = this.API
         let $state = this.$state
-        
+
         swal({
-          title: 'Re-Assign Task',
-          text: 'Re-assign this incident will be return back task-flow to analyzing incident',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#DD6B55',
-          confirmButtonText: 'Yes',
-          closeOnConfirm: true,
-          showLoaderOnConfirm: true,
-          html: false
+            title: 'Re-Assign Task',
+            text: 'Re-assign this incident will be return back task-flow to analyzing incident',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: 'Yes',
+            closeOnConfirm: true,
+            showLoaderOnConfirm: true,
+            html: false
         }, function () {
-        //   API.one('users').one('user', userId).remove()
-        //     .then(() => {
-                $state.go('app.confirm'); 
+            //   API.one('users').one('user', userId).remove()
+            //     .then(() => {
+            $state.go('app.confirm');
             //   swal({
             //     title: 'Deleted!',
             //     text: 'User Permission has been deleted.',
@@ -351,9 +396,9 @@ class ConfirmFormController {
         })
     }
 
-    delete (userId) {
-        
-      }
+    delete(userId) {
+
+    }
 
     update(isValid) {
         if (isValid) {
@@ -447,192 +492,192 @@ class ConfirmFormController {
         let $scope = this.$scope;
         let items = [];
         switch (modalstate) {
-          case 'add':
-            items = [{
-              modalState: modalstate,
-              id: this.EditIssueId
-            }];
-            break;
-          case 'edit':
-            items = [{
-              modalState: modalstate,
-              id: id
-            }];
-            break;
-          default:
-            break;
+            case 'add':
+                items = [{
+                    modalState: modalstate,
+                    id: this.EditIssueId
+                }];
+                break;
+            case 'edit':
+                items = [{
+                    modalState: modalstate,
+                    id: id
+                }];
+                break;
+            default:
+                break;
         }
-    
+
         var modalInstance = $uibModal.open({
-          animation: true,
-          templateUrl: 'myModalContent.html',
-          controller: this.modalcontroller,
-          controllerAs: 'mvm',
-          resolve: {
-            items: () => {
-              return items
+            animation: true,
+            templateUrl: 'myModalContent.html',
+            controller: this.modalcontroller,
+            controllerAs: 'mvm',
+            resolve: {
+                items: () => {
+                    return items
+                }
             }
-          }
         })
-    
+
         modalInstance.result.then((selectedItem) => {
-          this.refreshTableConfirmHistory();
-        }, 
-        () => {
-          $log.info('Modal dismissed at: ' + new Date())
-        })
-      }
-    
-      modalcontroller($scope, $uibModalInstance, API, $http, items) {
+            this.refreshTableConfirmHistory();
+        },
+            () => {
+                $log.info('Modal dismissed at: ' + new Date())
+            })
+    }
+
+    modalcontroller($scope, $uibModalInstance, API, $http, items) {
         'ngInject'
-    
+
         // items
         let modalstate = items[0].modalState;
         let idState = items[0].id;
         switch (modalstate) {
             case 'add':
-            this.title = 'Add Confirm History'
-            break;
+                this.title = 'Add Confirm History'
+                break;
             case 'edit':
-            this.title = 'Edit Confirm History'
-            break;
+                this.title = 'Edit Confirm History'
+                break;
             default:
-              break;
-          }
-      
-        
-    
-    
+                break;
+        }
+
+
+
+
         $scope.today = function () {
-          $scope.dtPic = new Date();
+            $scope.dtPic = new Date();
         };
-    
+
         $scope.today();
-    
+
         $scope.clear = function () {
-          $scope.dtPic = null;
+            $scope.dtPic = null;
         };
-    
+
         $scope.inlineOptions = {
-          customClass: getDayClass,
-          minDate: new Date(),
-          showWeeks: true
+            customClass: getDayClass,
+            minDate: new Date(),
+            showWeeks: true
         };
-    
+
         $scope.dateOptions = {
-          dateDisabled: disabled,
-          formatYear: 'yy',
-          maxDate: new Date(2020, 5, 22),
-          minDate: new Date(),
-          startingDay: 1
+            dateDisabled: disabled,
+            formatYear: 'yy',
+            maxDate: new Date(2020, 5, 22),
+            minDate: new Date(),
+            startingDay: 1
         };
-    
+
         // Disable weekend selection
         function disabled(data) {
-          var date = data.date,
-            mode = data.mode;
-          return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+            var date = data.date,
+                mode = data.mode;
+            return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
         }
-    
+
         $scope.toggleMin = function () {
-          $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
-          $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
+            $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
+            $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
         };
-    
+
         $scope.toggleMin();
-    
+
         $scope.open1 = function () {
-          $scope.popup1.opened = true;
+            $scope.popup1.opened = true;
         };
-    
+
         $scope.open2 = function () {
-          $scope.popup2.opened = true;
+            $scope.popup2.opened = true;
         };
-    
+
         // $scope.setDate = function (year, month, day) {
         //   $scope.dt = new Date(year, month, day);
         // };
-    
+
         $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
         $scope.format = $scope.formats[0];
         $scope.altInputFormats = ['M!/d!/yyyy'];
-    
+
         $scope.popup1 = {
-          opened: false
+            opened: false
         };
-    
+
         $scope.popup2 = {
-          opened: false
+            opened: false
         };
-    
-    
+
+
         function getDayClass(data) {
-          var date = data.date,
-            mode = data.mode;
-          if (mode === 'day') {
-            var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
-    
-            for (var i = 0; i < $scope.events.length; i++) {
-              var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
-    
-              if (dayToCheck === currentDay) {
-                return $scope.events[i].status;
-              }
+            var date = data.date,
+                mode = data.mode;
+            if (mode === 'day') {
+                var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
+
+                for (var i = 0; i < $scope.events.length; i++) {
+                    var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
+
+                    if (dayToCheck === currentDay) {
+                        return $scope.events[i].status;
+                    }
+                }
             }
-          }
-    
-          return '';
+
+            return '';
         }
-    
+
         $scope.optionsTask = [
-          {
-            name: 'Analyzing',
-            value: 'Analyzing'
-          },
-          {
-            name: 'Fixing',
-            value: 'Fixing'
-          },
-          {
-            name: 'Testing',
-            value: 'Testing'
-          }
+            {
+                name: 'Analyzing',
+                value: 'Analyzing'
+            },
+            {
+                name: 'Fixing',
+                value: 'Fixing'
+            },
+            {
+                name: 'Testing',
+                value: 'Testing'
+            }
         ];
-    
+
         $scope.teamMember = [];
         let UserOptions = API.service('maintenance-team', API.all('users'))
         UserOptions.one('0').get()
-          .then((response) => {
-            let users = response.data.users;
-            angular.forEach(response.data.users, function (value, key) {
-              $scope.teamMember.push({
-                id: value.id,
-                name: value.name
-              });
+            .then((response) => {
+                let users = response.data.users;
+                angular.forEach(response.data.users, function (value, key) {
+                    $scope.teamMember.push({
+                        id: value.id,
+                        name: value.name
+                    });
+                })
             })
-          })
         this.pic = $scope.teamMember[0];
-    
+
         this.ok = () => {
-        //   switch (modalstate) {
-        //     case 'add':
-        //       let CreatePic = API.service('incident-pic', API.all('incidentpics'))
-        //       //let $state = this.$state
-        //       CreatePic.post({
-        //         'fidIncident': idState,
-        //         'fidUser': this.pic.id,
-        //         'picName': this.pic.name,
-        //         'targetDate': $scope.dtPic,
-        //         'task': this.task,
+            //   switch (modalstate) {
+            //     case 'add':
+            //       let CreatePic = API.service('incident-pic', API.all('incidentpics'))
+            //       //let $state = this.$state
+            //       CreatePic.post({
+            //         'fidIncident': idState,
+            //         'fidUser': this.pic.id,
+            //         'picName': this.pic.name,
+            //         'targetDate': $scope.dtPic,
+            //         'task': this.task,
             //   }).then(function (success) {
-                // let disableButtonStepTwo_ = false;
-                // let alert = {
-                //   type: 'success', 'title': 'Success!', msg: 'Incident No: ' + success.data.idIncident + ' Incident has been added.'
-                //   , inputState: 'editAfterSave', issueId: success.data.idIncident
-                // }
-                // $state.go($state.current, { alerts: alert, disableButtonStepTwo: disableButtonStepTwo_ });
-    
-                $uibModalInstance.close()
+            // let disableButtonStepTwo_ = false;
+            // let alert = {
+            //   type: 'success', 'title': 'Success!', msg: 'Incident No: ' + success.data.idIncident + ' Incident has been added.'
+            //   , inputState: 'editAfterSave', issueId: success.data.idIncident
+            // }
+            // $state.go($state.current, { alerts: alert, disableButtonStepTwo: disableButtonStepTwo_ });
+
+            $uibModalInstance.close()
             //     console.info('save-pic-succes', success);
             //   }, function (error) {
             //     // let alert = { type: 'error', 'title': 'Error!', msg: error.data.message }
@@ -641,22 +686,22 @@ class ConfirmFormController {
             //   })
             //   break;
             // case 'edit':
-    
+
             //   break;
             // default:
             //   break;
-        //   }
-          //$uibModalInstance.close($scope.selected.item)
+            //   }
+            //$uibModalInstance.close($scope.selected.item)
         }
-    
+
         this.cancel = () => {
-          $uibModalInstance.dismiss('cancel')
+            $uibModalInstance.dismiss('cancel')
         }
-      }
-    
-      toggleModalAnimation() {
+    }
+
+    toggleModalAnimation() {
         this.animationsEnabled = true;
-      }
+    }
 
     $onInit() {
     }

@@ -114,12 +114,20 @@ class ImageController extends Controller
 
     public function getFileByGroup(Request $request)
     {
-        $sql = "select * from incident_files where fidIncident = :idIncident and fileGroup = :fileGroup";
+        
         
         $idIncident = $request->input('idIncident');
         $fileGroup = $request->input('fileGroup');
-        $files = DB::select($sql, ['fileGroup'=>$fileGroup, 'idIncident'=>$idIncident]);
-        return response()->success(compact('files'));
+        if($fileGroup=="All"){
+            $sql = "select * from incident_files where fidIncident = :idIncident";
+            $files = DB::select($sql, ['idIncident'=>$idIncident]);
+            return response()->success(compact('files'));
+        }else{
+            $sql = "select * from incident_files where fidIncident = :idIncident and fileGroup = :fileGroup";
+            $files = DB::select($sql, ['fileGroup'=>$fileGroup, 'idIncident'=>$idIncident]);
+            return response()->success(compact('files'));
+        }
+        
     }
 
     public function getCreatePdf(){

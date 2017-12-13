@@ -9,6 +9,8 @@ use App\IncidentModel;
 use App\IncidentPicModel;
 use Input;
 //use Request;
+use DateTime;
+use DateTimeZone;
 
 class IncidentCtrl extends Controller
 {
@@ -148,6 +150,8 @@ class IncidentCtrl extends Controller
 
     public function getIncidentFilter(Request $request)
     { 
+        // $pdo = DB::getPdo();
+
         $sql = "SELECT A.idIncident, 
                        A.raisedDate,
                        A.raisedBy,
@@ -168,14 +172,33 @@ class IncidentCtrl extends Controller
                                 WHERE TASK = 'Testing' AND FIDINCIDENT = A.IDINCIDENT
                                 GROUP BY FIDINCIDENT LIMIT 1), '') pic_testing 
                     FROM INCIDENT A 
-                    WHERE A.idIncident = :idIncident
-                    ORDER BY A.idIncident    
-                    ";
+                    WHERE ";
         // $issue = DB::connection()->getPdo()->exec($sql);
         //$task = 'Analyzing';
-        $idIncident = $request->input('idIncident');
-        $task = $request->input('task');
-        $issue = DB::select($sql, ['idIncident'=>$idIncident]);
+        $filterValue = $request->input('filterValue');
+        $filterBy = $request->input('filterBy');
+        if($filterBy == "idIncident"){
+            $filterValue = '%'.$filterValue.'%';
+            $sql .= " A.idIncident like :filterValue";
+        }else if($filterBy == "descriptions"){
+            $filterValue = '%'.$filterValue.'%';
+            $sql .= " A.issueDescription like :filterValue";
+        }else if($filterBy == "raisedBy"){
+            $filterValue = '%'.$filterValue.'%';
+            $sql .= " A.raisedBy like :filterValue";
+        }else if($filterBy == "raisedDate"){
+            //$d = new DateTime('2017-12-13', new DateTimeZone('Asia/Jakarta'));
+            
+            //$timestamp = $d->getTimestamp(); // Unix timestamp
+            //$formatted_date = $d->format('Y-m-d'); // 2003-10-16
+            $sql .= " A.raisedDate = :filterValue";
+        } 
+
+        $sql .= " ORDER BY A.idIncident";
+        // $issue = $pdo->prepare($sql);
+        // $issue->bindValue(':filterValue', $filterValue);
+        // $issue->execute();
+        $issue = DB::select($sql, ['filterValue'=>$filterValue]);
         return response()->success(compact('issue'));
     }
 }

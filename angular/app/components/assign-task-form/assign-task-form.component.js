@@ -1,5 +1,5 @@
 class AssignTaskFormController {
-  constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService) {
+  constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService, $window) {
     'ngInject'
 
     this.$state = $state;
@@ -9,6 +9,7 @@ class AssignTaskFormController {
     this.form_title = '';
     this.API = API;
     this.$scope = $scope;
+    this.$window = $window;
     this.raise_date = "2017-09-21T18:25:43-05:00";
     this.EditIssueId = '';
     this.showAlert = false;
@@ -95,6 +96,21 @@ class AssignTaskFormController {
         }
       }
     })
+
+    // get file incident
+    $scope.filesOpenIcident = [];
+    let fileOpen = API.service('file-by-group', API.all('files'))
+    fileOpen.one().get({ idIncident: this.EditIssueId, fileGroup: 'Open' })
+        .then((response) => {
+            angular.forEach(response.data.files, function (value, key) {
+                $scope.filesOpenIcident.push({
+                    id: value.id,
+                    fidIncident: value.fidIncident,
+                    fileName: value.fileName,
+                    fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                });
+            })
+        })
 
     $scope.today = function () {
       $scope.dt = new Date();

@@ -1,5 +1,5 @@
 class OpenIncidentFormController {
-  constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, AclService, ContextService, $window) {
+  constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, AclService, ContextService, $window, $filter) {
     'ngInject'
 
     this.$state = $state;
@@ -17,6 +17,7 @@ class OpenIncidentFormController {
     this.disableButtonStepTwo = true;
     this.showAlert = false;
     this.$http = $http;
+    this.$filter = $filter;
     //this.issueDataEdit = {};
 
 
@@ -396,9 +397,11 @@ class OpenIncidentFormController {
     if (isValid) {
       let CreateIssue = this.API.service('incident', this.API.all('incidents'))
       let $state = this.$state
+      let $filter = this.$filter;
+      let $raisedDate = $filter('date')(this.$scope.dt, "yyyy-MM-dd");
       //console.log('is Save');
       CreateIssue.post({
-        'raisedDate': this.$scope.dt,
+        'raisedDate': $raisedDate,
         'raisedBy': this.selectedReporter.name,
         'fidUserRaised': this.selectedReporter.id,
         'division': this.division,
@@ -424,8 +427,10 @@ class OpenIncidentFormController {
   update(isValid) {
     if (isValid) {
       let $state = this.$state
+      let $filter = this.$filter;
+      let $raisedDate = $filter('date')(this.$scope.dt, "yyyy-MM-dd");
       //console.log('Is Update');
-      this.issueDataEdit.data.raisedDate = this.$scope.dt;
+      this.issueDataEdit.data.raisedDate = $raisedDate;
       this.issueDataEdit.data.raisedBy = this.selectedReporter.name,
         this.issueDataEdit.data.fidUserRaised = this.selectedReporter.id,
         this.issueDataEdit.data.division = this.division;

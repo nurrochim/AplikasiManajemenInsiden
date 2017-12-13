@@ -106,16 +106,13 @@
                                             ng-disabled="vm.detailIncidentDisable" />
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">File Incident</label>
+                                <div class="form-group" ng-if="filesOpenIcident.length > 0">
+                                    <label class="col-sm-3 control-label">File Attachment</label>
                                     <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
+                                        <li ng-repeat="file_item in filesOpenIcident">
+                                            <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
+                                            <br/>
+                                        </li>
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +203,15 @@
                                         <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                     </div>
                                 </div>
-
+                                <div class="form-group" ng-if="filesAnalyzing.length > 0">
+                                    <label class="col-sm-4 control-label">Analyzing Files</label>
+                                    <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
+                                        <li ng-repeat="file_item in filesAnalyzing">
+                                            <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
+                                            <br/>
+                                        </li>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -261,7 +266,7 @@
                                                 />
                                                 <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default" ng-click="open2()">
-                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                        <i class="fa fa-calendar"></i>
                                                     </button>
                                                 </span>
                                             </p>
@@ -276,7 +281,7 @@
                                                 />
                                                 <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default" ng-click="open3()">
-                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                        <i class="fa fa-calendar"></i>
                                                     </button>
                                                 </span>
                                             </p>
@@ -291,7 +296,7 @@
                                                     ng-disabled="vm.detailIncidentDisable" />
                                                 <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default" ng-click="open1()" ng-disabled="vm.detailIncidentDisable">
-                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                        <i class="fa fa-calendar"></i>
                                                     </button>
                                                 </span>
                                             </p>
@@ -313,6 +318,15 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">Upload File Fixing</div>
                                 <div class="panel-body">
+                                    <div class="form-group" ng-if="filesFixing.length > 0">
+                                        <label class="col-sm-3 control-label">Fixing Files</label>
+                                        <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
+                                            <li ng-repeat="file_item in filesFixing">
+                                                <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
+                                                <br/>
+                                            </li>
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label" style="padding-top: 0px">Select images</label>
                                         <div class="col-sm-9">
@@ -346,7 +360,9 @@
                                                         <!--auto height-->
                                                         <!--<div ng-thumb="{ file: item.file, width: 100 }"></div>-->
                                                         <!--auto width-->
-                                                        <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+                                                        <div ng-show="vm.filterImage(item.file.name)">
+                                                            <div ng-show="uploader.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+                                                        </div>
                                                         <!--fixed width and height -->
                                                         <!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>-->
                                                     </td>
@@ -369,13 +385,13 @@
                                                     </td>
                                                     <td nowrap>
                                                         <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
-                                                            <span class="glyphicon glyphicon-upload"></span> Upload
+                                                            <span class="fa fa-upload"></span> Upload
                                                         </button>
                                                         <!-- <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
                                                                                 <span class="glyphicon glyphicon-ban-circle"></span> Cancel
                                                                             </button> -->
                                                         <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove();deleteImage(item.file.name)">
-                                                            <span class="glyphicon glyphicon-trash"></span> Remove
+                                                            <span class="fa fa-trash-o"></span> Remove
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -388,15 +404,15 @@
                                                 <div class="progress" style="">
                                                     <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
                                                 </div>
-                                            </div>
+                                            </div> 
                                             <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
-                                                <span class="glyphicon glyphicon-upload"></span> Upload all
+                                                <span class="fa fa-upload"></span> Upload all
                                             </button>
                                             <!-- <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
                                                                     <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
                                                                 </button> -->
                                             <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
-                                                <span class="glyphicon glyphicon-trash"></span> Remove all
+                                                <span class="fa fa-trash-o"></span> Remove all
                                             </button>
                                         </div>
                                     </div>

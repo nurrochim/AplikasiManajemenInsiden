@@ -169,16 +169,13 @@
                                             ng-disabled="vm.detailIncidentDisable" />
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">File Incident</label>
+                                <div class="form-group" ng-if="filesOpenIcident.length > 0">
+                                    <label class="col-sm-3 control-label">File Attachment</label>
                                     <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
+                                        <li ng-repeat="file_item in filesOpenIcident">
+                                            <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
+                                            <br/>
+                                        </li>
                                     </div>
                                 </div>
                             </div>
@@ -303,16 +300,13 @@
                                         <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label">File Analyzing Incident</label>
+                                <div class="form-group" ng-if="filesAnalyzing.length > 0">
+                                    <label class="col-sm-4 control-label">Analyzing Files</label>
                                     <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
+                                        <li ng-repeat="file_item in filesAnalyzing">
+                                            <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
+                                            <br/>
+                                        </li>
                                     </div>
                                 </div>
 
@@ -339,16 +333,13 @@
                                         <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label">File Fixing Incident</label>
+                                <div class="form-group" ng-if="filesFixing.length > 0">
+                                    <label class="col-sm-4 control-label">Fixing Files</label>
                                     <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
+                                        <li ng-repeat="file_item in filesFixing">
+                                            <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
+                                            <br/>
+                                        </li>
                                     </div>
                                 </div>
                             </div>
@@ -379,16 +370,13 @@
                                         <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label">File Testing Incident</label>
+                                <div class="form-group" ng-if="filesTesting.length > 0">
+                                    <label class="col-sm-4 control-label">Testing Files</label>
                                     <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
-                                        <br/>
-                                        <a>File Download</a>
+                                        <li ng-repeat="file_item in filesTesting">
+                                            <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
+                                            <br/>
+                                        </li>
                                     </div>
                                 </div>
                             </div>

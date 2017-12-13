@@ -1,5 +1,5 @@
 class AnalyzingIncidentFormController {
-    constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService) {
+    constructor($stateParams, $state, API, $log, $scope, FileUploader, $http, $uibModal, AclService, ContextService, $window, $filter) {
         'ngInject'
 
         this.$state = $state;
@@ -9,6 +9,7 @@ class AnalyzingIncidentFormController {
         this.form_title = '';
         this.API = API;
         this.$scope = $scope;
+        this.$window = $window;
         this.raise_date = "2017-09-21T18:25:43-05:00";
         this.EditIssueId = '';
         this.stepOne = true;
@@ -21,13 +22,16 @@ class AnalyzingIncidentFormController {
         this.detailIncidentDisable = true;
         this.params = [];
         //this.issueDataEdit = {};
+        $scope.userName = '';
+        this.$filter = $filter;
 
         // get data user
         let controller = this;
         controller.can = AclService.can
 
         ContextService.me(function (data) {
-            controller.userData = data; 
+            controller.userData = data;
+            controller.$scope.userName = controller.userData.name;
             if (data) {
                 controller.params = { idIncident: issueId, idUser: controller.userData.id, task: "Analyzing" };
                 getDataPicIncidentTask();
@@ -39,10 +43,10 @@ class AnalyzingIncidentFormController {
             IncidentList.one().get(this.params)
                 .then((response) => {
                     angular.forEach(response.data.pics, function (value, key) {
-                        if (value.startDate!=null) {
+                        if (value.startDate != null) {
                             controller.startDate = new Date(value.startDate);
                         }
-                        if (value.finishDate!=null) {
+                        if (value.finishDate != null) {
                             controller.finishDate = new Date(value.finishDate);
                         }
                         controller.targetDate = new Date(value.targetDate);
@@ -55,6 +59,7 @@ class AnalyzingIncidentFormController {
 
         let issueId = $stateParams.issueId
         this.EditIssueId = issueId;
+        this.$scope.idIncident = issueId;
         let inputState = $stateParams.inputState
         //$log.info(issueId+' '+inputState);
 
@@ -105,6 +110,31 @@ class AnalyzingIncidentFormController {
                 this.recreateStep = issueEdit.data.recreateStep;
                 this.responTaken = issueEdit.data.responTaken;
                 this.decidedSolution = issueEdit.data.decidedSolution;
+            })
+
+        // get file incident
+        $scope.filesOpenIcident = [];
+        $scope.filesAnalyzing = [];
+        let fileOpen = API.service('file-by-group', API.all('files'))
+        fileOpen.one().get({ idIncident: this.EditIssueId, fileGroup: 'All' })
+            .then((response) => {
+                angular.forEach(response.data.files, function (value, key) {
+                    if (value.fileGroup === "Open") {
+                        $scope.filesOpenIcident.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    }else if (value.fileGroup === "Analyzing") {
+                        $scope.filesAnalyzing.push({
+                            id: value.id,
+                            fidIncident: value.fidIncident,
+                            fileName: value.fileName,
+                            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+                        });
+                    }
+                })
             })
 
         // settingDate
@@ -269,8 +299,13 @@ class AnalyzingIncidentFormController {
 
         // upload method
         var uploader = $scope.uploader = new FileUploader({
-            url: 'upload'
+            url: 'file-upload',
+            method: 'POST'
         });
+
+        uploader.onBeforeUploadItem = function (item) {
+            item.formData = [{ idIncident: $scope.idIncident, fileGorup: 'Analyzing', userName: $scope.userName }];
+        };
 
         $scope.deleteImage = function (id) {
             console.info('removeId', id);
@@ -301,13 +336,44 @@ class AnalyzingIncidentFormController {
 
         // FILTERS
 
+        // uploader.filters.push({
+        //     name: 'imageFilter',
+        //     fn: function (item /*{File|FileLikeObject}*/, options) {
+        //         var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+        //         return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        //     }
+        // });
+
+        // a sync filter
         uploader.filters.push({
-            name: 'imageFilter',
+            name: 'syncFilter',
             fn: function (item /*{File|FileLikeObject}*/, options) {
-                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-                return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+                console.log('syncFilter');
+                return this.queue.length < 10;
             }
         });
+
+        // an async filter
+        uploader.filters.push({
+            name: 'asyncFilter',
+            fn: function (item /*{File|FileLikeObject}*/, options, deferred) {
+                console.log('asyncFilter');
+                setTimeout(deferred.resolve, 1e3);
+            }
+        });
+
+
+        uploader.onCompleteItem = function (fileItem, response, status, headers) {
+            console.info('onCompleteItem', fileItem, response, status, headers);
+        };
+        uploader.onCompleteAll = function () {
+            console.info('onCompleteAll');
+        };
+    }
+
+    filterImage(item) {
+        var type = item.slice((item.lastIndexOf(".") - 1 >>> 0) + 2);
+        return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
     }
 
     eventStepOne() {
@@ -350,7 +416,10 @@ class AnalyzingIncidentFormController {
             this.issueDataEdit.data.recreateStep = this.recreateStep;
             this.issueDataEdit.data.responTaken = this.responTaken;
             this.issueDataEdit.data.decidedSolution = this.decidedSolution;
-            let $picIncident = {picTask: 'Analyzing', picUser: this.userData.id, startDate: this.startDate, finishDate: this.finishDate};
+
+            // date convert to string
+
+            let $picIncident = { picTask: 'Analyzing', picUser: this.userData.id, startDate: this.startDate, finishDate: this.finishDate };
             this.issueDataEdit.put($picIncident)
                 .then(() => {
                     let disableButtonStepTwo_ = false;

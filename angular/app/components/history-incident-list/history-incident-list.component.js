@@ -1,5 +1,5 @@
 class HistoryIncidentListController {
-    constructor($stateParams, $state, API, $log, $scope, $compile, FileUploader, $http, $uibModal, AclService, ContextService, DTOptionsBuilder, DTColumnBuilder) {
+    constructor($stateParams, $state, API, $log, $scope, $compile, FileUploader, $http, $uibModal, AclService, ContextService, DTOptionsBuilder, DTColumnBuilder, uibDateParser, $filter) {
         'ngInject'
 
         this.$state = $state;
@@ -10,6 +10,13 @@ class HistoryIncidentListController {
         this.DTOptionsBuilder = DTOptionsBuilder;
         this.DTColumnBuilder = DTColumnBuilder;
         this.$compile = $compile;
+        this.showFilterId = true;
+        this.showFilterDesc = false;
+        this.showFilterRaisedBy = false;
+        this.showFilterRaisedDate = false;
+        this.uibDateParser = uibDateParser;
+        this.$filter = $filter;
+        
 
         // settingDate
         $scope.today = function () {
@@ -114,6 +121,41 @@ class HistoryIncidentListController {
                     });
                 })
             })
+
+            $scope.filters = [
+                {
+                  id: 'idIncident',
+                  name: 'Id Incident'
+                },
+                {
+                    id: 'descriptions',
+                  name: 'Issue Descriptions'
+                },
+                {
+                    id: 'raisedBy',
+                  name: 'Raised By'
+                },
+                {
+                    id: 'raisedDate',
+                  name: 'Raised Date'
+                },
+                
+              ];
+              this.selectedFilter = $scope.filters[0];
+
+              $scope.GetFormattedDate = function (CalDate) { 
+                // var re = /-?\d+/;
+                // var WDate = CalDate.toString();
+                // var m = re.exec(WDate);
+                //var lastDate = new Date(parseInt(m[0]));
+                var lastDate = CalDate;
+                var mm = lastDate.getMonth() + 1;
+                var dd = lastDate.getDate();
+                var yyyy = lastDate.getFullYear();
+                var formattedDate = yyyy+'-'+mm+'-'+dd;
+        
+                return formattedDate;
+            }
     }
 
     eventSearch() { 
@@ -121,7 +163,26 @@ class HistoryIncidentListController {
         let DTColumnBuilder = this.DTColumnBuilder;
         let $compile = this.$compile; 
         let $scope = this.$scope;
-        let params = { idIncident: this.idIncident, task:'task coba' };
+        let params = {};
+        let $filter = this.$filter;
+        let $raisedDate = $filter('date')(this.raisedDate, "yyyy-MM-dd");
+        
+        if(this.selectedFilter.id===$scope.filters[0].id){
+            params = {filterValue: this.idIncident, filterBy:this.selectedFilter.id};
+        }else if(this.selectedFilter.id===$scope.filters[1].id){
+            params = {filterValue: this.description, filterBy:this.selectedFilter.id};
+        }else if(this.selectedFilter.id===$scope.filters[2].id){
+            params = {filterValue: this.selectedReporter.name, filterBy:this.selectedFilter.id};
+        }else if(this.selectedFilter.id===$scope.filters[3].id){
+            //let date = uibDateParser.parse(this.raisedDate, 'yyyy-MM-dd')
+            //var rightNow = new Date();
+            //var res = date.toISOString().slice(0,10); 
+            //var SelectDate = $scope.GetFormattedDate(this.raisedDate);            
+            
+            params = {filterValue: $raisedDate, filterBy:this.selectedFilter.id};
+        }
+
+
         let IncidentList = this.API.service('incident-filter', this.API.all('incidents'))
         IncidentList.one().get(params).then((response) => {
             //         console.info('test', response);
@@ -185,6 +246,23 @@ class HistoryIncidentListController {
                             <a class="btn btn-xs btn-warning" ui-sref="app.historyView({issueId: ${data.idIncident}})" uib-tooltip="View Incident">
                                 <i class="fa fa-search"></i>
                             </a></div>`
+        }
+    }
+
+    reloadFilter() { 
+        let $scope = this.$scope;
+        if(this.selectedFilter.id===$scope.filters[0].id){
+            this.showFilterId = true;
+            this.showFilterDesc = this.showFilterRaisedBy = this.showFilterRaisedDate = false;
+        }else if(this.selectedFilter.id===$scope.filters[1].id){
+            this.showFilterDesc = true;
+            this.showFilterId = this.showFilterRaisedBy = this.showFilterRaisedDate = false;
+        }else if(this.selectedFilter.id===$scope.filters[2].id){
+            this.showFilterRaisedBy = true;
+            this.showFilterId = this.showFilterDesc = this.showFilterRaisedDate = false;
+        }else if(this.selectedFilter.id===$scope.filters[3].id){
+            this.showFilterRaisedDate = true;
+            this.showFilterId = this.showFilterDesc = this.showFilterRaisedBy = false;
         }
     }
 
