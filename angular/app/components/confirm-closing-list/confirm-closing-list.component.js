@@ -5,8 +5,17 @@ class ConfirmClosingListController {
         this.$state = $state
         this.$uibModal = $uibModal
 
-        let IncidentList = this.API.service('incident-assignment', this.API.all('incidents'))
-        IncidentList.one().get()
+        // get User Info
+        let controller = this;
+        controller.can = AclService.can
+
+        ContextService.me(function (data) {
+            controller.userData = data;
+        })
+
+        let params = {task:'ConfirmClosing'};
+        let IncidentList = this.API.service('incident-closing', this.API.all('incidents'))
+        IncidentList.one().get(params)
             .then((response) => {
                 console.info('test', response);
                 let dataIncident = response.data.issue;
@@ -14,14 +23,15 @@ class ConfirmClosingListController {
                     .withOption('data', dataIncident)
                     .withOption('createdRow', createdRow)
                     .withOption('responsive', true)
+                    .withOption('order', [])
                     .withBootstrap()
 
                 this.dtColumns = [
-                    DTColumnBuilder.newColumn('idIncident').withTitle('ID').withOption('width', '5%'),
+                    DTColumnBuilder.newColumn('idIncident').withTitle('ID').withOption('width', '8%'),
                     DTColumnBuilder.newColumn(null).withTitle('Raise Date').notSortable().renderWith(raisedInfo).withOption('width', '10%'),
                     DTColumnBuilder.newColumn(null).withTitle('Priority & Module').notSortable().renderWith(priorityModul),
                     DTColumnBuilder.newColumn(null).withTitle('Issue Description').notSortable().renderWith(issueDescHtml).withOption('width', '40%'),
-                    DTColumnBuilder.newColumn(null).withTitle('PIC').notSortable().renderWith(picHtml),
+                    DTColumnBuilder.newColumn('pic_confirm').withTitle('PIC').notSortable(),
                     DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable().withOption('width', '10%').renderWith(actionsHtml)
                 ]
 
@@ -51,41 +61,70 @@ class ConfirmClosingListController {
                     `
         }
 
-        let issueDescHtml = (data) => {
-            // return `<div class="col-sm-4"><pre style="height: max-content; background-color: unset;">${data.issue_description}</pre></div>`
-            return `<text style="white-space:pre-line">${data.issueDescription}</text>`
+        let counter = 0;
+        // <a ng-model="vm.isCollapse${counter}" ng-show="!vm.isCollapse${counter} 
+        // ng-click="vm.isCollapsed${counter} = false">Show Less</a>
+        let issueDescHtml = (data) => { 
+            counter = counter+1;
+            let issueDesc = `<text style="font-size: 14px;font-weight: bold;text-decoration: underline;">Issue Descriptions : </text></br><text style="white-space:pre-line">${data.issueDescription}</text> 
+            </br>
+            <a class="pull-right"  href="" ng-model="vm.isCollapse${counter}" ng-init="vm.isCollapsed${counter} = true" ng-show="!vm.isCollapse${counter}"
+            ng-click="vm.isCollapsed${counter} = !vm.isCollapsed${counter}">
+            Show More</a>
+            
+            <div uib-collapse="vm.isCollapsed${counter}">
+            <hr>
+            <div>` 
+            ;
+            let texpectedResult = `<text style="font-size: 14px;font-weight: bold;text-decoration: underline;">Expected Result : </text></br><text style="white-space:pre-line">${data.expectedResult}</text></br></br>`;
+            let suspectedReason = `<text style="font-size: 14px;font-weight: bold;text-decoration: underline;">Suspected Reason : </text></br><text style="white-space:pre-line">${data.suspectedReason}</text></br></br>`;
+            let responTaken = `<text style="font-size: 14px;font-weight: bold;text-decoration: underline;">Respon Taken : </text></br><text style="white-space:pre-line">${data.responTaken}</text></br></br>`;
+            let decidedSolution = `<text style="font-size: 14px;font-weight: bold;text-decoration: underline;">Decided Solution : </text></br><text style="white-space:pre-line">${data.decidedSolution}</text>`;
+            
+            if(data.expectedResult){
+                issueDesc = issueDesc.concat(texpectedResult)
+
+            }
+            if(data.suspectedReason){issueDesc = issueDesc.concat(suspectedReason)}
+            if(data.responTaken){issueDesc = issueDesc.concat(responTaken)}
+            if(data.decidedSolution){issueDesc = issueDesc.concat(decidedSolution)}
+            issueDesc.concat(`</div></div>`); 
+
+            return issueDesc;
         }
 
         let picHtml = (data) => {
-            return `
-                    <text style="font-size: 12px;font-weight: bold;">Analyzing : </text> ${data.pic_analyzing}
-                    </br><text style="font-size: 12px;font-weight: bold;">Fixing : </text> ${data.pic_fixing}
-                    </br><text style="font-size: 12px;font-weight: bold;">Testing : </text> ${data.pic_testing}
-                    `
+            // return `
+            //         <text style="font-size: 12px;font-weight: bold;">Analyzing : </text> ${data.pic_analyzing}
+            //         </br><text style="font-size: 12px;font-weight: bold;">Fixing : </text> ${data.pic_fixing}
+            //         </br><text style="font-size: 12px;font-weight: bold;">Testing : </text> ${data.pic_testing}
+            //         `
+            //return 
         }
 
         let actionsHtml = (data) => {
             return `
                         <div style="text-align: center">
-                        <a class="btn btn-xs btn-info" ui-sref="app.confirmForm({issueId: ${data.idIncident}})" uib-tooltip="Add Confirm History">
+                        <a class="btn btn-xs btn-info" ui-sref="app.confirmForm({issueId: '${data.idIncident}'})" uib-tooltip="Add Confirm History">
                             <i class="fa fa-edit"></i>
                         </a>
-                        <a class="btn btn-xs btn-warning" ui-sref="" ng-click="vm.reAssignTask(data.idIncident)" uib-tooltip="Re-Assign Task">
+                        <a class="btn btn-xs btn-warning"ng-click="vm.reAssignTask('${data.idIncident}')" uib-tooltip="Re-Assign Task">
                             <i class="fa fa-undo"></i>
                         </a>
-                        <a class="btn btn-xs btn-danger" ui-sref="" ng-click="vm.toggle('add', 0)" uib-tooltip="Closing">
+                        <a class="btn btn-xs btn-danger" ng-click="vm.toggle('edit', '${data.idIncident}', vm.userData.id)" uib-tooltip="Closing">
                             <i class="fa fa-times"></i>
                         </a>
                         </div>
                     `
         }
-
+        
+        
     }
 
-    reAssignTask(idIncident) {
+    reAssignTask($idIncident) {
         let API = this.API
-        let $state = this.$state
-
+        let $state = this.$state;
+        let params = {idIncident: $idIncident, statusTask:'Re-Open', updateBy: this.userData.id}; 
         swal({
             title: 'Re-Assign Task',
             text: 'Re-assign this incident will be return back task-flow to analyzing incident',
@@ -97,43 +136,40 @@ class ConfirmClosingListController {
             showLoaderOnConfirm: true,
             html: false
         }, function () {
-            //   API.one('users').one('user', userId).remove()
-            //     .then(() => {
-            // $state.go('app.confirm'); 
-            //   swal({
-            //     title: 'Deleted!',
-            //     text: 'User Permission has been deleted.',
-            //     type: 'success',
-            //     confirmButtonText: 'OK',
-            //     closeOnConfirm: true
-            //   }, function () {
-            $state.reload()
-            //   })
-            // })
+            
+            let IssueUpdateStatus = API.service('incident-status-update', API.all('incidents'))
+            IssueUpdateStatus.one().put(params) 
+            .then(() => { 
+              $state.reload();
+            }, (response) => {
+              let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
+              $state.go($state.current, { alerts: alert })
+            })
         })
     }
 
     // init modal for add confirm history
-    toggle(modalstate, id) {
+    toggle(modalstate, $id, $user, $state) {
         let $uibModal = this.$uibModal;
         let $scope = this.$scope;
-        let items = [];
-        switch (modalstate) {
-            case 'add':
-                items = [{
-                    modalState: modalstate,
-                    id: 0
-                }];
-                break;
-            case 'edit':
-                items = [{
-                    modalState: modalstate,
-                    id: 0
-                }];
-                break;
-            default:
-                break;
-        }
+        let items = [{
+                        modalState: modalstate,
+                        id: $id,
+                        user: $user
+                    }];
+        // switch (modalstate) {
+        //     case 'add':
+                
+        //         break;
+        //     case 'edit':
+        //         items = [{
+        //             modalState: modalstate,
+        //             id: $id
+        //         }];
+        //         break;
+        //     default:
+        //         break;
+        // }
 
         var modalInstance = $uibModal.open({
             animation: true,
@@ -148,7 +184,7 @@ class ConfirmClosingListController {
         })
 
         modalInstance.result.then((selectedItem) => {
-            this.refreshTableConfirmHistory();
+            this.$state.reload();
         }, () => {
             $log.info('Modal dismissed at: ' + new Date())
         })
@@ -159,21 +195,10 @@ class ConfirmClosingListController {
 
         // items
         let modalstate = items[0].modalState;
-        let idState = items[0].id;
-        switch (modalstate) {
-            case 'add':
-                this.title = 'Close Incident'
-                break;
-            case 'edit':
-                this.title = 'Close Incident'
-                break;
-            default:
-                break;
-        }
-
-
-
-
+        this.idIncident = items[0].id;
+        this.idUser = items[0].user;
+        this.title = 'Close Incident'
+      
         $scope.today = function () {
             $scope.dtPic = new Date();
         };
@@ -255,24 +280,9 @@ class ConfirmClosingListController {
             return '';
         }
 
-        $scope.optionsTask = [
-            {
-                name: 'Analyzing',
-                value: 'Analyzing'
-            },
-            {
-                name: 'Fixing',
-                value: 'Fixing'
-            },
-            {
-                name: 'Testing',
-                value: 'Testing'
-            }
-        ];
-
         $scope.teamMember = [];
         let UserOptions = API.service('maintenance-team', API.all('users'))
-        UserOptions.one('0').get()
+        UserOptions.one('1').get()
             .then((response) => {
                 let users = response.data.users;
                 angular.forEach(response.data.users, function (value, key) {
@@ -285,39 +295,19 @@ class ConfirmClosingListController {
         this.pic = $scope.teamMember[0];
 
         this.ok = () => {
-            // switch (modalstate) {
-            //     case 'add':
-            //         let CreatePic = API.service('incident-pic', API.all('incidentpics'))
-            //         //let $state = this.$state
-            //         CreatePic.post({
-            //             'fidIncident': idState,
-            //             'fidUser': this.pic.id,
-            //             'picName': this.pic.name,
-            //             'targetDate': $scope.dtPic,
-            //             'task': this.task,
-            //         }).then(function (success) {
-            //             // let disableButtonStepTwo_ = false;
-            //             // let alert = {
-            //             //   type: 'success', 'title': 'Success!', msg: 'Incident No: ' + success.data.idIncident + ' Incident has been added.'
-            //             //   , inputState: 'editAfterSave', issueId: success.data.idIncident
-            //             // }
-            //             // $state.go($state.current, { alerts: alert, disableButtonStepTwo: disableButtonStepTwo_ });
-
-            //             $uibModalInstance.close()
-            //             console.info('save-pic-succes', success);
-            //         }, function (error) {
-            //             // let alert = { type: 'error', 'title': 'Error!', msg: error.data.message }
-            //             // $state.go($state.current, { alerts: alert })
-            //             console.error('save-pic-error', error);
-            //         })
-            //         break;
-            //     case 'edit':
-
-            //         break;
-            //     default:
-            //         break;
-            // }
-            $uibModalInstance.close()
+            let CreatePic = API.service('incident-closing', API.all('incidents'))
+            CreatePic.post({
+                'idIncident': this.idIncident,
+                'closedDate': this.dtClosing,
+                'closedBy': this.pic.name,
+                'updateBy': this.idUser
+                
+            }).then(function (success) {
+                $uibModalInstance.close()
+                console.info('save-history-succes', success);
+            }, function (error) {
+                console.error('save-history-error', error);
+            })
         }
 
         this.cancel = () => {

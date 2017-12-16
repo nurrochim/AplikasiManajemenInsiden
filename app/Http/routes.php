@@ -80,14 +80,16 @@ $api->group(['middleware' => ['api', 'api.auth']], function ($api) {
     $api->put('users/me', 'UserController@putMe');
 });
 
-$api->group(['middleware' => ['api', 'api.auth', 'role:admin.super|admin.user|role.serviceadmin']], function ($api) {
-    $api->controller('users', 'UserController');
-});
+// $api->group(['middleware' => ['api', 'api.auth', 'role:admin.super|admin.user|role.serviceadmin']], function ($api) {
+//     $api->controller('users', 'UserController');
+// });
 
 $api->group(['middleware' => ['api', 'api.auth']], function ($api) {
     $api->controller('issues', 'ControllerIssueList');
     $api->controller('incidents', 'IncidentCtrl');
     $api->controller('incidentpics', 'IncidentPicCtrl');
     $api->controller('files', 'ImageController');
+    $api->controller('confirm', 'IncidentConfirmHistoryCtrl');
+    $api->controller('users', 'UserController');
 });
 

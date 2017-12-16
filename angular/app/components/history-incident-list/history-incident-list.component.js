@@ -242,8 +242,8 @@ class HistoryIncidentListController {
 
         let actionsHtml = (data) => {
             return `
-                            <div style="text-align: center">
-                            <a class="btn btn-xs btn-warning" ui-sref="app.historyView({issueId: ${data.idIncident}})" uib-tooltip="View Incident">
+                            <div style="text-align: center"> 
+                            <a class="btn btn-xs btn-warning" ui-sref="app.historyView({issueId: '${data.idIncident}'})" uib-tooltip="View Incident">
                                 <i class="fa fa-search"></i>
                             </a></div>`
         }

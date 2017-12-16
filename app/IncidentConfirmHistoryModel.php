@@ -11,8 +11,11 @@ class IncidentConfirmHistoryModel extends Model
                                 'fidUser',
                                 'userName',
                                 'submitDate',
+                                'confirmDescription',
                                 'receiveResponDate',
+                                'responApproval',
                                 'responDescription'
                                 );
 protected $table = 'incident_confirm_history';
+protected $primaryKey = 'idHistory';
 }

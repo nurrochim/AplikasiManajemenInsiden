@@ -69,7 +69,7 @@ class HistoryIncidentFormController{
             .then((response) => {
                 this.issueDataEdit = API.copy(response);
                 var issueEdit = this.issueDataEdit;
-                this.raise_date = issueEdit.data.raisedDate;
+                this.raise_date = issueEdit.data.raisedDate; 
                 //$scope.dt = new Date(this.raise_date);
 
                 this.raisedBy = issueEdit.data.raisedBy;
@@ -96,6 +96,7 @@ class HistoryIncidentFormController{
                 this.testScenario = issueEdit.data.testScenario;
             })
 
+        this.refreshTableConfirmHistory();
         this.refreshTablePic();    
 
         // get file incident
@@ -383,7 +384,27 @@ class HistoryIncidentFormController{
         this.classElemetStepFive = 'btn btn-primary btn-circle';
     }
 
-
+    refreshTableConfirmHistory() {
+        let scope = this.$scope;
+        scope.confirmHistory = [];
+        let confirmHistory = this.API.service('confirm-incident', this.API.all('confirm'))
+        confirmHistory.one(this.EditIssueId).get()
+            .then((response) => {
+                let confirmHistory = response.data.confirmHistory;
+                angular.forEach(response.data.confirmHistory, function (value, key) {
+                    scope.confirmHistory.push({
+                        id: value.idHistory,
+                        fidIncident: value.fidIncident,
+                        userName: value.userName,
+                        submitDate: value.submitDate,
+                        confirmDescription: value.confirmDescription,
+                        receiveResponDate: value.receiveResponDate,
+                        responApproval: value.responApproval,
+                        responDescription: value.responDescription
+                    });
+                })
+            })
+    }
     
 
 

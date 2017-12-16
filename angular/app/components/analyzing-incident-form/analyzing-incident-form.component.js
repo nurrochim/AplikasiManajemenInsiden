@@ -416,6 +416,11 @@ class AnalyzingIncidentFormController {
             this.issueDataEdit.data.recreateStep = this.recreateStep;
             this.issueDataEdit.data.responTaken = this.responTaken;
             this.issueDataEdit.data.decidedSolution = this.decidedSolution;
+            this.issueDataEdit.data.updateBy = this.userData.id;
+            if(this.startDate){
+                this.issueDataEdit.data.statusTask = 'On Progress';
+                this.issueDataEdit.data.statusAssignment = 'Analyzing';
+            }
 
             // date convert to string
 
@@ -436,6 +441,59 @@ class AnalyzingIncidentFormController {
             this.formSubmitted = true
         }
     }
+
+    sendAction() {
+        let $state = this.$state; 
+        let params = {idIncident: this.EditIssueId, statusTask:'Fixing', updateBy: this.userData.id}; 
+        let IssueUpdateStatus = this.API.service('incident-status-update', this.API.all('incidents'))
+        swal({
+            title: 'Send For Fixing',
+            text: 'Send task to programmer for fixing incident',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: 'Yes',
+            closeOnConfirm: true,
+            showLoaderOnConfirm: true,
+            html: false
+        }, function () {
+            IssueUpdateStatus.one().put(params) 
+            .then(() => { 
+              $state.go("app.analyzing");
+            }, (response) => {
+              let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
+              $state.go($state.current, { alerts: alert })
+            })
+        })
+        
+      }
+
+      finishTask() {
+        let API = this.API
+        let $state = this.$state;
+        let params = {idIncident: this.EditIssueId, statusTask:'Closing', updateBy: this.userData.id}; 
+        swal({
+            title: 'Finish For Confirm',
+            text: 'Finish task assignment',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: 'Yes',
+            closeOnConfirm: true,
+            showLoaderOnConfirm: true,
+            html: false
+        }, function () {
+            
+            let IssueUpdateStatus = API.service('incident-status-update', API.all('incidents'))
+            IssueUpdateStatus.one().put(params) 
+            .then(() => { 
+              $state.go("app.analyzing");
+            }, (response) => {
+              let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
+              $state.go($state.current, { alerts: alert })
+            })
+        })
+    }  
 
     $onInit() {
     }

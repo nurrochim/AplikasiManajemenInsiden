@@ -46,17 +46,17 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Confirm Option</label>
+                            <label class="col-sm-4 control-label">Confirm Option</label>
                             <div class="col-sm-5">
-                                <select class="form-control" id="sel1" ng-model="vm.selectedReporter" ng-options="option.value as option.name for option in options"
+                                <select class="form-control" id="sel1" ng-model="vm.responApproval" ng-options="option.value as option.name for option in options"
                                     ng-change="vm.reloadDivision()" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Reason Descriptions</label>
+                            <label class="col-sm-4 control-label">Reason Descriptions</label>
                             <div class="col-sm-8">
                                 <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Reason descriptions"
-                                    value="{{issue_description}}" ng-model="vm.issueDescription"></textarea>
+                                    value="{{issue_description}}" ng-model="vm.responDescription"></textarea>
                                 <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                             </div>
                         </div>
@@ -65,10 +65,276 @@
                         <a ng-show="vm.stepTwo" ng-click="vm.eventStepOne()" class="btn btn-default">
                             <i class="fa fa-angle-double-left"></i> Back</a>
                         <div ng-show="vm.stepOne">
-                            <button ng-show="!vm.isEdit" ng-click="vm.save(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Save</button>
+                            <button ng-show="!vm.isEdit" ng-click="vm.postAction()" class="btn btn-primary pull-right">Post</button>
                             <button ng-show="vm.isEdit" ng-click="vm.update(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Update</button>
                         </div>
-                        <a ng-show="vm.stepTwo" ui-sref="app.openissue" class="btn btn-primary pull-right">Finish</a>
+                        <a ng-show="vm.stepTwo" ui-sref="app.confirmApproval" class="btn btn-primary pull-right">Finish</a>
+                    </div>
+                </form>
+            </div>
+            <div class="box box-primary collapsed-box">
+                <form class="form-horizontal" novalidate>
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Detail Incident information</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="box box-info collapsed-box">
+                            <div class="box-header with-border">
+                                <h6 class="box-title">End User Info</h6>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Raised By</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" ng-model="vm.raisedBy" name="raiseDate" placeholder="Raised By" ng-disabled="vm.detailIncidentDisable">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Raised Date</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" ng-model="vm.raisedDate" name="raiseDate" placeholder="Raised Date" ng-disabled="vm.detailIncidentDisable">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Division</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" ng-model="vm.division" name="division" placeholder="Division" ng-disabled="vm.detailIncidentDisable">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Group Division</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" ng-model="vm.groupDivision" name="groupDivision" placeholder="Group Division" ng-disabled="vm.detailIncidentDisable">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Contact No</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" ng-model="vm.contactNo" name="contactNo" placeholder="Contact No" ng-disabled="vm.detailIncidentDisable">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-info collapsed-box">
+                            <div class="box-header with-border">
+                                <h6 class="box-title">Detail Incident</h6>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Priority</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="sel1" ng-model="vm.priority" ng-options="option.value as option.name for option in options"
+                                            ng-disabled="vm.detailIncidentDisable" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Issue Descriptions</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Issue descriptions"
+                                            ng-model="vm.issueDescription" ng-disabled="vm.detailIncidentDisable"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Module</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="sel1" ng-model="vm.module" ng-options="option.value as option.name for option in optionsModul"
+                                            ng-disabled="vm.detailIncidentDisable" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Sub Modul</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="sel1" ng-model="vm.subModule" ng-options="option.value as option.name for option in optionsSubModul"
+                                            ng-disabled="vm.detailIncidentDisable" />
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-if="filesOpenIcident.length > 0">
+                                    <label class="col-sm-4 control-label">File Attachment</label>
+                                    <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
+                                        <li ng-repeat="file_item in filesOpenIcident">
+                                            <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
+                                            <br/>
+                                        </li>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-info collapsed-box">
+                            <div class="box-header with-border">
+                                <h6 class="box-title">Analyzing Result</h6>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Category Analysis</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="sel1" ng-model="vm.categoryAnalysis" ng-options="option.value as option.name for option in options"
+                                            ng-disabled="vm.detailIncidentDisable" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Category Group</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="sel1" ng-model="vm.categoryGroup" ng-options="option.value as option.name for option in options"
+                                            ng-disabled="vm.detailIncidentDisable" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Category Root Cause</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="sel1" ng-model="vm.categoryRootCause" ng-options="option.value as option.name for option in options"
+                                            ng-disabled="vm.detailIncidentDisable" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Root Cause Modul</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="sel1" ng-model="vm.rootCauseModule" ng-options="option.value as option.name for option in options"
+                                            ng-disabled="vm.detailIncidentDisable" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Root Cause Sub Modul</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="sel1" ng-model="vm.rootCauseSubModule" ng-options="option.value as option.name for option in options"
+                                            ng-disabled="vm.detailIncidentDisable" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Function</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" ng-model="vm.function" name="function" placeholder="Function" ng-disabled="vm.detailIncidentDisable">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Suspected Reason
+                                        <br/>(Root Cause)</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control has-error" rows="5" id="suspectedReason" name="suspectedReason" placeholder="Suspected Reason"
+                                            ng-model="vm.suspectedReason" ng-disabled="vm.detailIncidentDisable"></textarea>
+                                        <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Recreate Step</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control has-error" rows="5" id="recreateStep" name="recreateStep" placeholder="Recreate Step"
+                                            ng-model="vm.recreateStep" ng-disabled="vm.detailIncidentDisable"></textarea>
+                                        <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Respon Taken</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control has-error" rows="5" id="responTaken" name="responTaken" placeholder="Respon Taken"
+                                            ng-model="vm.responTaken" ng-disabled="vm.detailIncidentDisable"></textarea>
+                                        <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Decide Solution</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control has-error" rows="5" id="decideSolution" name="decideSolution" placeholder="Decide Solution"
+                                            ng-model="vm.decidedSolution" ng-disabled="vm.detailIncidentDisable"></textarea>
+                                        <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-if="filesAnalyzing.length > 0">
+                                    <label class="col-sm-4 control-label">Analyzing Files</label>
+                                    <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
+                                        <li ng-repeat="file_item in filesAnalyzing">
+                                            <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
+                                            <br/>
+                                        </li>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-info collapsed-box">
+                            <div class="box-header with-border">
+                                <h6 class="box-title">Fixing Result</h6>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Fixing Note's</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Fixing Note's"
+                                            ng-model="vm.fixingNotes" ng-disabled="vm.detailIncidentDisable"></textarea>
+                                        <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-if="filesFixing.length > 0">
+                                    <label class="col-sm-4 control-label">Fixing Files</label>
+                                    <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
+                                        <li ng-repeat="file_item in filesFixing">
+                                            <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
+                                            <br/>
+                                        </li>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box box-info collapsed-box">
+                            <div class="box-header with-border">
+                                <h6 class="box-title">Testing Result</h6>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Testing Note's</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Testing Note's"
+                                            ng-model="vm.testingNotes" ng-disabled="vm.detailIncidentDisable"></textarea>
+                                        <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Test Scenario</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Test Scenario"
+                                            ng-model="vm.testScenario" ng-disabled="vm.detailIncidentDisable"></textarea>
+                                        <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-if="filesTesting.length > 0">
+                                    <label class="col-sm-4 control-label">Testing Files</label>
+                                    <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
+                                        <li ng-repeat="file_item in filesTesting">
+                                            <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
+                                            <br/>
+                                        </li>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

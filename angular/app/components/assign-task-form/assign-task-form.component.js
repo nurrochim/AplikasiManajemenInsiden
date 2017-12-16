@@ -101,16 +101,16 @@ class AssignTaskFormController {
     $scope.filesOpenIcident = [];
     let fileOpen = API.service('file-by-group', API.all('files'))
     fileOpen.one().get({ idIncident: this.EditIssueId, fileGroup: 'Open' })
-        .then((response) => {
-            angular.forEach(response.data.files, function (value, key) {
-                $scope.filesOpenIcident.push({
-                    id: value.id,
-                    fidIncident: value.fidIncident,
-                    fileName: value.fileName,
-                    fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
-                });
-            })
+      .then((response) => {
+        angular.forEach(response.data.files, function (value, key) {
+          $scope.filesOpenIcident.push({
+            id: value.id,
+            fidIncident: value.fidIncident,
+            fileName: value.fileName,
+            fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
+          });
         })
+      })
 
     $scope.today = function () {
       $scope.dt = new Date();
@@ -475,14 +475,18 @@ class AssignTaskFormController {
       let $state = this.$state
       //console.log('Is Update');
       this.issueDataEdit.data.raisedDate = this.$scope.dt;
-      this.issueDataEdit.data.raisedBy = this.selectedReporter.name,
-        this.issueDataEdit.data.fidUserRaised = this.selectedReporter.id,
-        this.issueDataEdit.data.division = this.division;
+      this.issueDataEdit.data.raisedBy = this.selectedReporter.name;
+      this.issueDataEdit.data.fidUserRaised = this.selectedReporter.id;
+      this.issueDataEdit.data.division = this.division;
       this.issueDataEdit.data.groupDivision = this.groupDivision;
       this.issueDataEdit.data.issueDescription = this.issueDescription;
       this.issueDataEdit.data.module = this.module;
       this.issueDataEdit.data.subModule = this.subModule;
       this.issueDataEdit.data.priority = this.priority;
+      if (this.$scope.assignTaskPIC) {
+        this.issueDataEdit.data.statusTask = 'Assign';
+      }
+
 
       this.issueDataEdit.put()
         .then(() => {

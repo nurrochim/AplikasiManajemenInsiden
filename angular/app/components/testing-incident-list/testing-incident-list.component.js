@@ -28,15 +28,16 @@ class TestingIncidentListController{
                     .withOption('data', dataIncident)
                     .withOption('createdRow', createdRow)
                     .withOption('responsive', true)
+                    .withOption('order', [])
                     .withBootstrap()
 
                 this.dtColumns = [
-                    DTColumnBuilder.newColumn('idIncident').withTitle('ID').withOption('width', '5%'),
+                    DTColumnBuilder.newColumn('idIncident').withTitle('ID').withOption('width', '10%'),
                     DTColumnBuilder.newColumn(null).withTitle('Raise Date').notSortable().renderWith(raisedInfo).withOption('width', '10%'),
                     DTColumnBuilder.newColumn(null).withTitle('Priority & Module').notSortable().renderWith(priorityModul),
                     DTColumnBuilder.newColumn(null).withTitle('Issue Description').notSortable().renderWith(issueDescHtml).withOption('width', '40%'),
                     DTColumnBuilder.newColumn(null).withTitle('PIC').notSortable().renderWith(picHtml),
-                    DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable().withOption('width', '10%').renderWith(actionsHtml)
+                    DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable().withOption('width', '5%').renderWith(actionsHtml)
                 ]
 
                 this.displayTable = true
@@ -81,7 +82,7 @@ class TestingIncidentListController{
         let actionsHtml = (data) => {
             return `
                         <div style="text-align: center">
-                        <a class="btn btn-xs btn-warning" ui-sref="app.testingForm({issueId: ${data.idIncident}})" uib-tooltip="Edit">
+                        <a class="btn btn-xs btn-warning" ui-sref="app.testingForm({issueId: '${data.idIncident}'})" uib-tooltip="Edit">
                             <i class="fa fa-edit"></i>
                         </a></div>`
         }

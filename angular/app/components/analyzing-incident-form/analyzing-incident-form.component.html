@@ -411,7 +411,12 @@
                             <button ng-click="vm.eventStepTwo()" class="btn btn-primary pull-right">Next</button>
                         </div>
                         <button ng-show="vm.stepTwo" ng-click="vm.update(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Save</button>
-                        <a ng-show="vm.stepThree" ui-sref="app.analyzing" class="btn btn-primary pull-right">Send For Fixing</a>
+
+                        <a ng-show="vm.stepThree" ng-click="vm.sendAction()" class="btn btn-primary pull-right" style="width: 140px">Send For Fixing</a>
+                        <div>
+                            <br/>
+                            <button ng-show="vm.stepThree" ng-click="vm.finishTask" class="btn btn-warning pull-right" style="width: 140px">Finish For Confirm</button>
+                        </div>
                     </div>
 
                 </div>
@@ -479,4 +484,5 @@
                 border-radius: 15px;
             }
         </style>
+    </div>
 </section>

@@ -431,7 +431,7 @@
                         <!-- <button ng-show="vm.stepOne" ng-click="vm.eventStepTwo()" class="btn btn-primary pull-right">Next</button> -->
                         <!-- <button ng-show="vm.stepTwo" ng-click="vm.eventStepThree()" class="btn btn-primary pull-right">Next</button> -->
                         <button ng-show="vm.stepOne" ng-click="vm.update(frmIssue.$valid, frmIssue)" class="btn btn-primary pull-right">Save</button>
-                        <a ng-show="vm.stepTwo" ui-sref="app.fixing" class="btn btn-primary pull-right">Send For Testing</a>
+                        <a ng-show="vm.stepTwo" ng-click="vm.sendAction()" class="btn btn-primary pull-right">Send For Testing</a>
                     </div>
 
                 </div>

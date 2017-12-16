@@ -29,7 +29,7 @@ class FixingIncidentFormController {
         let issueId = $stateParams.issueId
         this.EditIssueId = issueId;
         this.$scope.idIncident = issueId;
-        
+
         let inputState = $stateParams.inputState
         //$log.info(issueId+' '+inputState);
 
@@ -137,7 +137,7 @@ class FixingIncidentFormController {
                             fileUrl: "http://" + $window.location.host + "/download/" + value.fidIncident + "/" + value.fileName
                         });
                     } else if (value.fileGroup === "Fixing") {
-                        $scope.filesFixing.push({ 
+                        $scope.filesFixing.push({
                             id: value.id,
                             fidIncident: value.fidIncident,
                             fileName: value.fileName,
@@ -385,7 +385,7 @@ class FixingIncidentFormController {
         var type = item.slice((item.lastIndexOf(".") - 1 >>> 0) + 2);
         return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
     }
-	
+
 
     update(isValid) {
         if (isValid) {
@@ -451,6 +451,31 @@ class FixingIncidentFormController {
         this.classElemetStepTwo = 'btn btn-primary btn-circle';
         this.classElemetStepThree = 'btn btn-primary btn-circle';
         this.classElemetStepFour = 'btn btn-primary btn-circle';
+    }
+
+    sendAction() {
+        let $state = this.$state;
+        let params = { idIncident: this.EditIssueId, statusTask: 'Testing', updateBy: this.userData.id };
+        let IssueUpdateStatus = this.API.service('incident-status-update', this.API.all('incidents'))
+        swal({
+            title: 'Send For Testing',
+            text: 'Send task to QA for testing',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: 'Yes',
+            closeOnConfirm: true,
+            showLoaderOnConfirm: true,
+            html: false
+        }, function () {
+            IssueUpdateStatus.one().put(params)
+                .then(() => {
+                    $state.go("app.fixing");
+                }, (response) => {
+                    let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
+                    $state.go($state.current, { alerts: alert })
+                })
+        })
     }
 
     $onInit() {

@@ -76,7 +76,7 @@ class IncidentCtrl extends Controller
         
         // update PIC Task
         if($picTask!=null){
-            DB::update('update incident_pic set startDate = :startDate, finishDate = :finishDate where fidUser =:fidUser and fidIncident =:fidIncident and task =:task' , ['fidUser'=>intval($picUser),'fidIncident'=>intval($issueForm['idIncident']), 'startDate'=>$startDate, 'finishDate'=>$finishDate, 'task'=>$picTask]);
+            DB::update('update incident_pic set startDate = :startDate, finishDate = :finishDate where fidUser =:fidUser and fidIncident =:fidIncident and task =:task' , ['fidUser'=>intval($picUser),'fidIncident'=>$issueForm['idIncident'], 'startDate'=>$startDate, 'finishDate'=>$finishDate, 'task'=>$picTask]);
         }
         return response()->success($issueForm);
     }
@@ -87,7 +87,7 @@ class IncidentCtrl extends Controller
         return response()->success('success');
     }
 
-    public function getIncidentAssignment()
+    public function getIncidentAssignment(Request $request)
     {
         $sql = "SELECT A.idIncident, 
                        A.raisedDate,
@@ -96,6 +96,11 @@ class IncidentCtrl extends Controller
                        coalesce(A.module, '') module,
                        coalesce(A.subModule, '') subModule,
                        A.issueDescription,
+                       A.expectedResult,
+                       A.suspectedReason,
+                       A.responTaken,
+                       A.decidedSolution,
+                       A.recreateStep,
                         coalesce((SELECT GROUP_CONCAT(PICNAME SEPARATOR ', ') 
                                 FROM INCIDENT_PIC 
                                 WHERE TASK = 'Analyzing' AND FIDINCIDENT = A.IDINCIDENT
@@ -109,10 +114,87 @@ class IncidentCtrl extends Controller
                                 WHERE TASK = 'Testing' AND FIDINCIDENT = A.IDINCIDENT
                                 GROUP BY FIDINCIDENT LIMIT 1), '') pic_testing 
 
-                    FROM INCIDENT A 
-                    ORDER BY A.idIncident    ";
+                    FROM INCIDENT A ";
+                    
+                    
         // $issue = DB::connection()->getPdo()->exec($sql);
+
+        $task = $request->input('task');
+        if($task=="Assign"){
+            $sql .= " WHERE A.statusTask in ('Open','Assign','On Progress')";
+        }else if($task=="ConfirmClosing"){
+            $sql .= " WHERE A.statusTask in ('Confirm','Closing')";
+        }
+        $sql .= "ORDER BY A.CREATED_AT ASC";
         $issue = DB::select($sql);
+        return response()->success(compact('issue'));
+    }
+
+    public function getIncidentClosing(Request $request)
+    {
+        $sql = "SELECT A.idIncident, 
+                       A.raisedDate,
+                       A.raisedBy,
+                       coalesce(A.priority, '') priority,
+                       coalesce(A.module, '') module,
+                       coalesce(A.subModule, '') subModule,
+                       A.issueDescription,
+                       A.expectedResult,
+                       A.suspectedReason,
+                       A.responTaken,
+                       A.decidedSolution,
+                       A.statusTask,
+                       A.statusAssignment,
+                        coalesce((SELECT GROUP_CONCAT(confirmation SEPARATOR '<hr>') FROM (
+                                    SELECT fidIncident, concat(pic_name, '<br/>', confirm_status) as confirmation FROM (
+                                    SELECT fidIncident, concat('<text style=\"font-size: 12px;font-weight: bold;\">',userName,' </text>' ) as pic_name, 
+                                        case when responApproval = 'Approve' then '<i style=\"color: deepskyblue\" class=\"fa fa-check \"></i>  Approve For Closing'
+                                                when responApproval = 'Reject' then '<i style=\"color: red\" class=\"fa fa-ban \"></i>  Issue Not Clear'
+                                                else '<i style=\"color: orange\" class=\"fa fa-clock-o \"></i>  Waiting Respon'
+                                                end as confirm_status
+                                    FROM INCIDENT_CONFIRM_HISTORY
+                                    
+                                    ORDER BY submitDate ASC) TBL_CONFIRM_1
+                                    ) TBL_CONFIRM_2 WHERE fidIncident = A.idIncident), '') 
+                        pic_confirm
+
+                    FROM INCIDENT A ";
+                    
+                    
+        // $issue = DB::connection()->getPdo()->exec($sql);
+
+        $task = $request->input('task');
+        if($task=="ConfirmClosing"){
+            $sql .= " WHERE A.statusTask in ('Closing') AND A.statusAssignment in ('Finish', 'Confirmed')";
+        }
+        $sql .= "ORDER BY A.CREATED_AT ASC";
+        $issue = DB::select($sql);
+        return response()->success(compact('issue'));
+    }
+
+    public function getApprovalClosing(Request $request)
+    {
+        $sql = "SELECT A.idIncident, 
+                       A.raisedDate,
+                       A.raisedBy,
+                       coalesce(A.priority, '') priority,
+                       coalesce(A.module, '') module,
+                       coalesce(A.subModule, '') subModule,
+                       A.issueDescription,
+                       A.expectedResult,
+                       A.suspectedReason,
+                       A.responTaken,
+                       A.decidedSolution,
+                       A.statusTask,
+                       A.statusAssignment
+                    FROM INCIDENT A LEFT JOIN INCIDENT_CONFIRM_HISTORY B ON A.idIncident = B.fidIncident
+                    WHERE A.statusTask = 'Closing' AND A.statusAssignment = 'Finish' AND B.fidUser = :idUser
+                    ORDER BY A.CREATED_AT ASC";
+                    
+                    
+        
+        $idUser = $request->input('idUser');
+        $issue = DB::select($sql, ['idUser'=>$idUser]);
         return response()->success(compact('issue'));
     }
 
@@ -139,14 +221,21 @@ class IncidentCtrl extends Controller
                                 GROUP BY FIDINCIDENT LIMIT 1), '') pic_testing 
                     FROM INCIDENT A 
                     LEFT JOIN  INCIDENT_PIC B ON A.IDINCIDENT = B.FIDINCIDENT           
-                    WHERE B.FIDUSER = :idUser AND B.TASK = :task
-                    ORDER BY A.idIncident    
+                    WHERE B.FIDUSER = :idUser AND B.TASK = :task1
                     ";
         // $issue = DB::connection()->getPdo()->exec($sql);
         //$task = 'Analyzing';
         $idUser = $request->input('idUser');
         $task = $request->input('task');
-        $issue = DB::select($sql, ['idUser'=>$idUser, 'task'=>$task]);
+        
+        if($task=="Fixing" || $task=="Testing"){
+            $sql .= " AND A.statusAssignment = :task2 ";
+        }else if($task=="Analyzing"){
+            $sql .= " AND (A.statusAssignment = :task2 OR A.statusAssignment is null)";
+        }
+        $sql .= " ORDER BY A.idIncident  ";
+
+        $issue = DB::select($sql, ['idUser'=>$idUser, 'task1'=>$task, 'task2'=>$task]);
         return response()->success(compact('issue'));
     }
 
@@ -208,8 +297,55 @@ class IncidentCtrl extends Controller
     {
         $idIncident = $request->input('idIncident');
         $status = $request->input('statusTask');
+        $statusTask = $request->input('statusTask');
         $updateBy = $request->input('updateBy');
-        $issue = DB::update('update incident set statusTask = :status, updated_at = now(), updateBy = :updateBy where idIncident =:idIncident' , ['status'=>$status,'idIncident'=>$idIncident, 'updateBy'=>intval($updateBy)]);
+        $sql = "";
+        if($statusTask=="Open"){
+            $sql = "update incident set statusTask = :status, updated_at = now(), updateBy = :updateBy where idIncident =:idIncident";
+        }else if($statusTask=="Analyzing" || $statusTask == "Fixing" || $statusTask == "Testing"){
+            $sql = "update incident set statusAssignment = :status, updated_at = now(), updateBy = :updateBy where idIncident =:idIncident";
+        }else if($statusTask == "Closing"){
+            $sql = "update incident set statusTask = :status, statusAssignment = 'Finish', updated_at = now(), updateBy = :updateBy where idIncident =:idIncident";
+        } 
+
+        if($statusTask == "Re-Open"){
+            $sql = "update incident set statusTask = 'On Progress', statusAssignment = 'Analyzing', updated_at = now(), updateBy = :updateBy where idIncident =:idIncident";
+            $issue = DB::update($sql , ['idIncident'=>$idIncident, 'updateBy'=>intval($updateBy)]);
+        }else{
+            $issue = DB::update($sql , ['status'=>$status,'idIncident'=>$idIncident, 'updateBy'=>intval($updateBy)]);
+        }  
+        
         return response()->success(compact('issue'));
     }   
+
+    public function postIncidentClosing() {
+        $idIncident = Input::get('idIncident');
+        $closedDate = Input::get('closesDate');
+        $closedBy = Input::get('closedBy');
+        $updateBy = Input::get('updateBy');
+
+        $sql = "update incident set statusTask = 'Closed', closedDate = :closedDate, closedBy = :closedBy, updated_at = now(), updateBy = :updateBy where idIncident =:idIncident";
+        $issue = DB::update($sql , ['idIncident'=>$idIncident, 'updateBy'=>intval($updateBy), 'closedBy'=>$closedBy, 'closedDate'=>$closedDate]);
+        return response()->success(compact('issue'));
+    }  
+    
+    public function putIncidentConfirmed(Request $request)
+    {
+        $idIncident = $request->input('idIncident');
+        $status = $request->input('statusTask');
+        $statusTask = $request->input('statusTask');
+        $updateBy = $request->input('updateBy');
+        $responApproval = $request->input('responApproval');
+        $responDescription = $request->input('responDescription');
+        $sql = "";
+
+        $sql = "update incident set statusAssignment = :status, updated_at = now(), updateBy = :updateBy where idIncident =:idIncident";
+        $issue = DB::update($sql , ['status'=>$status,'idIncident'=>$idIncident, 'updateBy'=>intval($updateBy)]);
+    
+        $sqlConfirmHistory = "update incident_confirm_history set responDescription = :responDescription, responApproval = :responApproval, receiveResponDate = now(), updated_at = now() 
+                where fidIncident =:fidIncident and fidUser = :idUser";
+        $confirmHistory = DB::update($sqlConfirmHistory , ['fidIncident'=>$idIncident, 'idUser'=>intval($updateBy), 'responDescription'=>$responDescription, 'responApproval'=>$responApproval]);
+        
+        return response()->success(compact('issue'));
+    }
 }

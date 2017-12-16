@@ -61,7 +61,10 @@ class ConfirmFormController {
 
         this.form_title = "Edit Confirm History";
         this.form_subTitle = "Incident Number : " + issueId;
-
+        
+        // get Data for history
+        this.refreshTableConfirmHistory(); 
+        this.refreshTablePic();
 
 
         // getDataIncident
@@ -97,7 +100,8 @@ class ConfirmFormController {
                 this.testScenario = issueEdit.data.testScenario;
             })
 
-        this.refreshTablePic();
+        
+
 
         // get file incident
         $scope.filesOpenIcident = [];
@@ -228,119 +232,6 @@ class ConfirmFormController {
 
             return '';
         }
-
-
-
-        // Modul
-        $scope.optionsModul = [
-            { name: 'All Modules', value: 'All Modules' },
-            { name: 'BackEnd Tools', value: 'BackEnd Tools' },
-            { name: 'Batch Process', value: 'Batch Process' },
-            { name: 'CDB', value: 'CDB' },
-            { name: 'Collection', value: 'Collection' },
-            { name: 'Facility', value: 'Facility' },
-            { name: 'Fixed Asset', value: 'Fixed Asset' },
-            { name: 'Funding', value: 'Funding' },
-            { name: 'General Setting', value: 'General Setting' },
-            { name: 'General Ledger', value: 'General Ledger' },
-            { name: 'Insurance', value: 'Insurance' },
-            { name: 'Life Insurance Receive', value: 'Life Insurance Receive' },
-            { name: 'Internal Payment', value: 'Internal Payment' },
-            { name: 'Payment', value: 'Payment' },
-            { name: 'CBCS', value: 'CBCS' },
-            { name: 'Procurement', value: 'Procurement' },
-            { name: 'Report', value: 'Report' },
-            { name: 'General Issue', value: 'General Issue' },
-            { name: 'Other', value: 'Other' },
-            { name: 'Data', value: 'Data' }
-        ];
-        $scope.selectedOptionModule = $scope.optionsModul[0].value;
-
-        // Sub Modul
-        $scope.optionsSubModul = [
-            { name: 'Update Additional Info', value: 'Update Additional Info' },
-            { name: 'Insurance Payment', value: 'Insurance Payment' },
-            { name: 'New Report', value: 'New Report' },
-            { name: 'Cash Overbook', value: 'Cash Overbook' },
-            { name: 'Insurance Payment', value: 'Insurance Payment' },
-            { name: 'Payment', value: 'Payment' },
-            { name: 'Facility Register', value: 'Facility Register' },
-            { name: 'Inquiry', value: 'Inquiry' },
-            { name: 'Cash / Transfer', value: 'Cash / Transfer' },
-            { name: 'Facility Register', value: 'Facility Register' },
-            { name: 'Request Disbursement', value: 'Request Disbursement' },
-            { name: 'Virtual Payment', value: 'Virtual Payment' },
-            { name: 'Request Disbursement', value: 'Request Disbursement' },
-            { name: 'Finance Report', value: 'Finance Report' },
-            { name: 'Payment', value: 'Payment' },
-            { name: 'CDB', value: 'CDB' },
-            { name: 'Cash / Transfer', value: 'Cash / Transfer' },
-            { name: 'Other', value: 'Other' }
-        ];
-        $scope.selectedOptionSubModule = $scope.optionsSubModul[0].value;
-
-        // Priority
-        $scope.options = [
-            {
-                name: 'Critical',
-                value: 'Critical'
-            },
-            {
-                name: 'High',
-                value: 'High'
-            },
-            {
-                name: 'Medium',
-                value: 'Medium'
-            },
-            {
-                name: 'Low',
-                value: 'Low'
-            }
-        ];
-        $scope.selectedOption = $scope.options[0].value;
-
-        // upload method
-        var uploader = $scope.uploader = new FileUploader({
-            url: 'upload'
-        });
-
-        $scope.deleteImage = function (id) {
-            console.info('removeId', id);
-            $http.post('/destroy-image', { id: id })
-                .then(function (success) {
-                    //console.info('remove', success);
-                    c//onsole.info('remove', success.data.message);
-                }, function (error) {
-
-                });
-        }
-
-        $scope.removeFile = function (attachment) {
-            var path = 'delete';
-            $http({
-                url: path,
-                data: attachment,
-                method: 'POST',
-                headers: {
-                    'Content-Type': undefined
-                }
-            })
-                .success(function (result) {
-                    //alert(result);
-                    //console.info('remove', result);
-                });
-        }
-
-        // FILTERS
-
-        uploader.filters.push({
-            name: 'imageFilter',
-            fn: function (item /*{File|FileLikeObject}*/, options) {
-                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-                return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
-            }
-        });
     }
 
     refreshTablePic() {
@@ -367,8 +258,8 @@ class ConfirmFormController {
 
     reAssignTask(idIncident) {
         let API = this.API
-        let $state = this.$state
-
+        let $state = this.$state;
+        let params = {idIncident: this.EditIssueId, statusTask:'Re-Open', updateBy: this.userData.id}; 
         swal({
             title: 'Re-Assign Task',
             text: 'Re-assign this incident will be return back task-flow to analyzing incident',
@@ -380,19 +271,15 @@ class ConfirmFormController {
             showLoaderOnConfirm: true,
             html: false
         }, function () {
-            //   API.one('users').one('user', userId).remove()
-            //     .then(() => {
-            $state.go('app.confirm');
-            //   swal({
-            //     title: 'Deleted!',
-            //     text: 'User Permission has been deleted.',
-            //     type: 'success',
-            //     confirmButtonText: 'OK',
-            //     closeOnConfirm: true
-            //   }, function () {
-            //     $state.reload()
-            //   })
-            // })
+            
+            let IssueUpdateStatus = API.service('incident-status-update', API.all('incidents'))
+            IssueUpdateStatus.one().put(params) 
+            .then(() => { 
+              $state.go("app.confirm");
+            }, (response) => {
+              let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
+              $state.go($state.current, { alerts: alert })
+            })
         })
     }
 
@@ -495,13 +382,15 @@ class ConfirmFormController {
             case 'add':
                 items = [{
                     modalState: modalstate,
-                    id: this.EditIssueId
+                    id: this.EditIssueId,
+                    userId: this.userData.id
                 }];
                 break;
             case 'edit':
                 items = [{
                     modalState: modalstate,
-                    id: id
+                    id: id,
+                    userId: this.userData.id
                 }];
                 break;
             default:
@@ -522,10 +411,9 @@ class ConfirmFormController {
 
         modalInstance.result.then((selectedItem) => {
             this.refreshTableConfirmHistory();
-        },
-            () => {
-                $log.info('Modal dismissed at: ' + new Date())
-            })
+        }, () => {
+            $log.info('Modal dismissed at: ' + new Date())
+        })
     }
 
     modalcontroller($scope, $uibModalInstance, API, $http, items) {
@@ -534,19 +422,31 @@ class ConfirmFormController {
         // items
         let modalstate = items[0].modalState;
         let idState = items[0].id;
+        this.userId = items[0].userId;
         switch (modalstate) {
             case 'add':
                 this.title = 'Add Confirm History'
                 break;
             case 'edit':
                 this.title = 'Edit Confirm History'
+                let confirmEdit = API.service('incident-confirm-show', API.all('confirm'))
+                confirmEdit.one(idState).get()
+                  .then((response) => {
+                    this.confirmDataEdit = API.copy(response);
+                    var issueEdit = this.confirmDataEdit;
+                    this.submitDate = issueEdit.data.submitDate;
+                    this.dtSubmit = new Date(this.submitDate);
+        
+                    this.userName = issueEdit.data.userName;
+                    this.fidUserRaised = issueEdit.data.fidUserRaised;
+                    this.confirmDescription = issueEdit.data.confirmDescription;
+                    
+                    this.pic = { id: issueEdit.data.fidUser, name: issueEdit.data.userName };
+                  })
                 break;
             default:
                 break;
         }
-
-
-
 
         $scope.today = function () {
             $scope.dtPic = new Date();
@@ -646,7 +546,7 @@ class ConfirmFormController {
 
         $scope.teamMember = [];
         let UserOptions = API.service('maintenance-team', API.all('users'))
-        UserOptions.one('0').get()
+        UserOptions.one('1').get()
             .then((response) => {
                 let users = response.data.users;
                 angular.forEach(response.data.users, function (value, key) {
@@ -659,39 +559,44 @@ class ConfirmFormController {
         this.pic = $scope.teamMember[0];
 
         this.ok = () => {
-            //   switch (modalstate) {
-            //     case 'add':
-            //       let CreatePic = API.service('incident-pic', API.all('incidentpics'))
-            //       //let $state = this.$state
-            //       CreatePic.post({
-            //         'fidIncident': idState,
-            //         'fidUser': this.pic.id,
-            //         'picName': this.pic.name,
-            //         'targetDate': $scope.dtPic,
-            //         'task': this.task,
-            //   }).then(function (success) {
-            // let disableButtonStepTwo_ = false;
-            // let alert = {
-            //   type: 'success', 'title': 'Success!', msg: 'Incident No: ' + success.data.idIncident + ' Incident has been added.'
-            //   , inputState: 'editAfterSave', issueId: success.data.idIncident
-            // }
-            // $state.go($state.current, { alerts: alert, disableButtonStepTwo: disableButtonStepTwo_ });
-
-            $uibModalInstance.close()
-            //     console.info('save-pic-succes', success);
-            //   }, function (error) {
-            //     // let alert = { type: 'error', 'title': 'Error!', msg: error.data.message }
-            //     // $state.go($state.current, { alerts: alert })
-            //     console.error('save-pic-error', error);
-            //   })
-            //   break;
-            // case 'edit':
-
-            //   break;
-            // default:
-            //   break;
-            //   }
-            //$uibModalInstance.close($scope.selected.item)
+            switch (modalstate) {
+                case 'add':
+                    let CreatePic = API.service('incident-confirm', API.all('confirm'))
+                    //let $state = this.$state
+                    CreatePic.post({
+                        'fidIncident': idState,
+                        'fidUser': this.pic.id,
+                        'userName': this.pic.name,
+                        'submitDate': this.dtSubmit,
+                        'confirmDescription': this.confirmDescription,
+                        'userId': this.userId,
+                    }).then(function (success) {
+                        $uibModalInstance.close()
+                        console.info('save-history-succes', success);
+                    }, function (error) {
+                        // let alert = { type: 'error', 'title': 'Error!', msg: error.data.message }
+                        // $state.go($state.current, { alerts: alert })
+                        console.error('save-history-error', error);
+                    })
+                    break;
+                case 'edit':
+                    this.confirmDataEdit.data.submitDate = this.dtSubmit;
+                    this.confirmDataEdit.data.userName = this.pic.name;
+                    this.confirmDataEdit.data.fidUser = this.pic.id;
+                    this.confirmDataEdit.data.confirmDescription = this.confirmDescription;
+                    
+                    this.confirmDataEdit.put()
+                    .then(function (success) {
+                        $uibModalInstance.close()
+                        console.info('save-history-succes', success);
+                    }, function (error) {
+                        console.error('save-history-error', error);
+                    })
+                    break;
+                default:
+                    break;
+            }
+            // $uibModalInstance.close($scope.selected.item)
         }
 
         this.cancel = () => {
@@ -702,6 +607,41 @@ class ConfirmFormController {
     toggleModalAnimation() {
         this.animationsEnabled = true;
     }
+
+    refreshTableConfirmHistory() {
+        let scope = this.$scope;
+        scope.confirmHistory = [];
+        let confirmHistory = this.API.service('confirm-incident', this.API.all('confirm'))
+        confirmHistory.one(this.EditIssueId).get()
+            .then((response) => {
+                let confirmHistory = response.data.confirmHistory;
+                angular.forEach(response.data.confirmHistory, function (value, key) {
+                    scope.confirmHistory.push({
+                        id: value.idHistory,
+                        fidIncident: value.fidIncident,
+                        userName: value.userName,
+                        submitDate: value.submitDate,
+                        confirmDescription: value.confirmDescription,
+                        receiveResponDate: value.receiveResponDate,
+                        responApproval: value.responApproval,
+                        responDescription: value.responDescription
+                    });
+                })
+            })
+    }
+
+    sendAction() {
+        let $state = this.$state; 
+        let params = {idIncident: this.EditIssueId, statusTask:'Analyzing', updateBy: this.userData.id}; 
+        let IssueUpdateStatus = this.API.service('incident-status-update', this.API.all('incidents'))
+        IssueUpdateStatus.one().put(params) 
+        .then(() => { 
+          $state.go("app.confirm");
+        }, (response) => {
+          let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
+          $state.go($state.current, { alerts: alert })
+        })
+      }
 
     $onInit() {
     }

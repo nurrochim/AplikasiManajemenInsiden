@@ -56,29 +56,36 @@
 
                                 <br/>
                                 <table class="table table-bordered">
-                                    <thead>
-                                        <tr style="background: whitesmoke">
-                                            <th style="text-align: center">PIC</th>
-                                            <th style="text-align: center">Submit Date</th>
-                                            <th style="text-align: center">Receive Respon Date</th>
-                                            <th style="text-align: center">Respon Description</th>
-                                            <th style="text-align: center">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>IT</td>
-                                            <td>17 Dec 2017</td>
-                                            <td>20 Dec 2017</td>
-                                            <td>Masih perlu di UAT</td>
-                                            <td style="text-align: center">
-                                                <button class="btn btn-xs btn-warning" ng-click="vm.delete(pic.id)" uib-tooltip="Edit">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                        <thead>
+                                            <tr style="background: whitesmoke">
+                                                <th style="text-align: center; width:20%">PIC</th>
+                                                <th style="text-align: center; width:35%">Submit Info</th>
+                                                <th style="text-align: center; width:35%">Respon Description</th>
+                                                <th style="text-align: center;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="confirm in confirmHistory">
+                                                <td>{{ confirm.userName}}</td>
+                                                <td><text style="font-size: 12px;font-weight: bold;">Submit Date : </text> {{confirm.submitDate}}
+                                                    <br/><text style="font-size: 12px;font-weight: bold;">Confirm Description : </text> 
+                                                    <br/>{{confirm.confirmDescription}}
+                                                </td>
+                                                <td><a ng-if="!confirm.responApproval"class="btn btn-block btn-default btn-xs">Waiting Respon</a>
+                                                    <a ng-if="confirm.responApproval == 'Reject'"class="btn btn-block btn-danger btn-xs">Issue Not Clear</a>
+                                                    <a ng-if="confirm.responApproval == 'Approve'"class="btn btn-block btn-info btn-xs">Approve For Closing</a>
+                                                    <br/><text ng-if="confirm.receiveResponDate" style="font-size: 12px;font-weight: bold;">Respon Date : </text> <text ng-if="confirm.receiveResponDate">{{confirm.receiveResponDate}}</text>
+                                                    <br/><text ng-if="confirm.responDescription" style="font-size: 12px;font-weight: bold;">Respon Description : </text> 
+                                                    <br/><text ng-if="confirm.responDescription">{{confirm.responDescription}}</text>
+                                                </td>
+                                                <td style="text-align: center">
+                                                    <button class="btn btn-xs btn-warning" ng-click="vm.toggle('edit', confirm.id)" uib-tooltip="Edit">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                             </div>
                         </div>
 

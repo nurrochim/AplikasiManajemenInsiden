@@ -4,31 +4,33 @@ class AssignTaskListController {
         this.API = API
         this.$state = $state
 
+        let params = {task:'Assign'};
         let IncidentList = this.API.service('incident-assignment', this.API.all('incidents'))
-        IncidentList.one().get()
-        .then((response) => {
+        IncidentList.one().get(params)
+            .then((response) => {
                 console.info('test', response);
                 let dataIncident = response.data.issue;
                 this.dtOptions = DTOptionsBuilder.newOptions()
                     .withOption('data', dataIncident)
                     .withOption('createdRow', createdRow)
                     .withOption('responsive', true)
+                    .withOption('order', [])
                     .withBootstrap()
 
                 this.dtColumns = [
-                    DTColumnBuilder.newColumn('idIncident').withTitle('ID').withOption('width', '5%'),
+                    DTColumnBuilder.newColumn('idIncident').withTitle('ID').withOption('width', '10%'),
                     DTColumnBuilder.newColumn(null).withTitle('Raise Date').notSortable().renderWith(raisedInfo).withOption('width', '10%'),
                     DTColumnBuilder.newColumn(null).withTitle('Priority & Module').notSortable().renderWith(priorityModul),
                     DTColumnBuilder.newColumn(null).withTitle('Issue Description').notSortable().renderWith(issueDescHtml).withOption('width', '40%'),
                     DTColumnBuilder.newColumn(null).withTitle('PIC').notSortable().renderWith(picHtml),
-                    DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable().withOption('width', '10%').renderWith(actionsHtml)
+                    DTColumnBuilder.newColumn(null).withTitle('Actions').notSortable().withOption('width', '5%').renderWith(actionsHtml)
                 ]
 
                 this.displayTable = true
             }, function (error) {
-                
+
                 console.error('save-pic-error', error);
-              })
+            })
 
         let createdRow = (row) => {
             $compile(angular.element(row).contents())($scope)
@@ -63,11 +65,11 @@ class AssignTaskListController {
         }
 
         let actionsHtml = (data) => {
-            return `
-                        <div style="text-align: center">
-                        <a class="btn btn-xs btn-warning" ui-sref="app.assignTaskForm({inputState: 'edit',issueId: ${data.idIncident}})" uib-tooltip="Edit">
+            return `<div style="text-align: center">
+                        <a class="btn btn-xs btn-warning" ui-sref="app.assignTaskForm({inputState: 'edit',issueId: '${data.idIncident}'})" uib-tooltip="Edit">
                             <i class="fa fa-edit"></i>
-                        </a></div>`
+                        </a>
+                    </div>`
         }
     }
     $onInit() {

@@ -40,31 +40,31 @@
                             </div>
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">Raised By</label>
+                                    <label class="col-sm-4 control-label">Raised By</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" ng-model="vm.raisedBy" name="raiseDate" placeholder="Raised By" ng-disabled="vm.detailIncidentDisable">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">Raised Date</label>
+                                    <label class="col-sm-4 control-label">Raised Date</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" ng-model="vm.raisedDate" name="raiseDate" placeholder="Raised Date" ng-disabled="vm.detailIncidentDisable">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">Division</label>
+                                    <label class="col-sm-4 control-label">Division</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" ng-model="vm.division" name="division" placeholder="Division" ng-disabled="vm.detailIncidentDisable">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">Group Division</label>
+                                    <label class="col-sm-4 control-label">Group Division</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" ng-model="vm.groupDivision" name="groupDivision" placeholder="Group Division" ng-disabled="vm.detailIncidentDisable">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">Contact No</label>
+                                    <label class="col-sm-4 control-label">Contact No</label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" ng-model="vm.contactNo" name="contactNo" placeholder="Contact No" ng-disabled="vm.detailIncidentDisable">
                                     </div>
@@ -82,35 +82,35 @@
                             </div>
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">Priority</label>
+                                    <label class="col-sm-4 control-label">Priority</label>
                                     <div class="col-sm-8">
                                         <select class="form-control" id="sel1" ng-model="vm.priority" ng-options="option.value as option.name for option in options"
                                             ng-disabled="vm.detailIncidentDisable" />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">Issue Descriptions</label>
+                                    <label class="col-sm-4 control-label">Issue Descriptions</label>
                                     <div class="col-sm-8">
                                         <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Issue descriptions"
                                             ng-model="vm.issueDescription" ng-disabled="vm.detailIncidentDisable"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">Module</label>
+                                    <label class="col-sm-4 control-label">Module</label>
                                     <div class="col-sm-8">
                                         <select class="form-control" id="sel1" ng-model="vm.module" ng-options="option.value as option.name for option in optionsModul"
                                             ng-disabled="vm.detailIncidentDisable" />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">Sub Modul</label>
+                                    <label class="col-sm-4 control-label">Sub Modul</label>
                                     <div class="col-sm-8">
                                         <select class="form-control" id="sel1" ng-model="vm.subModule" ng-options="option.value as option.name for option in optionsSubModul"
                                             ng-disabled="vm.detailIncidentDisable" />
                                     </div>
                                 </div>
                                 <div class="form-group" ng-if="filesOpenIcident.length > 0">
-                                    <label class="col-sm-3 control-label">File Attachment</label>
+                                    <label class="col-sm-4 control-label">File Attachment</label>
                                     <div class="col-sm-8" style="font-size: 14px; padding-top: 5px">
                                         <li ng-repeat="file_item in filesOpenIcident">
                                             <a href="{{file_item.fileUrl}}" target="_blank">{{file_item.fileName}}</a>
@@ -321,21 +321,28 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr style="background: whitesmoke">
-                                                <th style="text-align: center">PIC</th>
-                                                <th style="text-align: center">Submit Date</th>
-                                                <th style="text-align: center">Receive Respon Date</th>
-                                                <th style="text-align: center">Respon Description</th>
-                                                <th style="text-align: center">Action</th>
+                                                <th style="text-align: center; width:20%">PIC</th>
+                                                <th style="text-align: center; width:35%">Submit Info</th>
+                                                <th style="text-align: center; width:35%">Respon Description</th>
+                                                <th style="text-align: center;">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>IT</td>
-                                                <td>17 Dec 2017</td>
-                                                <td>20 Dec 2017</td>
-                                                <td>Masih perlu di UAT</td>
+                                            <tr ng-repeat="confirm in confirmHistory">
+                                                <td>{{ confirm.userName}}</td>
+                                                <td><text style="font-size: 12px;font-weight: bold;">Submit Date : </text> {{confirm.submitDate}}
+                                                    <br/><text style="font-size: 12px;font-weight: bold;">Confirm Description : </text> 
+                                                    <br/>{{confirm.confirmDescription}}
+                                                </td>
+                                                <td><a ng-if="!confirm.responApproval"class="btn btn-block btn-default btn-xs">Waiting Respon</a>
+                                                    <a ng-if="confirm.responApproval == 'Reject'"class="btn btn-block btn-danger btn-xs">Issue Not Clear</a>
+                                                    <a ng-if="confirm.responApproval == 'Approve'"class="btn btn-block btn-info btn-xs">Approve For Closing</a>
+                                                    <br/><text ng-if="confirm.receiveResponDate" style="font-size: 12px;font-weight: bold;">Respon Date : </text> <text ng-if="confirm.receiveResponDate">{{confirm.receiveResponDate}}</text>
+                                                    <br/><text ng-if="confirm.responDescription" style="font-size: 12px;font-weight: bold;">Respon Description : </text> 
+                                                    <br/><text ng-if="confirm.responDescription">{{confirm.responDescription}}</text>
+                                                </td>
                                                 <td style="text-align: center">
-                                                    <button class="btn btn-xs btn-warning" ng-click="vm.delete(pic.id)" uib-tooltip="Edit">
+                                                    <button class="btn btn-xs btn-warning" ng-click="vm.toggle('edit', confirm.id)" uib-tooltip="Edit">
                                                         <i class="fa fa-edit"></i>
                                                     </button>
                                                 </td>
@@ -361,7 +368,7 @@
                                                 <th style="text-align: center">Start Date</th>
                                                 <th style="text-align: center">Finish Date</th>
                                                 <th style="text-align: center">Target Date</th>
-                                                <th style="text-align: center">Action</th>
+                                                <!-- <th style="text-align: center">Action</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -371,14 +378,14 @@
                                                 <td>{{ pic.startDate}}</td>
                                                 <td>{{ pic.finishDate}}</td>
                                                 <td>{{ pic.targetDate}}</td>
-                                                <td style="text-align: center">
+                                                <!-- <td style="text-align: center"> -->
                                                     <!-- <button class="btn btn-xs btn-warning" uib-tooltip="Edit" ng-click="vm.toggle('edit', 0)">
                                                                 <i class="fa fa-edit"></i>
                                                             </button> -->
-                                                    <button class="btn btn-xs btn-warning" ng-click="vm.delete(pic.id)" uib-tooltip="Edit">
+                                                    <!-- <button class="btn btn-xs btn-warning" ng-click="vm.delete(pic.id)" uib-tooltip="Edit">
                                                         <i class="fa fa-edit"></i>
                                                     </button>
-                                                </td>
+                                                </td> -->
                                             </tr>
                                         </tbody>
                                     </table>
@@ -407,7 +414,7 @@
                                 <label class="col-sm-4 control-label">Submit Date</label>
                                 <div class="col-sm-5">
                                     <p class="input-group">
-                                        <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dtPic" is-open="popup1.opened" datepicker-options="dateOptions"
+                                        <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="mvm.dtSubmit" is-open="popup1.opened" datepicker-options="dateOptions"
                                             ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="open1()">
@@ -418,27 +425,13 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                    <label class="col-sm-4 control-label">Receive Respon Date</label>
-                                    <div class="col-sm-5">
-                                        <p class="input-group">
-                                            <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dtPic" is-open="popup1.opened" datepicker-options="dateOptions"
-                                                ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
-                                            <span class="input-group-btn">
-                                                <button type="button" class="btn btn-default" ng-click="open1()">
-                                                    <i class="fa fa-calendar"></i>
-                                                </button>
-                                            </span>
-                                        </p>
+                                    <label class="col-sm-4 control-label">Respon Description</label>
+                                    <div class="col-sm-8">
+                                        <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Confirm Description"
+                                            ng-model="mvm.confirmDescription"></textarea>
+                                        <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                        <label class="col-sm-4 control-label">Respon Description</label>
-                                        <div class="col-sm-8">
-                                            <textarea type="text" class="form-control has-error" rows="5" id="issuedesc" name="issuedesc" placeholder="Fixing Note's"
-                                                ng-model="vm.fixingNotes" ng-disabled="vmm.responDescription"></textarea>
-                                            <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
-                                        </div>
-                                    </div>   
+                                </div>   
                         </form>
             </div>
             <div class="modal-footer">

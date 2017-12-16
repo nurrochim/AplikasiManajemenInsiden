@@ -17,7 +17,7 @@ class OpenIncidentListController {
                     .withBootstrap()
 
                 this.dtColumns = [
-                    DTColumnBuilder.newColumn('idIncident').withTitle('ID').withOption('width', '10%'),
+                    DTColumnBuilder.newColumn('idIncident').withTitle('ID').notSortable().withOption('width', '10%'),
                     DTColumnBuilder.newColumn('raisedDate').withTitle('Raise Date').withOption('width', '10%'),
                     DTColumnBuilder.newColumn('raisedBy').withTitle('Raise By').withOption('width', '10%'),
                     DTColumnBuilder.newColumn(null).withTitle('Issue Description').notSortable().renderWith(issueDescHtml).withOption('width', '50%'),
@@ -88,23 +88,34 @@ class OpenIncidentListController {
                     }
                 }
                 if (data.statusTask === "Closing") {
-                    return `<div class="progress-group">
-                                <span class="progress-text">${data.statusTask}</span>
-                                <span class="progress-number" uib-tooltip="4 from 4 Step"><b>4</b>/4</span>
-                                <div class="progress sm">
-                                <div class="progress-bar progress-bar-aqua" style="width: 90%"></div>
-                                </div>
-                            </div>`
+                    if (data.statusAssignment === "Confirmed") {
+                        return `<div class="progress-group">
+                        <span class="progress-text">Confirmed</span>
+                        <span class="progress-number" uib-tooltip="3 from 4 Step"><b>3</b>/4</span>
+                        <div class="progress sm">
+                        <div class="progress-bar progress-bar-aqua" style="width: 98%"></div>
+                        </div>
+                        </div>`
+                    }else if (data.statusAssignment === "Waiting Confirmation") {
+                        return `<div class="progress-group">
+                        <span class="progress-text">Confirmation</span>
+                        <span class="progress-number" uib-tooltip="3 from 4 Step"><b>3</b>/4</span>
+                        <div class="progress sm">
+                        <div class="progress-bar progress-bar-aqua" style="width: 95%" uib-tooltip="Waiting Confrimation from Reporter"></div>
+                        </div>
+                        </div>`
+                    }else{
+                        return `<div class="progress-group">
+                        <span class="progress-text">${data.statusTask}</span>
+                        <span class="progress-number" uib-tooltip="4 from 4 Step"><b>4</b>/4</span>
+                        <div class="progress sm">
+                        <div class="progress-bar progress-bar-aqua" style="width: 90%"></div>
+                        </div>
+                    </div>`
+                    }
+                    
                 }
-                if (data.statusTask === "Confirm") {
-                    return `<div class="progress-group">
-                                <span class="progress-text">Confirmation</span>
-                                <span class="progress-number" uib-tooltip="3 from 4 Step"><b>3</b>/4</span>
-                                <div class="progress sm">
-                                <div class="progress-bar progress-bar-aqua" style="width: 85%" uib-tooltip="Waiting Confrimation from MBF"></div>
-                                </div>
-                            </div>`
-                }
+                
             } else {
                 return `<div/>`;
             }
@@ -115,9 +126,10 @@ class OpenIncidentListController {
                 return `<div/>`;
             } else {
                 return `<div style="text-align: center">
-                <a class="btn btn-xs btn-warning" ui-sref="app.inputIncident({inputState: 'edit',issueId: '${data.idIncident}'})" uib-tooltip="Edit">
-                    <i class="fa fa-edit"></i>
-                </a></div>`
+                            <a class="btn btn-xs btn-warning" ui-sref="app.inputIncident({inputState: 'edit',issueId: '${data.idIncident}'})" uib-tooltip="Edit">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                        </div>` 
             }
         }
     }

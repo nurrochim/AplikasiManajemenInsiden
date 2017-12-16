@@ -42,7 +42,7 @@ class IncidentPicCtrl extends Controller
         $issueForm = Input::get('data');
         $affectedRows = IncidentPicModel::where('idPic', '=', intval($issueForm['idPic']))->update($issueForm);
 
-        return response()->success($issueForm);
+        return response()->success($affectedRows);
     }
 
     public function deleteIncidentPic($idPic)

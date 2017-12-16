@@ -363,7 +363,7 @@ class TestingIncidentFormController {
         //         return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
         //     }
         // });
-        
+
         // a sync filter
         uploader.filters.push({
             name: 'syncFilter',
@@ -419,6 +419,57 @@ class TestingIncidentFormController {
         } else {
             this.formSubmitted = true
         }
+    }
+
+    sendBackAction() {
+        let $state = this.$state;
+        let params = { idIncident: this.EditIssueId, statusTask: 'Fixing', updateBy: this.userData.id };
+        let IssueUpdateStatus = this.API.service('incident-status-update', this.API.all('incidents'))
+        swal({
+            title: 'Send For Fixing',
+            text: 'Send task to programmer for fixing incident',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: 'Yes',
+            closeOnConfirm: true,
+            showLoaderOnConfirm: true,
+            html: false
+        }, function () {
+            IssueUpdateStatus.one().put(params)
+                .then(() => {
+                    $state.go("app.testing");
+                }, (response) => {
+                    let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
+                    $state.go($state.current, { alerts: alert })
+                })
+        })
+    }
+
+    sendFinishTaskAction() {
+        let $state = this.$state;
+        let params = { idIncident: this.EditIssueId, statusTask: 'Closing', updateBy: this.userData.id };
+        let IssueUpdateStatus = this.API.service('incident-status-update', this.API.all('incidents'))
+
+        swal({
+            title: 'Finish Task',
+            text: 'Send task to admin for closing incident',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: 'Yes',
+            closeOnConfirm: true,
+            showLoaderOnConfirm: true,
+            html: false
+        }, function () {
+            IssueUpdateStatus.one().put(params)
+                .then(() => {
+                    $state.go("app.testing");
+                }, (response) => {
+                    let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
+                    $state.go($state.current, { alerts: alert })
+                })
+        })
     }
 
     eventStepOne() {
