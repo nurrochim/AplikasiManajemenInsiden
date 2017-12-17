@@ -23,6 +23,9 @@ Route::group(['middleware' => ['web']], function () {
 Route::post('/upload', function(){return view('upload');});
 Route::post('/destroy-image', 'ImageController@destroyImage');
 Route::post('/file-upload', 'ImageController@uploadImage');
+Route::get('/report-comm-sheet', 'CommunicationSheetCtrl@exportToPdf');
+Route::get('/report-comm-template', function(){return view('ReportTemplate.CommSheetTemplate');});
+Route::get('/report-comm-sheet2/{idIncident}', 'CommunicationSheetCtrl@generateReport');
 Route::get('/download', 'ImageController@getDownload');
 Route::get('/download-report', 'ImageController@getCreatePdf');
 Route::get('/download-report3', 'ImageController@createTcpdf');
@@ -66,6 +69,21 @@ Route::get('/download/{idIncident}/{filename}', function ($idIncident,$filename)
     return $response;
 });
 
+Route::get('/download-report/{filename}', function ($filename)
+{
+    $path = public_path()."/report/". $filename;
+
+    if(!File::exists($path)) abort(404);
+
+    $file = File::get($path);
+    $type = File::mimeType($path);
+
+    $response = Response::make($file, 200);
+    $response->header("Content-Type", $type);
+
+    return $response;
+});
+
 $api->group(['middleware' => ['api']], function ($api) {
     $api->controller('auth', 'Auth\AuthController');
 
@@ -91,5 +109,6 @@ $api->group(['middleware' => ['api', 'api.auth']], function ($api) {
     $api->controller('files', 'ImageController');
     $api->controller('confirm', 'IncidentConfirmHistoryCtrl');
     $api->controller('users', 'UserController');
+    $api->controller('reportcomm', 'CommunicationSheetCtrl');
 });
 

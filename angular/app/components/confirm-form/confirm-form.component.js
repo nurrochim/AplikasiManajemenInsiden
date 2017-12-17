@@ -4,6 +4,7 @@ class ConfirmFormController {
 
         this.$state = $state;
         this.$uibModal = $uibModal
+        this.$http = $http;
         this.formSubmitted = false;
         this.alerts = [];
         this.form_title = '';
@@ -61,9 +62,9 @@ class ConfirmFormController {
 
         this.form_title = "Edit Confirm History";
         this.form_subTitle = "Incident Number : " + issueId;
-        
+
         // get Data for history
-        this.refreshTableConfirmHistory(); 
+        this.refreshTableConfirmHistory();
         this.refreshTablePic();
 
 
@@ -100,7 +101,7 @@ class ConfirmFormController {
                 this.testScenario = issueEdit.data.testScenario;
             })
 
-        
+
 
 
         // get file incident
@@ -259,7 +260,7 @@ class ConfirmFormController {
     reAssignTask(idIncident) {
         let API = this.API
         let $state = this.$state;
-        let params = {idIncident: this.EditIssueId, statusTask:'Re-Open', updateBy: this.userData.id}; 
+        let params = { idIncident: this.EditIssueId, statusTask: 'Re-Open', updateBy: this.userData.id };
         swal({
             title: 'Re-Assign Task',
             text: 'Re-assign this incident will be return back task-flow to analyzing incident',
@@ -271,15 +272,15 @@ class ConfirmFormController {
             showLoaderOnConfirm: true,
             html: false
         }, function () {
-            
+
             let IssueUpdateStatus = API.service('incident-status-update', API.all('incidents'))
-            IssueUpdateStatus.one().put(params) 
-            .then(() => { 
-              $state.go("app.confirm");
-            }, (response) => {
-              let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
-              $state.go($state.current, { alerts: alert })
-            })
+            IssueUpdateStatus.one().put(params)
+                .then(() => {
+                    $state.go("app.confirm");
+                }, (response) => {
+                    let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
+                    $state.go($state.current, { alerts: alert })
+                })
         })
     }
 
@@ -431,18 +432,18 @@ class ConfirmFormController {
                 this.title = 'Edit Confirm History'
                 let confirmEdit = API.service('incident-confirm-show', API.all('confirm'))
                 confirmEdit.one(idState).get()
-                  .then((response) => {
-                    this.confirmDataEdit = API.copy(response);
-                    var issueEdit = this.confirmDataEdit;
-                    this.submitDate = issueEdit.data.submitDate;
-                    this.dtSubmit = new Date(this.submitDate);
-        
-                    this.userName = issueEdit.data.userName;
-                    this.fidUserRaised = issueEdit.data.fidUserRaised;
-                    this.confirmDescription = issueEdit.data.confirmDescription;
-                    
-                    this.pic = { id: issueEdit.data.fidUser, name: issueEdit.data.userName };
-                  })
+                    .then((response) => {
+                        this.confirmDataEdit = API.copy(response);
+                        var issueEdit = this.confirmDataEdit;
+                        this.submitDate = issueEdit.data.submitDate;
+                        this.dtSubmit = new Date(this.submitDate);
+
+                        this.userName = issueEdit.data.userName;
+                        this.fidUserRaised = issueEdit.data.fidUserRaised;
+                        this.confirmDescription = issueEdit.data.confirmDescription;
+
+                        this.pic = { id: issueEdit.data.fidUser, name: issueEdit.data.userName };
+                    })
                 break;
             default:
                 break;
@@ -584,14 +585,14 @@ class ConfirmFormController {
                     this.confirmDataEdit.data.userName = this.pic.name;
                     this.confirmDataEdit.data.fidUser = this.pic.id;
                     this.confirmDataEdit.data.confirmDescription = this.confirmDescription;
-                    
+
                     this.confirmDataEdit.put()
-                    .then(function (success) {
-                        $uibModalInstance.close()
-                        console.info('save-history-succes', success);
-                    }, function (error) {
-                        console.error('save-history-error', error);
-                    })
+                        .then(function (success) {
+                            $uibModalInstance.close()
+                            console.info('save-history-succes', success);
+                        }, function (error) {
+                            console.error('save-history-error', error);
+                        })
                     break;
                 default:
                     break;
@@ -631,17 +632,105 @@ class ConfirmFormController {
     }
 
     sendAction() {
-        let $state = this.$state; 
-        let params = {idIncident: this.EditIssueId, statusTask:'Analyzing', updateBy: this.userData.id}; 
+        let $state = this.$state;
+        let params = { idIncident: this.EditIssueId, statusTask: 'Analyzing', updateBy: this.userData.id };
         let IssueUpdateStatus = this.API.service('incident-status-update', this.API.all('incidents'))
-        IssueUpdateStatus.one().put(params) 
-        .then(() => { 
-          $state.go("app.confirm");
-        }, (response) => {
-          let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
-          $state.go($state.current, { alerts: alert })
+        IssueUpdateStatus.one().put(params)
+            .then(() => {
+                $state.go("app.confirm");
+            }, (response) => {
+                let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
+                $state.go($state.current, { alerts: alert })
+            })
+    }
+
+    downloadReport1() {
+        let $state = this.$state;
+        let $scope = this.$scope;
+        let $window = this.$window;
+
+        let params = { idIncident: this.EditIssueId}; 
+        let IssueUpdateStatus = this.API.service('generate-report-comm', this.API.all('reportcomm'))
+        IssueUpdateStatus.one().get(params)
+            .then(() => {
+                var fileURL = "http://localhost:8000/download-report/CommSheet.pdf";
+                $window.open(fileURL, '_blank');
+            }, (response) => {
+                let alert = { type: 'error', 'title': 'Error!', msg: response.data.message }
+                $state.go($state.current, { alerts: alert })
+            })
+    }    
+    downloadReport() {
+        let $http = this.$http;
+        let $scope = this.$scope;
+        let $window = this.$window;
+        var path = 'report-comm-sheet2/'.concat(this.EditIssueId);
+        // var downloadLink = document.getElementById("downloadReport");
+        // var downloadLink = angular.element(document).find('#appBusyIndicator');
+        // downloadLink.click();
+        $http({
+            url: path,
+            method: 'GET', 
+            headers: {
+                'Content-Type': undefined
+            }
+        }).then((respon) => {
+            // var fileURL = "http://localhost:8000/download-report/CommSheet.pdf";
+            // $window.open(fileURL, '_blank');
+            // var downloadLink = document.createElement("a");
+            // document.body.appendChild(downloadLink);
+            // downloadLink.style = "display: none";
+            // var fileURL= "http://localhost:8000/download-report/CommSheet.pdf";
+            // downloadLink.href = fileURL;
+            // downloadLink.click();
+            var downloadLink = document.getElementById("downloadReport");
+            downloadLink.click();
         })
-      }
+        // .success(function (respon) { 
+        //alert(result);
+        //console.info('remove', result);
+        // });
+        // let CreateIssue = this.API.service('download', this.API.all('files'))
+        // CreateIssue.one().get()
+        // .then((respon) => {
+        //     //console.info('download respon', respon);
+        //     // var url = (window.URL || window.webkitURL).createObjectURL(response);
+        //     // window.open(url); 
+
+        //     //create sample hidden link in document, to accept Blob returned in the response from back end
+
+        //     var downloadLink = document.createElement("a");
+
+        //     document.body.appendChild(downloadLink);
+        //     downloadLink.style = "display: none";
+        //     var fileURL= "http://localhost:8000/download-report/CommSheet.pdf";
+        //     downloadLink.href = fileURL;
+        //     downloadLink.click();
+        //     // downloadLink.target="_blank";
+
+        //     // //This service is written Below how does it work, by aceepting necessary params
+        //     // // var fName = 'Kartu Ujian.pdf';
+        //     // // var file = new Blob([respon]);
+        //     // var fileURL = (window.URL || window.webkitURL).createObjectURL(file);
+
+
+
+        //     // //Blob, client side object created to with holding browser specific download popup, on the URL created with the help of window obj.
+
+
+        //     // 
+        //     // downloadLink.setAttribute('target', '_blank');
+        //     // downloadLink.download = fName;
+
+        //     // var fileURL = URL.createObjectURL(file);
+        //     // var a         = document.createElement('a');
+        //     // a.href        = fileURL; 
+        //     // a.target      = '_blank';
+        //     // a.download    = $scope.selectedFile+'.json';
+        //     // document.body.appendChild(a);
+        //     // a.click();
+        // })
+    }
 
     $onInit() {
     }

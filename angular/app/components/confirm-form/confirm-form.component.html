@@ -311,11 +311,11 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">History Confirm Incident</div>
                                 <div class="panel-body">
-                                    <div class="col-sm-12" style="padding-bottom: 10px">
-                                        <div class="box-tools pull-right">
-                                            <a ng-click="vm.toggle('add', 0)" class="btn btn-block btn-success btn-xs">
-                                                <i class="fa fa-plus"></i> Add New</a>
-                                        </div>
+                                    <div class="box-tools" style="text-align: right;">
+                                        <a href="http://localhost:8000/report-comm-sheet2/{{vm.EditIssueId}}" target="_blank" class="btn btn-primary btn-xs" uib-tooltip="Download Communication Sheet">
+                                            <i class="fa fa-download"></i> Communication Sheet</a>
+                                        <a ng-click="vm.toggle('add', 0)" class="btn btn-success btn-xs"> 
+                                            <i class="fa fa-plus"></i> Add New</a>
                                     </div>
                                     <br/>
                                     <table class="table table-bordered">
@@ -330,16 +330,23 @@
                                         <tbody>
                                             <tr ng-repeat="confirm in confirmHistory">
                                                 <td>{{ confirm.userName}}</td>
-                                                <td><text style="font-size: 12px;font-weight: bold;">Submit Date : </text> {{confirm.submitDate}}
-                                                    <br/><text style="font-size: 12px;font-weight: bold;">Confirm Description : </text> 
+                                                <td>
+                                                    <text style="font-size: 12px;font-weight: bold;">Submit Date : </text> {{confirm.submitDate}}
+                                                    <br/>
+                                                    <text style="font-size: 12px;font-weight: bold;">Confirm Description : </text>
                                                     <br/>{{confirm.confirmDescription}}
                                                 </td>
-                                                <td><a ng-if="!confirm.responApproval"class="btn btn-block btn-default btn-xs">Waiting Respon</a>
-                                                    <a ng-if="confirm.responApproval == 'Reject'"class="btn btn-block btn-danger btn-xs">Issue Not Clear</a>
-                                                    <a ng-if="confirm.responApproval == 'Approve'"class="btn btn-block btn-info btn-xs">Approve For Closing</a>
-                                                    <br/><text ng-if="confirm.receiveResponDate" style="font-size: 12px;font-weight: bold;">Respon Date : </text> <text ng-if="confirm.receiveResponDate">{{confirm.receiveResponDate}}</text>
-                                                    <br/><text ng-if="confirm.responDescription" style="font-size: 12px;font-weight: bold;">Respon Description : </text> 
-                                                    <br/><text ng-if="confirm.responDescription">{{confirm.responDescription}}</text>
+                                                <td>
+                                                    <a ng-if="!confirm.responApproval" class="btn btn-block btn-default btn-xs">Waiting Respon</a>
+                                                    <a ng-if="confirm.responApproval == 'Reject'" class="btn btn-block btn-danger btn-xs">Issue Not Clear</a>
+                                                    <a ng-if="confirm.responApproval == 'Approve'" class="btn btn-block btn-info btn-xs">Approve For Closing</a>
+                                                    <br/>
+                                                    <text ng-if="confirm.receiveResponDate" style="font-size: 12px;font-weight: bold;">Respon Date : </text>
+                                                    <text ng-if="confirm.receiveResponDate">{{confirm.receiveResponDate}}</text>
+                                                    <br/>
+                                                    <text ng-if="confirm.responDescription" style="font-size: 12px;font-weight: bold;">Respon Description : </text>
+                                                    <br/>
+                                                    <text ng-if="confirm.responDescription">{{confirm.responDescription}}</text>
                                                 </td>
                                                 <td style="text-align: center">
                                                     <button class="btn btn-xs btn-warning" ng-click="vm.toggle('edit', confirm.id)" uib-tooltip="Edit">
@@ -349,55 +356,60 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">History Assignment Task</div>
-                                <div class="panel-body">
-                                    <div class="col-sm-12" style="padding-bottom: 10px">
-                                        <div class="box-tools pull-right">
-                                            <a ng-click="vm.reAssignTask(vm.EditIssueId)" class="btn btn-block btn-danger btn-xs">
-                                                <i class="fa fa-undo"></i> Re-Assign Task</a>
-                                        </div>
-                                    </div>
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr style="background: whitesmoke">
-                                                <th style="text-align: center">Task</th>
-                                                <th style="text-align: center">PIC Name</th>
-                                                <th style="text-align: center">Start Date</th>
-                                                <th style="text-align: center">Finish Date</th>
-                                                <th style="text-align: center">Target Date</th>
-                                                <!-- <th style="text-align: center">Action</th> -->
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="pic in assignTaskPIC">
-                                                <td>{{ pic.taskName}}</td>
-                                                <td>{{ pic.picName}}</td>
-                                                <td>{{ pic.startDate}}</td>
-                                                <td>{{ pic.finishDate}}</td>
-                                                <td>{{ pic.targetDate}}</td>
-                                                <!-- <td style="text-align: center"> -->
-                                                    <!-- <button class="btn btn-xs btn-warning" uib-tooltip="Edit" ng-click="vm.toggle('edit', 0)">
-                                                                <i class="fa fa-edit"></i>
-                                                            </button> -->
-                                                    <!-- <button class="btn btn-xs btn-warning" ng-click="vm.delete(pic.id)" uib-tooltip="Edit">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </td> -->
-                                            </tr>
-                                        </tbody>
-                                    </table>
+
+
                                 </div>
                             </div>
                         </div>
-
+                        <div class="panel panel-default">
+                            <div class="panel-heading">History Assignment Task</div>
+                            <div class="panel-body">
+                                <div class="col-sm-12" style="padding-bottom: 10px">
+                                    <div class="box-tools pull-right">
+                                        <a ng-click="vm.reAssignTask(vm.EditIssueId)" class="btn btn-block btn-danger btn-xs">
+                                            <i class="fa fa-undo"></i> Re-Assign Task</a>
+                                    </div>
+                                </div>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr style="background: whitesmoke">
+                                            <th style="text-align: center">Task</th>
+                                            <th style="text-align: center">PIC Name</th>
+                                            <th style="text-align: center">Start Date</th>
+                                            <th style="text-align: center">Finish Date</th>
+                                            <th style="text-align: center">Target Date</th>
+                                            <!-- <th style="text-align: center">Action</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="pic in assignTaskPIC">
+                                            <td>{{ pic.taskName}}</td>
+                                            <td>{{ pic.picName}}</td>
+                                            <td>{{ pic.startDate}}</td>
+                                            <td>{{ pic.finishDate}}</td>
+                                            <td>{{ pic.targetDate}}</td>
+                                            <!-- <td style="text-align: center"> -->
+                                            <!-- <button class="btn btn-xs btn-warning" uib-tooltip="Edit" ng-click="vm.toggle('edit', 0)">
+                                                                <i class="fa fa-edit"></i>
+                                                            </button> -->
+                                            <!-- <button class="btn btn-xs btn-warning" ng-click="vm.delete(pic.id)" uib-tooltip="Edit">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                </td> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
+                    <!-- <div class="box-footer">
+                            <button ng-click="vm.finishTask" class="btn btn-warning pull-right" style="width: 140px" uib-tooltip="Generate Report"> Communication Sheet</button>
+                        </div> -->
+                </div>
             </form>
-            </div>
         </div>
-        <script type="text/ng-template" id="myModalContent.html">
+    </div>
+    <script type="text/ng-template" id="myModalContent.html">
             <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel">{{mvm.title}}</h4>
             </div>
@@ -439,64 +451,65 @@
               <button class="btn btn-warning" type="button" ng-click="mvm.cancel()">Cancel</button>
             </div>
           </script>
-        <div>
-            <style>
-                .full button span {
-                    background-color: limegreen;
-                    border-radius: 32px;
-                    color: black;
-                }
+          <a id="downloadReport" href="http://localhost:8000/download-report/CommSheet.pdf"></a>
+    <div>
+        <style>
+            .full button span {
+                background-color: limegreen;
+                border-radius: 32px;
+                color: black;
+            }
 
-                .partially button span {
-                    background-color: orange;
-                    border-radius: 32px;
-                    color: black;
-                }
+            .partially button span {
+                background-color: orange;
+                border-radius: 32px;
+                color: black;
+            }
 
-                .stepwizard-step p {
-                    margin-top: 10px;
-                }
+            .stepwizard-step p {
+                margin-top: 10px;
+            }
 
-                .stepwizard-row {
-                    display: table-row;
-                }
+            .stepwizard-row {
+                display: table-row;
+            }
 
-                .stepwizard {
-                    display: table;
-                    width: 50%;
-                    position: relative;
-                }
+            .stepwizard {
+                display: table;
+                width: 50%;
+                position: relative;
+            }
 
-                .stepwizard-step button[disabled] {
-                    opacity: 1 !important;
-                    filter: alpha(opacity=100) !important;
-                }
+            .stepwizard-step button[disabled] {
+                opacity: 1 !important;
+                filter: alpha(opacity=100) !important;
+            }
 
-                .stepwizard-row:before {
-                    top: 14px;
-                    bottom: 0;
-                    position: absolute;
-                    content: " ";
-                    width: 100%;
-                    height: 1px;
-                    background-color: #ccc;
-                    z-order: 0;
-                }
+            .stepwizard-row:before {
+                top: 14px;
+                bottom: 0;
+                position: absolute;
+                content: " ";
+                width: 100%;
+                height: 1px;
+                background-color: #ccc;
+                z-order: 0;
+            }
 
-                .stepwizard-step {
-                    display: table-cell;
-                    text-align: center;
-                    position: relative;
-                }
+            .stepwizard-step {
+                display: table-cell;
+                text-align: center;
+                position: relative;
+            }
 
-                .btn-circle {
-                    width: 30px;
-                    height: 30px;
-                    text-align: center;
-                    padding: 6px 0;
-                    font-size: 12px;
-                    line-height: 1.428571429;
-                    border-radius: 15px;
-                }
-            </style>
+            .btn-circle {
+                width: 30px;
+                height: 30px;
+                text-align: center;
+                padding: 6px 0;
+                font-size: 12px;
+                line-height: 1.428571429;
+                border-radius: 15px;
+            }
+        </style>
 </section>
