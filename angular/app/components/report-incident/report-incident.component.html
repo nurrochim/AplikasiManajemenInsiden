@@ -1,0 +1,182 @@
+<section class="content-header">
+    <h1>Incident Report
+        <!-- <small>Module description here</small> -->
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a ui-sref="app.landing">
+                <i class="fa fa-dashboard"></i> Home</a>
+        </li>
+        <!-- <li class="active">Incident Report</li> -->
+        <li>
+                <a href="http://localhost:8000/report-yearly" target="_blank" class="btn btn-xs" uib-tooltip="Download Detail Report" style="background-color: gold">
+                    <i class="fa fa-download"></i> Download Detail Report</a>
+
+        </li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Summary Incident in December 2017</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <p class="text-center">
+                                        <strong>Summary By Root Cause</strong>
+                                    </p>
+                                    <div class="col-md-6">
+                                        <div class="chart-responsive">
+                                            <canvas id="doughnut" class="chart chart-doughnut" responsive=true chart-options="options" height="200" width="400" chart-data="dataPieCharts"
+                                                chart-labels="labelsPieCharts">
+                                            </canvas>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul class="chart-legend clearfix">
+                                            <li>
+                                                <i class="fa fa-circle-o text-blue"></i> CR Side Impact</li>
+                                            <li>
+                                                <i class="fa fa-circle-o text-light-gray"></i> Data Migration Issue</li>
+                                            <li>
+                                                <i class="fa fa-circle-o text-red"></i> Deployment Issue</li>
+                                            <li>
+                                                <i class="fa fa-circle-o text-green"></i> Design Issue</li>
+                                            <li>
+                                                <i class="fa fa-circle-o text-yellow"></i> Newly Used Function</li>
+                                            <li>
+                                                <i class="fa fa-circle-o text-gray"></i> Program Bugs</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-6">
+                                    <p class="text-center">
+                                        <strong>Summary By Division</strong>
+                                    </p>
+                                    <div class="col-md-6">
+                                        <div class="chart-responsive">
+                                            <canvas id="doughnut" class="chart chart-doughnut" responsive=true chart-options="options" height="200" width="400" chart-data="dataPieChartsDivision"
+                                                chart-labels="labelsPieChartsDivision">
+                                            </canvas>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <ul class="chart-legend clearfix">
+                                            <li>
+                                                <i class="fa fa-circle-o text-blue"></i> Credit Analyst</li>
+                                            <li>
+                                                <i class="fa fa-circle-o text-gray"></i> Finance</li>
+                                            <li>
+                                                <i class="fa fa-circle-o text-red"></i> General Affairs</li>
+                                            <li>
+                                                <i class="fa fa-circle-o text-green"></i> IT SPD</li>
+                                            <li>
+                                                <i class="fa fa-circle-o text-yellow"></i> Marketing</li>
+                                            <li>
+                                                <i class="fa fa-circle-o text-gray"></i> Collection</li>
+                                            <li>
+                                                <i class="fa fa-circle-o text-light-gray"></i> All</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Chart Bar Incident in December 2017</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="text-center">
+                                        <strong>Incident: 1 Des 2017 - 31 Des 2017</strong>
+                                    </p>
+                                    <div class="chart">
+                                        <canvas id="area" class="chart chart-bar" chart-data="dataDaily" chart-labels="labelsDaily" chart-legend="false" chart-series="series"
+                                            chart-click="onClick" chart-colours="colours" style="height: 250px;">
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Monthly Recap Report</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <div class="btn-group" uib-dropdown is-open="status.isopen">
+                                    <button id="single-button" type="button" class="btn btn-box-tool" uib-dropdown-toggle ng-disabled="disabled">
+                                        <!-- Button dropdown <span class="caret"></span> -->
+                                        <i class="fa fa-wrench"></i>
+                                    </button>
+                                    <!-- </button> -->
+                                    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                                        <li role="menuitem">
+                                            <a href="http://localhost:8000/report-comm-sheet2/INC-0004" target="_blank">
+                                                <i class="fa fa-download"></i> Download Detail Report</a>
+
+                                        </li>
+                                    </ul>
+                                </div>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="box-body">
+                            <p class="text-center">
+                                <strong>Incident: 1 Jan 2017 - 30 Jul 2017</strong>
+                            </p>
+                            <div class="chart">
+                                <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="false" chart-series="series"
+                                    chart-click="onClick" style="height: 250px;" chart-colours="colours">
+                                </canvas>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

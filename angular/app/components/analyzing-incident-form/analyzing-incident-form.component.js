@@ -110,6 +110,13 @@ class AnalyzingIncidentFormController {
                 this.recreateStep = issueEdit.data.recreateStep;
                 this.responTaken = issueEdit.data.responTaken;
                 this.decidedSolution = issueEdit.data.decidedSolution;
+                if(issueEdit.data.needCr==1){
+                    this.needCr = true;
+                }else{
+                    this.needCr = false;
+                }
+                
+                this.estimationDurationCr = issueEdit.data.estimationDurationCr;
             })
 
         // get file incident
@@ -276,6 +283,64 @@ class AnalyzingIncidentFormController {
         ];
         $scope.selectedOptionSubModule = $scope.optionsSubModul[0].value;
 
+        // Category analysis
+        $scope.optionsAnalysis = [
+            { name: 'Confirmation', value: 'Confirmation'},
+            { name: 'Data Input Issue', value: 'Data Input Issue'},
+            { name: 'Data Issue', value: 'Data Issue'},
+            { name: 'Data Setting Issue', value: 'Data Setting Issue'},
+            { name: 'Design Issue', value: 'Design Issue'},
+            { name: 'Migration Issue', value: 'Migration Issue'},
+            { name: 'New/Change Request', value: 'New/Change Request'},
+            { name: 'Operational Procedure', value: 'Operational Procedure'},
+            { name: 'Program Bugs', value: 'Program Bugs'},
+            { name: 'Report Issue', value: 'Report Issue'},
+            { name: 'Workflow Issue', value: 'Workflow Issue'},
+            { name: 'Uncategorized', value: 'Uncategorized'},
+            { name: 'Deployment Issue', value: 'Deployment Issue'},
+            { name: 'Server Performance', value: 'Server Performance'},
+            { name: 'Network Performance', value: 'Network Performance'},
+            { name: 'Program Performance', value: 'Program Performance'},
+            { name: 'Other', value: 'Other'}            
+        ];
+        //this.categoryAnalysis = $scope.optionsAnalysis[0].value;
+
+        // Category group
+        $scope.optionsGroup = [
+            { name: 'System Issue', value: 'System Issue'},
+            { name: 'Operation Issue', value: 'Operation Issue'},
+            { name: 'Data Issue', value: 'Data Issue'},
+            { name: 'Others Issue', value: 'Others Issue'},
+            { name: 'Operation Support', value: 'Operation Support'}
+        ];
+        //this.categoryGroup = $scope.optionsGroup[0].value;
+
+        // Category root cause
+        $scope.optionsRootcause = [
+            { name: 'Confirmation', value: 'Confirmation'},
+            { name: 'Business Case', value: 'Business Case'},
+            { name: 'Data Input Issue', value: 'Data Input Issue'},
+            { name: 'Data Migration Issue', value: 'Data Migration Issue'},
+            { name: 'Data Setting Issue', value: 'Data Setting Issue'},
+            { name: 'Deadlock Issue', value: 'Deadlock Issue'},
+            { name: 'Deployment Issue', value: 'Deployment Issue'},
+            { name: 'Design Issue', value: 'Design Issue'},
+            { name: 'Infrastructure', value: 'Infrastructure'},
+            { name: 'Lack of Testing', value: 'Lack of Testing'},
+            { name: 'Miss-operate', value: 'Miss-operate'},
+            { name: 'Network Performance', value: 'Network Performance'},
+            { name: 'Never Test', value: 'Never Test'},
+            { name: 'Newly Used Function', value: 'Newly Used Function'},
+            { name: 'New/Change Request', value: 'New/Change Request'},
+            { name: 'Operational Procedure', value: 'Operational Procedure'},
+            { name: 'Program Bugs', value: 'Program Bugs'},
+            { name: 'CR Side Impact', value: 'CR Side Impact'},
+            { name: 'Uncategorized', value: 'Uncategorized'},
+            { name: 'Uncomplete support', value: 'Uncomplete support'},
+            { name: 'Other', value: 'Other'}
+        ];
+        //this.categoryRootCause = $scope.optionsRootcause[0].value;
+
         // Priority
         $scope.options = [
             {
@@ -417,6 +482,8 @@ class AnalyzingIncidentFormController {
             this.issueDataEdit.data.responTaken = this.responTaken;
             this.issueDataEdit.data.decidedSolution = this.decidedSolution;
             this.issueDataEdit.data.updateBy = this.userData.id;
+            this.issueDataEdit.data.needCr = this.needCr;
+            this.issueDataEdit.data.estimationDurationCr = this.estimationDurationCr;
             if(this.startDate){
                 this.issueDataEdit.data.statusTask = 'On Progress';
                 this.issueDataEdit.data.statusAssignment = 'Analyzing';

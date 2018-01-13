@@ -59,9 +59,22 @@
           <li><a ng-show="vm.can('manage.confirmclosing.list')" ui-sref="app.confirm"><i class="fa fa-circle-o"></i> Confirm & Closing</a></li>
           <li><a ng-show="vm.can('manage.approval.confirm')" ui-sref="app.confirmApproval"><i class="fa fa-circle-o"></i> Approval Confirmation</a></li>
           <li><a ng-show="vm.can('manage.history.list')" ui-sref="app.history"><i class="fa fa-circle-o"></i> History Incident</a></li>
+          <li><a ng-show="vm.can('manage.report')" ui-sref="app.report"><i class="fa fa-circle-o"></i> Download Report</a></li>
         </ul>
       </li>
-      
+      <!-- <li class="treeview">
+          <a href="javascript:void(0)">
+            <i class="fa fa-pie-chart"></i>
+            <span>Charts</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu">
+            <li><a ui-sref="app.chartjs"><i class="fa fa-circle-o"></i> ChartJS</a></li>
+            <li><a ui-sref="app.comingsoon"><i class="fa fa-circle-o"></i> Morris</a></li>
+            <li><a ui-sref="app.comingsoon"><i class="fa fa-circle-o"></i> Flot</a></li>
+            <li><a ui-sref="app.comingsoon"><i class="fa fa-circle-o"></i> Inline charts</a></li>
+          </ul>
+        </li> -->
       
       
       <!-- <li class="treeview">
@@ -83,19 +96,7 @@
           <small class="label pull-right bg-green">new</small>
         </a>
       </li>
-      <li class="treeview">
-        <a href="javascript:void(0)">
-          <i class="fa fa-pie-chart"></i>
-          <span>Charts</span>
-          <i class="fa fa-angle-left pull-right"></i>
-        </a>
-        <ul class="treeview-menu">
-          <li><a ui-sref="app.chartjs"><i class="fa fa-circle-o"></i> ChartJS</a></li>
-          <li><a ui-sref="app.comingsoon"><i class="fa fa-circle-o"></i> Morris</a></li>
-          <li><a ui-sref="app.comingsoon"><i class="fa fa-circle-o"></i> Flot</a></li>
-          <li><a ui-sref="app.comingsoon"><i class="fa fa-circle-o"></i> Inline charts</a></li>
-        </ul>
-      </li>
+      
       <li class="treeview">
         <a href="javascript:void(0)">
           <i class="fa fa-laptop"></i>

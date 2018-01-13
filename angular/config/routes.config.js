@@ -621,4 +621,15 @@ export function RoutesConfig ($stateProvider, $urlRouterProvider) {
         issueId: null
       }
     })
+    .state('app.report', {
+      url: '/report', 
+      data: {
+        auth: true
+      },
+      views: {
+        'main@app': {
+          template: '<report-incident></report-incident>'
+        }
+      }
+    })
 }

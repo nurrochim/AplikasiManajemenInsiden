@@ -21,11 +21,13 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/api/authenticate/user', 'Auth\AuthController@getAuthenticatedUser');
 });
 Route::post('/upload', function(){return view('upload');});
+Route::get('/array-table', function(){return view('ReportTemplate.ReportYearlyAccumulated');});
 Route::post('/destroy-image', 'ImageController@destroyImage');
 Route::post('/file-upload', 'ImageController@uploadImage');
 Route::get('/report-comm-sheet', 'CommunicationSheetCtrl@exportToPdf');
 Route::get('/report-comm-template', function(){return view('ReportTemplate.CommSheetTemplate');});
 Route::get('/report-comm-sheet2/{idIncident}', 'CommunicationSheetCtrl@generateReport');
+Route::get('/report-yearly', 'CommunicationSheetCtrl@generateReportYearly');
 Route::get('/download', 'ImageController@getDownload');
 Route::get('/download-report', 'ImageController@getCreatePdf');
 Route::get('/download-report3', 'ImageController@createTcpdf');

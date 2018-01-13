@@ -1,3 +1,4 @@
+import {ReportIncidentComponent} from './app/components/report-incident/report-incident.component';
 import {ConfirmApprovalListComponent} from './app/components/confirm-approval-list/confirm-approval-list.component';
 import {ConfirmApprovalFormComponent} from './app/components/confirm-approval-form/confirm-approval-form.component';
 import {AssignPicFormComponent} from './app/components/assign-pic-form/assign-pic-form.component';
@@ -48,6 +49,7 @@ import { LoginFormComponent } from './app/components/login-form/login-form.compo
 import { RegisterFormComponent } from './app/components/register-form/register-form.component'
 
 angular.module('app.components')
+	.component('reportIncident', ReportIncidentComponent)
 	.component('confirmApprovalList', ConfirmApprovalListComponent)
 	.component('confirmApprovalForm', ConfirmApprovalFormComponent)
 	.component('assignPicForm', AssignPicFormComponent)

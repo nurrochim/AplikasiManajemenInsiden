@@ -188,7 +188,7 @@ class IncidentCtrl extends Controller
                        A.statusTask,
                        A.statusAssignment
                     FROM INCIDENT A LEFT JOIN INCIDENT_CONFIRM_HISTORY B ON A.idIncident = B.fidIncident
-                    WHERE A.statusTask = 'Closing' AND A.statusAssignment = 'Finish' AND B.fidUser = :idUser
+                    WHERE A.statusTask = 'Closing' AND A.statusAssignment = 'Waiting Confirmation' AND B.fidUser = :idUser
                     ORDER BY A.CREATED_AT ASC";
                     
                     

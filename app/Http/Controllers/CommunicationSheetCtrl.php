@@ -90,5 +90,26 @@ class CommunicationSheetCtrl extends Controller
         
         $succes = PDF::Output(public_path() . '/report/CommSheet.pdf', 'F');
         return response()->success(compact('succes'));
-    }    
+    }
+    
+    
+    public function generateReportYearly()
+    {
+        //$incident = IncidentModel::where('idIncident', '=', $idIncident)->first();
+        $html = view('ReportTemplate.ReportYearlyAccumulated');
+    
+        PDF::SetTitle('Report Yearly Accumulated');
+        PDF::SetPrintHeader(false);
+        PDF::SetPrintFooter(false);
+        PDF::SetMargins(10, 10, 15);
+        PDF::AddPage('L','LEGAL');
+        $tagvs = array('p' => array(0 => array('h' => 0, 'n' => 0), 1 => array('h' => 0, 'n'=> 0)));
+        PDF::SetHtmlVSpace($tagvs);
+        PDF::SetCellPadding(0);
+    
+        PDF::writeHTML($html, true, false, true, false, '');
+        PDF::Output(public_path() . '/report/ReportYearlyAccumulated.pdf', 'I');
+        // $succes = 'Create pdf succes';
+        // return response()->success(compact('succes'));
+    }
 }

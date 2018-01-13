@@ -221,35 +221,35 @@
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Category Analysis</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.categoryAnalysis" ng-options="option.value as option.name for option in options"
+                                            <select class="form-control" id="sel1" ng-model="vm.categoryAnalysis" ng-options="option.value as option.name for option in optionsAnalysis"
                                             />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Category Group</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.categoryGroup" ng-options="option.value as option.name for option in options"
+                                            <select class="form-control" id="sel1" ng-model="vm.categoryGroup" ng-options="option.value as option.name for option in optionsGroup"
                                             />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Category Root Cause</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.categoryRootCause" ng-options="option.value as option.name for option in options"
+                                            <select class="form-control" id="sel1" ng-model="vm.categoryRootCause" ng-options="option.value as option.name for option in optionsRootcause"
                                             />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Root Cause Modul</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.rootCauseModule" ng-options="option.value as option.name for option in options"
+                                            <select class="form-control" id="sel1" ng-model="vm.rootCauseModule" ng-options="option.value as option.name for option in optionsModul"
                                             />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label">Root Cause Sub Modul</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="sel1" ng-model="vm.rootCauseSubModule" ng-options="option.value as option.name for option in options"
+                                            <select class="form-control" id="sel1" ng-model="vm.rootCauseSubModule" ng-options="option.value as option.name for option in optionsSubModul"
                                             />
                                         </div>
                                     </div>
@@ -289,6 +289,22 @@
                                         <div class="col-sm-8">
                                             <textarea type="text" class="form-control has-error" rows="5" id="decideSolution" name="decideSolution" placeholder="Decide Solution"
                                                 ng-model="vm.decidedSolution"></textarea>
+                                            <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Need Change Request (CR)</label>
+                                        <div class="col-sm-8" style="padding-top: 10px;">
+                                            <label>
+                                                <input type="checkbox" ng-model="vm.needCr">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Estimation Duration For CR</label>
+                                        <div class="col-sm-8">
+                                            <textarea type="text" class="form-control has-error" rows="5" id="estimationDurationCr" name="estimationDurationCr" placeholder="Estimation Duration For CR"
+                                                ng-model="vm.estimationDurationCr"></textarea>
                                             <span class="help-inline" style="color: red" ng-show="frmIssue.issuedesc.$invalid && frmIssue.issuedesc.$touched">Issue Description is required</span>
                                         </div>
                                     </div>
@@ -415,7 +431,7 @@
                         <a ng-show="vm.stepThree" ng-click="vm.sendAction()" class="btn btn-primary pull-right" style="width: 140px">Send For Fixing</a>
                         <div>
                             <br/>
-                            <button ng-show="vm.stepThree" ng-click="vm.finishTask" class="btn btn-warning pull-right" style="width: 140px">Finish For Confirm</button>
+                            <button ng-show="vm.stepThree" ng-click="vm.finishTask()" class="btn btn-warning pull-right" style="width: 140px">Finish For Confirm</button>
                         </div>
                     </div>
 
